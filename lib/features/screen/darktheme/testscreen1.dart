@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:shohozkaz/l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   final Function(ThemeMode)? toggleTheme;
-
+  
   const LoginScreen({super.key, this.toggleTheme});
 
   @override
   Widget build(BuildContext context) {
+
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBar(title: Text(loc.appTitle)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Welcome to ShohozKaz!"),
+            Text(loc.welcomeText),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => toggleTheme?.call(ThemeMode.light),
