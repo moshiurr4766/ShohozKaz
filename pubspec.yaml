@@ -22,6 +22,9 @@ dependencies:
     sdk: flutter
   intl: ^0.20.2
 
+  flutter_native_splash: ^2.4.6
+  lottie: ^3.3.1
+
 
 dev_dependencies:
   flutter_test:
@@ -35,10 +38,23 @@ flutter:
   generate: true
   uses-material-design: true
 
-
   assets:
-    - assets/image/banner/
-    - assets/image/logo/
+    - assets/images/banner/
+    - assets/images/logo/logo.png
+    - assets/animations/loading/
+
+# For details regarding adding assets from package dependencies for slash screen,
+flutter_native_splash:
+  color: "#ffffff"  # Background color
+  image: assets/images/logo/logo.png  # Path to your logo
+  android_gravity: center
+  ios_content_mode: center
+  fullscreen: true
+
+  android_12:
+    image: assets/images/logo/logo.png
+    icon_background_color: "#ffffff"
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

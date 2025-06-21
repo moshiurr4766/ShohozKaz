@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
+import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
 import 'package:shohozkaz/widgets/language_switch.dart';
 
 class AppRouter {
@@ -29,6 +30,8 @@ class AppRouter {
 
       case '/test':
         return MaterialPageRoute(builder: (_) => const TestUi());
+      case '/splash':
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       default:
         return MaterialPageRoute(

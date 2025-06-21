@@ -15,6 +15,7 @@ class TestUi extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image(image: AssetImage('assets/images/logo/logo.png')),
             Text(loc.uiText, style: TextStyle(fontSize: 24)),
             const SizedBox(height: 20),
             ElevatedButton(

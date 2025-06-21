@@ -56,7 +56,7 @@ class _ShohozKazAppState extends State<ShohozKazApp> {
       ],
 
       // Navigation
-      initialRoute: '/',
+      initialRoute: '/splash',
       onGenerateRoute: (settings) =>
           AppRouter.generateRoute(settings, _toggleTheme, _changeLocale),
     );
