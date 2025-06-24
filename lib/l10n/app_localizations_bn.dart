@@ -42,5 +42,50 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dontHaveAccount => 'একাউন্ট নেই?';
 
   @override
-  String get registerButton => 'সাইন আপ';
+  String get registerText => 'সাইন আপ';
+
+  @override
+  String get nameText => 'নাম';
+
+  @override
+  String get phoneText => 'ফোন নম্বর (ঐচ্ছিক)';
+
+  @override
+  String get confirmPasswordLabel => 'পাসওয়ার্ড নিশ্চিত করুন';
+
+  @override
+  String get googleSignUpText => 'গুগল দিয়ে সাইন আপ করুন';
+
+  @override
+  String get alreadyHaveAccount => 'আগেই একাউন্ট আছে?';
+
+  @override
+  String get orText => 'অথবা';
+
+  @override
+  String get tcText => 'শর্তাবলী ও নিয়মাবলি';
+
+  @override
+  String get acceptText => 'আমি সম্মত হচ্ছি';
+
+  @override
+  String get acceptNText => 'আপনাকে শর্তাবলী এবং নিয়মাবলী গ্রহণ করতে হবে';
+
+  @override
+  String get enterName => 'আপনার নাম লিখুন';
+
+  @override
+  String get enterEmail => 'আপনার ইমেইল লিখুন';
+
+  @override
+  String get enterEmailValid => 'একটি সঠিক ইমেইল লিখুন';
+
+  @override
+  String get enterPass => 'পাসওয়ার্ড লিখুন';
+
+  @override
+  String get enterPassValid => 'কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন';
+
+  @override
+  String get failedValid => 'ভ্যালিডেশন ব্যর্থ হয়েছে';
 }

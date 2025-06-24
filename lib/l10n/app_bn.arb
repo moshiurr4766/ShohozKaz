@@ -10,7 +10,21 @@
   "noAccountRegister": "একাউন্ট নেই? রেজিস্টার করুন",
   "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
   "dontHaveAccount": "একাউন্ট নেই?",
-  "registerButton": "সাইন আপ"
-
+  "registerText": "সাইন আপ",
+  "nameText": "নাম",
+  "phoneText": "ফোন নম্বর (ঐচ্ছিক)",
+  "confirmPasswordLabel": "পাসওয়ার্ড নিশ্চিত করুন",
+  "googleSignUpText": "গুগল দিয়ে সাইন আপ করুন",
+  "alreadyHaveAccount": "আগেই একাউন্ট আছে?",
+  "orText": "অথবা",
+  "tcText":"শর্তাবলী ও নিয়মাবলি",
+  "acceptText": "আমি সম্মত হচ্ছি",
+  "acceptNText": "আপনাকে শর্তাবলী এবং নিয়মাবলী গ্রহণ করতে হবে",
+    "enterName": "আপনার নাম লিখুন",
+  "enterEmail": "আপনার ইমেইল লিখুন",
+  "enterEmailValid": "একটি সঠিক ইমেইল লিখুন",
+  "enterPass": "পাসওয়ার্ড লিখুন",
+  "enterPassValid": "কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন",
+  "failedValid": "ভ্যালিডেশন ব্যর্থ হয়েছে"
 }
 

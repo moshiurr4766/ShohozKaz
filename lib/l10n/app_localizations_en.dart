@@ -42,5 +42,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dontHaveAccount => 'Don\'t have an account?';
 
   @override
-  String get registerButton => 'Sign Up';
+  String get registerText => 'Sign Up';
+
+  @override
+  String get nameText => 'Name';
+
+  @override
+  String get phoneText => 'Phone (optional)';
+
+  @override
+  String get confirmPasswordLabel => 'Confirm Password';
+
+  @override
+  String get googleSignUpText => 'Sign Up with Google';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get orText => 'or';
+
+  @override
+  String get tcText => 'Terms & Conditions';
+
+  @override
+  String get acceptText => 'I accept the';
+
+  @override
+  String get acceptNText => 'You must accept the terms and conditions';
+
+  @override
+  String get enterName => 'Please enter your name';
+
+  @override
+  String get enterEmail => 'Please enter your email';
+
+  @override
+  String get enterEmailValid => 'Please enter a valid email';
+
+  @override
+  String get enterPass => 'Please enter a password';
+
+  @override
+  String get enterPassValid => 'Enter at least 6 characters';
+
+  @override
+  String get failedValid => 'Validation failed';
 }

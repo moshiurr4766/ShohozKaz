@@ -10,5 +10,20 @@
   "noAccountRegister": "Don’t have an account? Register",
   "forgotPassword": "Forgot Password?",
   "dontHaveAccount":"Don't have an account?",
-  "registerButton":"Sign Up"
+  "registerText":"Sign Up",
+  "nameText":"Name",
+  "phoneText":"Phone (optional)",
+  "confirmPasswordLabel":"Confirm Password",
+  "googleSignUpText": "Sign Up with Google",
+  "alreadyHaveAccount": "Already have an account?",
+  "orText": "or",
+  "tcText":"Terms & Conditions",
+  "acceptText":"I accept the",
+  "acceptNText": "You must accept the terms and conditions",
+  "enterName":"Please enter your name",
+  "enterEmail":"Please enter your email",
+  "enterEmailValid":"Please enter a valid email",
+  "enterPass":"Please enter a password",
+  "enterPassValid":"Enter at least 6 characters",
+  "failedValid":"Validation failed"
 }

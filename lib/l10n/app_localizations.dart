@@ -161,11 +161,101 @@ abstract class AppLocalizations {
   /// **'Don\'t have an account?'**
   String get dontHaveAccount;
 
-  /// No description provided for @registerButton.
+  /// No description provided for @registerText.
   ///
   /// In en, this message translates to:
   /// **'Sign Up'**
-  String get registerButton;
+  String get registerText;
+
+  /// No description provided for @nameText.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get nameText;
+
+  /// No description provided for @phoneText.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone (optional)'**
+  String get phoneText;
+
+  /// No description provided for @confirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPasswordLabel;
+
+  /// No description provided for @googleSignUpText.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up with Google'**
+  String get googleSignUpText;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @orText.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orText;
+
+  /// No description provided for @tcText.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get tcText;
+
+  /// No description provided for @acceptText.
+  ///
+  /// In en, this message translates to:
+  /// **'I accept the'**
+  String get acceptText;
+
+  /// No description provided for @acceptNText.
+  ///
+  /// In en, this message translates to:
+  /// **'You must accept the terms and conditions'**
+  String get acceptNText;
+
+  /// No description provided for @enterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get enterName;
+
+  /// No description provided for @enterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get enterEmail;
+
+  /// No description provided for @enterEmailValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get enterEmailValid;
+
+  /// No description provided for @enterPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a password'**
+  String get enterPass;
+
+  /// No description provided for @enterPassValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least 6 characters'**
+  String get enterPassValid;
+
+  /// No description provided for @failedValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Validation failed'**
+  String get failedValid;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

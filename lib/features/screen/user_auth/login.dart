@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 80),
+                
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: loc.emailLabel,
@@ -92,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 ElevatedButton(
                   onPressed: () {
-                    // Handle login logic here
+                    Navigator.pushNamed(context, '/');
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(loc.dontHaveAccount),
                     TextButton(
                       onPressed: () {
-                        // Handle navigation to registration screen
+                        Navigator.pushNamed(context, '/signup');
                       },
                       style: ButtonStyle(
                        
@@ -134,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         splashFactory: NoSplash.splashFactory,
                       ),
                       child: Text(
-                        loc.registerButton,
+                        loc.registerText,
                         style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                     ),
