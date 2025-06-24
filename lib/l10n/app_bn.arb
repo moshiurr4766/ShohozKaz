@@ -2,5 +2,15 @@
   "appTitle": "সহজকাজ",
   "welcomeText": "স্বাগতম সহজকাজ এ!",
   "switchLanguage": "ভাষা পরিবর্তন করুন",
-  "uiText": "এটি একটি পরীক্ষামূলক ইউআই"
+  "uiText": "এটি একটি পরীক্ষামূলক ইউআই",
+  "emailLabel": "ইমেইল",
+  "passwordLabel": "পাসওয়ার্ড",
+  "loginButton": "লগইন",
+  "loginText": "লগইন",
+  "noAccountRegister": "একাউন্ট নেই? রেজিস্টার করুন",
+  "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+  "dontHaveAccount": "একাউন্ট নেই?",
+  "registerButton": "সাইন আপ"
+
 }
+

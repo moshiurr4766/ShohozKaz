@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/material.dart';
+
 class AppConstants {
   // App name
   static const String appName = "ShohozKaz";
@@ -25,4 +27,35 @@ class AppConstants {
   // Padding & Radius
   static const double defaultPadding = 16.0;
   static const double defaultRadius = 12.0;
+}
+
+
+
+// helpers.dart
+
+class AppColors {
+  // Brand Colors
+  static const Color primary = Color(0xFF008080);       // Teal
+  static const Color secondary = Color(0xFF4DB6AC);     // Light Teal
+  static const Color accent = Color(0xFFFFA000);        // Amber
+
+  // Backgrounds
+  static const Color backgroundLight = Color(0xFFF9F9F9);
+  static const Color backgroundDark = Color(0xFF121212);
+
+  // Text Colors
+  static const Color textPrimary = Color(0xFF212121);
+  static const Color textSecondary = Color(0xFF757575);
+  static const Color textOnPrimary = Colors.white;
+
+  // Buttons
+  static const Color button = Color.fromARGB(255, 2, 14, 249);
+  static const Color buttonText = Colors.white;
+
+  // Error & Success
+  static const Color error = Colors.redAccent;
+  static const Color success = Colors.green;
+
+  // Border
+  static const Color border = Color(0xFFE0E0E0);
 }

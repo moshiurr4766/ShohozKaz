@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
+import 'package:shohozkaz/features/screen/user_auth/signup.dart';
+import 'package:shohozkaz/features/screen/user_auth/login.dart';
 import 'package:shohozkaz/widgets/language_switch.dart';
 
 class AppRouter {
@@ -13,7 +15,7 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => LoginScreen(toggleTheme: toggleTheme ?? (mode) {}),
+          builder: (_) => ThemeCheck(toggleTheme: toggleTheme ?? (mode) {}),
         );
 
       case '/language':
@@ -32,6 +34,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const TestUi());
       case '/splash':
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case '/login':
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
+      case '/signup':
+        return MaterialPageRoute(builder: (_) => const SignupScreen());
 
       default:
         return MaterialPageRoute(

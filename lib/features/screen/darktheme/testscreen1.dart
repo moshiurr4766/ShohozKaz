@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/l10n/app_localizations.dart';
 
-class LoginScreen extends StatelessWidget {
+class ThemeCheck extends StatefulWidget {
+  const ThemeCheck({super.key, this.toggleTheme});
   final Function(ThemeMode)? toggleTheme;
-  
-  const LoginScreen({super.key, this.toggleTheme});
 
   @override
+  State<ThemeCheck> createState() => _ThemeCheckState();
+}
+
+class _ThemeCheckState extends State<ThemeCheck> {
+   @override
   Widget build(BuildContext context) {
 
     final loc = AppLocalizations.of(context)!;
@@ -20,16 +24,28 @@ class LoginScreen extends StatelessWidget {
             Text(loc.welcomeText),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => toggleTheme?.call(ThemeMode.light),
+              onPressed: () => widget.toggleTheme?.call(ThemeMode.light),
               child: const Text("Switch to Light Theme"),
             ),
             ElevatedButton(
-              onPressed: () => toggleTheme?.call(ThemeMode.dark),
+              onPressed: () => widget.toggleTheme?.call(ThemeMode.dark),
               child: const Text("Switch to Dark Theme"),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/test'),
               child: const Text("System Default"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/language'),
+              child: const Text("Change Language"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/login'),
+              child: const Text("Login"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/signup'),
+              child: const Text("Signup"),
             ),
           ],
         ),
@@ -37,3 +53,4 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
+

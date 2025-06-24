@@ -2,5 +2,13 @@
   "appTitle": "ShohozKaz",
   "welcomeText": "Welcome to ShohozKaz!",
   "switchLanguage": "Switch Language",
-  "uiText":"This is a test UI"
+  "uiText": "This is a test UI",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "loginButton": "Login",
+  "loginText": "Login",
+  "noAccountRegister": "Don’t have an account? Register",
+  "forgotPassword": "Forgot Password?",
+  "dontHaveAccount":"Don't have an account?",
+  "registerButton":"Sign Up"
 }

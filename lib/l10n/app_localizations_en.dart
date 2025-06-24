@@ -19,4 +19,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uiText => 'This is a test UI';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get loginButton => 'Login';
+
+  @override
+  String get loginText => 'Login';
+
+  @override
+  String get noAccountRegister => 'Don’t have an account? Register';
+
+  @override
+  String get forgotPassword => 'Forgot Password?';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get registerButton => 'Sign Up';
 }
