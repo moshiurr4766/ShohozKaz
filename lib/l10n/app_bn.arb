@@ -25,6 +25,8 @@
   "enterEmailValid": "একটি সঠিক ইমেইল লিখুন",
   "enterPass": "পাসওয়ার্ড লিখুন",
   "enterPassValid": "কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন",
-  "failedValid": "ভ্যালিডেশন ব্যর্থ হয়েছে"
+  "failedValid": "ভ্যালিডেশন ব্যর্থ হয়েছে",
+  "forgotPasswordText": "পাসওয়ার্ড ভুলে গেছেন?"
+
 }
 

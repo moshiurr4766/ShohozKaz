@@ -88,4 +88,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get failedValid => 'ভ্যালিডেশন ব্যর্থ হয়েছে';
+
+  @override
+  String get forgotPasswordText => 'পাসওয়ার্ড ভুলে গেছেন?';
 }

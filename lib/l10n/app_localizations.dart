@@ -256,6 +256,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Validation failed'**
   String get failedValid;
+
+  /// No description provided for @forgotPasswordText.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgotPasswordText;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

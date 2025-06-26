@@ -25,5 +25,6 @@
   "enterEmailValid":"Please enter a valid email",
   "enterPass":"Please enter a password",
   "enterPassValid":"Enter at least 6 characters",
-  "failedValid":"Validation failed"
+  "failedValid":"Validation failed",
+  "forgotPasswordText":"Forgot Password"
 }

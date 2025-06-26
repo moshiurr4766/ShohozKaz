@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
+import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
 import 'package:shohozkaz/features/screen/user_auth/signup.dart';
 import 'package:shohozkaz/features/screen/user_auth/login.dart';
 import 'package:shohozkaz/widgets/language_switch.dart';
@@ -38,6 +39,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case '/signup':
         return MaterialPageRoute(builder: (_) => const SignupScreen());
+      case '/forgot':
+        return MaterialPageRoute(
+          builder: (_) => const ForgotPassword(),
+        );
 
       default:
         return MaterialPageRoute(

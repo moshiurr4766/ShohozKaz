@@ -47,6 +47,10 @@ class _ThemeCheckState extends State<ThemeCheck> {
               onPressed: () => Navigator.pushNamed(context, '/signup'),
               child: const Text("Signup"),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/forgot'),
+              child: const Text("Forgot Password"),
+            ),
           ],
         ),
       ),

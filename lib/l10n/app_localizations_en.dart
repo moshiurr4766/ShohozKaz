@@ -88,4 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedValid => 'Validation failed';
+
+  @override
+  String get forgotPasswordText => 'Forgot Password';
 }
