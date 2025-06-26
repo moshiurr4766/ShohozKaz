@@ -12,6 +12,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
 
+  final GlobalKey<FormState> _fromKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
@@ -20,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Form(
+            key: _fromKey,
             child: Column(
               children: [
                 Text(
@@ -27,8 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 80),
-                
+
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     labelText: loc.emailLabel,
                     border: const OutlineInputBorder(),
@@ -37,9 +44,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return loc.enterEmail;
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return loc.enterEmailValid;
+                    }
+                    return null;
+                  }, // Add your email validation logic here,
                 ),
                 const SizedBox(height: 30),
                 TextFormField(
+                  controller: _passwordController,
                   obscureText: _obscureText,
                   decoration: InputDecoration(
                     labelText: loc.passwordLabel,
@@ -67,6 +84,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return loc.enterPass;
+                    }
+                    if (value.length < 6) {
+                      return loc.enterPassValid;
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 5),
 
@@ -93,7 +119,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/');
+                    
+
+                    if (_fromKey.currentState!.validate()) {
+                      debugPrint("Email: ${_emailController.text}");
+                      debugPrint("Password: ${_passwordController.text}");
+
+                      Navigator.pushNamed(context, '/');
+                    } else {
+                      debugPrint(loc.failedValid);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
@@ -124,7 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushNamed(context, '/signup');
                       },
                       style: ButtonStyle(
-                       
                         foregroundColor: WidgetStateProperty.all(
                           Theme.of(context).primaryColor,
                         ),
