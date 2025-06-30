@@ -123,66 +123,7 @@
 
 //Code 2
 
-import 'package:flutter/material.dart';
-
-class AppThemes {
-  static final ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: Colors.green,
-    fontFamily: 'Roboto',
-    scaffoldBackgroundColor: Colors.white,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-    ),
-    iconTheme: const IconThemeData(color: Colors.black87),
-    // elevatedButtonTheme: ElevatedButtonThemeData(
-    //   style: ElevatedButton.styleFrom(
-    //     backgroundColor: Colors.green,
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(12),
-    //     ),
-    //     textStyle: const TextStyle(fontWeight: FontWeight.bold),
-    //   ),
-    // ),
-  );
-
-  static final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.green,
-    fontFamily: 'Roboto',
-    scaffoldBackgroundColor: const Color(0xFF121212),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(fontSize: 16, color: Colors.white70),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-    ),
-    iconTheme: const IconThemeData(color: Colors.white70),
-    // elevatedButtonTheme: ElevatedButtonThemeData(
-    //   style: ElevatedButton.styleFrom(
-    //     backgroundColor: Colors.green[700],
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(12),
-    //     ),
-    //     textStyle: const TextStyle(fontWeight: FontWeight.bold),
-    //   ),
-    // ),
-  );
-}
-
-
-
-
-//Code 3
-
-
+// import 'package:flutter/material.dart';
 
 // class AppThemes {
 //   static final ThemeData lightTheme = ThemeData(
@@ -191,24 +132,90 @@ class AppThemes {
 //     fontFamily: 'Roboto',
 //     scaffoldBackgroundColor: Colors.white,
 //     appBarTheme: const AppBarTheme(
-//       backgroundColor: Colors.green,
-//       foregroundColor: Colors.white,
+//       backgroundColor: Colors.white,
+//       foregroundColor: Colors.black,
 //     ),
 //     textTheme: const TextTheme(
-//       bodyLarge: TextStyle(color: Colors.black87),
+//       bodyLarge: TextStyle(fontSize: 18, color: Colors.black),
+//       titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
 //     ),
+//     iconTheme: const IconThemeData(color: Colors.black),
 //   );
 
 //   static final ThemeData darkTheme = ThemeData(
 //     brightness: Brightness.dark,
 //     primarySwatch: Colors.green,
+//     fontFamily: 'Roboto',
 //     scaffoldBackgroundColor: const Color(0xFF121212),
 //     appBarTheme: const AppBarTheme(
-//       backgroundColor: Colors.black,
+//       backgroundColor: Color.fromARGB(255, 31, 31, 31),
 //       foregroundColor: Colors.white,
 //     ),
 //     textTheme: const TextTheme(
-//       bodyLarge: TextStyle(color: Colors.white),
+//       bodyLarge: TextStyle(fontSize: 18, color: Colors.white),
+//       titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
 //     ),
+//     iconTheme: const IconThemeData(color: Colors.white),
 //   );
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import 'package:flutter/material.dart';
+
+class AppThemes {
+  static final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    fontFamily: 'Roboto',
+    scaffoldBackgroundColor: Colors.white,
+    colorScheme: const ColorScheme.light(
+      primary: Color.fromARGB(255, 2, 14, 249),
+      onPrimary: Colors.white,
+      background: Colors.white,
+      onBackground: Colors.black,
+      secondary: Colors.greenAccent,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+    ),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(fontSize: 18, color: Colors.black),
+      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    ),
+    iconTheme: const IconThemeData(color: Colors.black),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    fontFamily: 'Roboto',
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    colorScheme: const ColorScheme.dark(
+      primary: Colors.white,
+      onPrimary: Colors.black,
+      background: Color(0xFF121212),
+      onBackground: Colors.white,
+      secondary: Colors.greenAccent,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color.fromARGB(255, 31, 31, 31),
+      foregroundColor: Colors.white,
+    ),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(fontSize: 18, color: Colors.white),
+      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+    iconTheme: const IconThemeData(color: Colors.white),
+  );
+}

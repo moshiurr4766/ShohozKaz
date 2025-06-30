@@ -262,6 +262,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forgot Password'**
   String get forgotPasswordText;
+
+  /// No description provided for @resetSuccessText.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset link has been sent to your email.'**
+  String get resetSuccessText;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

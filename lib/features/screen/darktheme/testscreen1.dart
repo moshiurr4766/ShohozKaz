@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/l10n/app_localizations.dart';
+import 'package:shohozkaz/services/auth_service.dart';
 
 class ThemeCheck extends StatefulWidget {
   const ThemeCheck({super.key, this.toggleTheme});
@@ -39,17 +40,15 @@ class _ThemeCheckState extends State<ThemeCheck> {
               onPressed: () => Navigator.pushNamed(context, '/language'),
               child: const Text("Change Language"),
             ),
+
             ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/login'),
-              child: const Text("Login"),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/signup'),
-              child: const Text("Signup"),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/forgot'),
-              child: const Text("Forgot Password"),
+              onPressed: () async => {
+                await authService.value.signOut(),
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false),
+
+              },
+              child: const Text("Sign Out"),
             ),
           ],
         ),

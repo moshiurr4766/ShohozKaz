@@ -26,5 +26,6 @@
   "enterPass":"Please enter a password",
   "enterPassValid":"Enter at least 6 characters",
   "failedValid":"Validation failed",
-  "forgotPasswordText":"Forgot Password"
+  "forgotPasswordText":"Forgot Password",
+  "resetSuccessText": "Password reset link has been sent to your email."
 }

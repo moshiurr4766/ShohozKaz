@@ -91,4 +91,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get forgotPasswordText => 'পাসওয়ার্ড ভুলে গেছেন?';
+
+  @override
+  String get resetSuccessText => 'পাসওয়ার্ড রিসেট লিংকটি আপনার ইমেইলে পাঠানো হয়েছে।';
 }
