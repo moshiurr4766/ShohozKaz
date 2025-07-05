@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class AppConstants {
@@ -21,7 +19,7 @@ class AppConstants {
     "Event Support",
     "Repairs",
     "Driver",
-    "Mover"
+    "Mover",
   ];
 
   // Padding & Radius
@@ -29,15 +27,13 @@ class AppConstants {
   static const double defaultRadius = 12.0;
 }
 
-
-
 // helpers.dart
 
 class AppColors {
   // Brand Colors
-  static const Color primary = Color(0xFF008080);       // Teal
-  static const Color secondary = Color(0xFF4DB6AC);     // Light Teal
-  static const Color accent = Color(0xFFFFA000);        // Amber
+  static const Color primary = Color(0xFF008080); // Teal
+  static const Color secondary = Color(0xFF4DB6AC); // Light Teal
+  static const Color accent = Color(0xFFFFA000); // Amber
 
   // Backgrounds
   static const Color backgroundLight = Color(0xFFF9F9F9);
@@ -48,8 +44,9 @@ class AppColors {
   static const Color textSecondary = Color(0xFF757575);
   static const Color textOnPrimary = Colors.white;
 
-  // Buttons
-  static const Color button = Color.fromARGB(255, 2, 14, 249);
+  //Light Buttons
+  static const Color button = Color(0xFF7454AC);
+  static const Color hover = Color(0xFFd5bdff);
   static const Color buttonText = Colors.white;
 
   // Error & Success

@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/nav');
     } on FirebaseAuthException catch (e) {
       debugPrint("Error signing in: ${e.message}");
 
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: const OutlineInputBorder(),
                     prefixIcon: Icon(
                       Icons.email_outlined,
-                      color: actionColor, // ✅ icon color based on theme
+                      color: actionColor, 
                     ),
                   ),
                   validator: (value) {
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 30),
 
-                // ✅ Password field
+                
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscureText,
@@ -109,14 +109,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: const OutlineInputBorder(),
                     prefixIcon: Icon(
                       Icons.lock_outline,
-                      color: actionColor, // ✅ icon color based on theme
+                      color: actionColor, 
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureText
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
-                        color: actionColor, // ✅ toggle icon color
+                        color: actionColor, 
                       ),
                       onPressed: () {
                         setState(() {
