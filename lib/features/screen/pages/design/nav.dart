@@ -44,11 +44,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
 
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(30),
+            color: Colors.transparent,
             boxShadow: [
               BoxShadow(
                 // ignore: deprecated_member_use
@@ -60,18 +60,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
+            
             child: Theme(
-              data: Theme.of(context).copyWith(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                //splashFactory: NoSplash.splashFactory,
-              ),
+            data: Theme.of(context).copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              //splashFactory: NoSplash.splashFactory,
+            ),
               child: BottomNavigationBar(
                 currentIndex: selectedIndex,
                 onTap: _onItemTapped,
                 selectedItemColor: AppColors.button,
-                unselectedItemColor: Colors.grey,
+                unselectedItemColor: Colors.grey[700],
                 elevation: 0,
                 selectedFontSize: 16,
                 unselectedFontSize: 12,
@@ -82,12 +83,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Iconsax.briefcase),
+                    icon: Icon(Iconsax.tick_square),
                     label: 'My Job',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Iconsax.message_question),
-                    label: 'Help',
+                    icon: Icon(Iconsax.support),
+                    label: 'Support',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.menu),
@@ -96,8 +97,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ],
               ),
             ),
-          ),
-        ),
+          ),        ),
       ),
     
     

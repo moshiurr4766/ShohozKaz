@@ -59,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/nav');
     } on FirebaseAuthException catch (e) {
       debugPrint("Registration failed: ${e.message}");
     } on FirebaseException catch (e) {
