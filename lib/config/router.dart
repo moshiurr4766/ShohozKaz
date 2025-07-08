@@ -18,8 +18,10 @@ class AppRouter {
   ) {
     switch (settings.name) {
       case '/nav':
-        return MaterialPageRoute(builder: (_) => BottomNavigation(toggleTheme: toggleTheme));
-        
+        return MaterialPageRoute(
+          builder: (_) => BottomNavigation(toggleTheme: toggleTheme),
+        );
+
       case '/home':
         return MaterialPageRoute(builder: (_) => const Home());
 
@@ -51,7 +53,9 @@ class AppRouter {
       case '/forgot':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case '/wrapper':
-        return MaterialPageRoute(builder: (_) => AuthWrapper(toggleTheme: toggleTheme));
+        return MaterialPageRoute(
+          builder: (_) => AuthWrapper(toggleTheme: toggleTheme),
+        );
 
       default:
         return MaterialPageRoute(
@@ -61,4 +65,3 @@ class AppRouter {
     }
   }
 }
-

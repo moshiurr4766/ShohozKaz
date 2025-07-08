@@ -1,8 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/core/constants.dart';
 import 'package:shohozkaz/features/screen/pages/design/drawer.dart';
+import 'package:shohozkaz/features/screen/pages/design/widgets/home_banner.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -47,24 +50,33 @@ class _HomeState extends State<Home> {
             profileImage: 'assets/images/logo/logo.png',
             userType: userType,
           ),
-          appBar: AppBar(title: const Text("ShozKaz"), centerTitle: true),
-          body: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.hover,
-                  ),
-                  child: Text(
-                    "Check Button",
-                    style: TextStyle(color: AppColors.buttonText),
-                  ),
+          appBar: AppBar(
+            title: const Text("ShozKaz"),
+            centerTitle: true,
+            actions: [
+              InkWell(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  //
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(Iconsax.notification),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(18),
+            child: TPromoSlide(banners: [
+              AppImages.promoBanner1,
+              AppImages.promoBanner2,
+              AppImages.promoBanner4,
+              AppImages.promoBanner4,
+
+              ],),
           ),
         );
       },
@@ -72,60 +84,3 @@ class _HomeState extends State<Home> {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:shohozkaz/core/constants.dart';
-// import 'package:shohozkaz/features/screen/pages/design/drawer.dart';
-
-// class Home extends StatefulWidget {
-//   const Home({super.key});
-
-//   @override
-//   State<Home> createState() => _HomeState();
-// }
-
-// class _HomeState extends State<Home> {
-//   @override
-//   Widget build(BuildContext context) {
-
-//     return Scaffold(
-//       drawer: CustomDrawer(
-//         userName: "Md.Moshiur Rahman",
-//         profileImage: 'assets/images/logo/logo.png',
-//         userType: 'Worker Level',
-//       ),
-//       appBar: AppBar(title: const Text("ShozKaz"), centerTitle: true),
-//       body: Padding(
-//         padding: const EdgeInsets.all(12),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-
-//           children: [
-//             ElevatedButton(
-//               onPressed: () => {},
-//               style: ElevatedButton.styleFrom(backgroundColor: AppColors.hover),
-//               child: Text(
-//                 "Check Buttom",
-//                 style: TextStyle(color: AppColors.buttonText),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
