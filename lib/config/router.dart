@@ -56,7 +56,8 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => AuthWrapper(toggleTheme: toggleTheme),
         );
-
+      case '/Plumbing':
+        return MaterialPageRoute(builder: (_)=> ThemeCheck(toggleTheme: toggleTheme ?? (mode) {}));
       default:
         return MaterialPageRoute(
           builder: (_) =>

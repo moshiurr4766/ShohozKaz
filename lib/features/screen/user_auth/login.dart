@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(context, '/forgot');
                     },
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(actionColor), // ✅ text color
+                      foregroundColor: MaterialStateProperty.all(actionColor), 
                       overlayColor: MaterialStateProperty.all(Colors.transparent),
                       splashFactory: NoSplash.splashFactory,
                     ),
@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                // ✅ Login Button
+                //Login Button
                 ElevatedButton(
                   onPressed: _isLoading
                       ? null
