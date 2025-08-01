@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/core/constants.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
+//import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -23,7 +24,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       const Home(),
       const About(),
       ThemeCheck(toggleTheme: widget.toggleTheme), 
-      const Manu(),
+      const Home(),
     ];
   }
 

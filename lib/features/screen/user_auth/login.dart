@@ -142,8 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(context, '/forgot');
                     },
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(actionColor), 
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      foregroundColor: WidgetStateProperty.all(actionColor), 
+                      overlayColor: WidgetStateProperty.all(Colors.transparent),
                       splashFactory: NoSplash.splashFactory,
                     ),
                     child: Text(loc.forgotPassword),
@@ -193,13 +193,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushNamed(context, '/signup');
                       },
                       style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(actionColor),
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        foregroundColor: WidgetStateProperty.all(actionColor),
+                        overlayColor: WidgetStateProperty.all(Colors.transparent),
                         splashFactory: NoSplash.splashFactory,
                       ),
                       child: Text(
                         loc.registerText,
-                        style: TextStyle(color: actionColor), // ✅ color match
+                        style: TextStyle(color: actionColor), 
                       ),
                     ),
                   ],

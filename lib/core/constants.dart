@@ -45,8 +45,8 @@ class AppColors {
   static const Color textOnPrimary = Colors.white;
 
   //Light Buttons
-  static const Color button = Color(0xFF7454AC);
-  static const Color hover = Color(0xFFd5bdff);
+  static const Color button = Color(0xFFFF6B00);
+  static const Color hover = Color.fromARGB(255, 170, 71, 1);
   static const Color buttonText = Colors.white;
 
   // Error & Success
@@ -58,10 +58,24 @@ class AppColors {
 }
 
 class AppImages {
-
   //Banner
   static const String promoBanner1 = "assets/images/banner/b1.png";
   static const String promoBanner2 = "assets/images/banner/b2.png";
   static const String promoBanner3 = "assets/images/banner/b3.png";
   static const String promoBanner4 = "assets/images/banner/b4.png";
+
+  //Onboarding
+  static const String onBoard1 = "assets/animations/loading/handshake.gif";
+  static const String onBoard2 = "assets/images/banner/b4.png";
+  static const String onBoard3 = "assets/images/banner/b2.png";
+}
+
+class AppTexts {
+  //Onboarding Title Description
+  static const String title1 = "Find Nearby Jobs Instantly";
+  static const String description1 ="Get local jobs fast based on your skills and location";
+  static const String title2 = "Hire Local Workers Fast";
+  static const String description2 = "Quickly connect with nearby workers for any short task";
+  static const String title3 = "Secure Digital Payments";
+  static const String description3 = "Pay workers securely via bKash or Nagad anytime";
 }

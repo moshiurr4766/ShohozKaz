@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
+import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
 import 'package:shohozkaz/features/screen/pages/design/nav.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/postjobs.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
 import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
@@ -52,12 +55,20 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SignupScreen());
       case '/forgot':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
+      case '/onboarding':
+        return MaterialPageRoute(builder: (_) => const JobOnboardingScreen());
+      case '/findjobs':
+        return MaterialPageRoute(builder: (_) => const FindJobsScreen());
+      case '/postjobs':
+        return MaterialPageRoute(builder: (_) => const CreateJobScreen());
       case '/wrapper':
         return MaterialPageRoute(
           builder: (_) => AuthWrapper(toggleTheme: toggleTheme),
         );
       case '/Plumbing':
-        return MaterialPageRoute(builder: (_)=> ThemeCheck(toggleTheme: toggleTheme ?? (mode) {}));
+        return MaterialPageRoute(
+          builder: (_) => ThemeCheck(toggleTheme: toggleTheme ?? (mode) {}),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) =>

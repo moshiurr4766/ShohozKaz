@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
 import 'package:shohozkaz/features/screen/pages/design/nav.dart';
-import 'package:shohozkaz/features/screen/user_auth/login.dart';
 
 class AuthWrapper extends StatelessWidget {
   final Function(ThemeMode)? toggleTheme;
@@ -17,7 +17,7 @@ class AuthWrapper extends StatelessWidget {
         } else if (snapshot.hasData) {
           return BottomNavigation(toggleTheme: toggleTheme);
         } else {
-          return const LoginScreen();
+          return const JobOnboardingScreen();
         }
       },
     );

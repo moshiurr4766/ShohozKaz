@@ -82,12 +82,16 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.home),
                       title: const Text('Home'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/onboarding');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.briefcase),
                       title: const Text('Find Jobs'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/findjobs');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.tick_square),
@@ -97,7 +101,9 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.add_square),
                       title: const Text('Post Jobs'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/postjobs');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.save_2),
