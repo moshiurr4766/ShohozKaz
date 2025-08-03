@@ -27,7 +27,21 @@
   "enterPassValid": "কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন",
   "failedValid": "ভ্যালিডেশন ব্যর্থ হয়েছে",
   "forgotPasswordText": "পাসওয়ার্ড ভুলে গেছেন?",
-  "resetSuccessText": "পাসওয়ার্ড রিসেট লিংকটি আপনার ইমেইলে পাঠানো হয়েছে।"
+  "resetSuccessText": "পাসওয়ার্ড রিসেট লিংকটি আপনার ইমেইলে পাঠানো হয়েছে।",
+  "accountSettings": "অ্যাকাউন্ট এবং সেটিংস",
+  "notifications": "বিজ্ঞপ্তি",
+  "account": "অ্যাকাউন্ট",
+  "profile": "প্রোফাইল",
+  "businessProfile": "ব্যবসায়িক প্রোফাইল",
+  "digitalPayment": "ডিজিটাল পেমেন্ট",
+  "savedAddress": "সংরক্ষিত ঠিকানা",
+  "offers": "অফার",
+  "promos": "প্রমো কোড",
+  "referDiscounts": "রেফার করুন এবং ডিসকাউন্ট পান",
+  "settings": "সেটিংস",
+  "language": "ভাষা",
+  "permissions": "অনুমতিসমূহ",
+  "darkMode": "ডার্ক মোড"
 
 
 }

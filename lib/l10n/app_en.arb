@@ -27,5 +27,19 @@
   "enterPassValid":"Enter at least 6 characters",
   "failedValid":"Validation failed",
   "forgotPasswordText":"Forgot Password",
-  "resetSuccessText": "Password reset link has been sent to your email."
+  "resetSuccessText": "Password reset link has been sent to your email.",
+  "accountSettings": "Account & Settings",
+  "notifications": "Notifications",
+  "account": "ACCOUNT",
+  "profile": "Profile",
+  "businessProfile": "Business Profile",
+  "digitalPayment": "Digital Payment",
+  "savedAddress": "Saved Address",
+  "offers": "OFFERS",
+  "promos": "Promos",
+  "referDiscounts": "Refer & Get Discounts",
+  "settings": "SETTINGS",
+  "language": "Language",
+  "permissions": "Permissions",
+  "darkMode": "Dark Mode"
 }

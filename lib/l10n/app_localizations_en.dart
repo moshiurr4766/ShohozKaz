@@ -94,4 +94,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetSuccessText => 'Password reset link has been sent to your email.';
+
+  @override
+  String get accountSettings => 'Account & Settings';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get account => 'ACCOUNT';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get businessProfile => 'Business Profile';
+
+  @override
+  String get digitalPayment => 'Digital Payment';
+
+  @override
+  String get savedAddress => 'Saved Address';
+
+  @override
+  String get offers => 'OFFERS';
+
+  @override
+  String get promos => 'Promos';
+
+  @override
+  String get referDiscounts => 'Refer & Get Discounts';
+
+  @override
+  String get settings => 'SETTINGS';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get permissions => 'Permissions';
+
+  @override
+  String get darkMode => 'Dark Mode';
 }

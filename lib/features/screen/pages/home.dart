@@ -77,7 +77,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             userType: userType,
           ),
           appBar: AppBar(
-            title: const Text("ShozKaz"),
+            title: Padding(
+              padding: const EdgeInsets.only(left: 16, top: 0),
+              child: Text(
+                'My Jobs',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+            ),
+            toolbarHeight: 60,
             centerTitle: true,
             actions: [
               InkWell(
@@ -151,43 +162,51 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 return Wrap(
                   spacing: spacing,
                   runSpacing: spacing,
-                  children: (_showAllCategories ? _categories : _categories.take(8))
-                      .map(
-                        (item) => GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/${item['name']}');
-                          },
-                          child: Container(
-                            width: itemWidth,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: actionColor,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: actionColor),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  item['icon'],
-                                  size: 28,
-                                  color: AppColors.button,
+                  children:
+                      (_showAllCategories ? _categories : _categories.take(8))
+                          .map(
+                            (item) => GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/${item['name']}',
+                                );
+                              },
+                              child: Container(
+                                width: itemWidth,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
                                 ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  item['name'],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: isDark ? Colors.white : Colors.black,
-                                  ),
+                                decoration: BoxDecoration(
+                                  color: actionColor,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: actionColor),
                                 ),
-                              ],
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      item['icon'],
+                                      size: 28,
+                                      color: AppColors.button,
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      item['name'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isDark
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                      .toList(),
+                          )
+                          .toList(),
                 );
               },
             ),
@@ -216,16 +235,4 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

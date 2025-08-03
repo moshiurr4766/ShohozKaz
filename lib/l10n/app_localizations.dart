@@ -268,6 +268,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password reset link has been sent to your email.'**
   String get resetSuccessText;
+
+  /// No description provided for @accountSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & Settings'**
+  String get accountSettings;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCOUNT'**
+  String get account;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @businessProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Profile'**
+  String get businessProfile;
+
+  /// No description provided for @digitalPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital Payment'**
+  String get digitalPayment;
+
+  /// No description provided for @savedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Address'**
+  String get savedAddress;
+
+  /// No description provided for @offers.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFERS'**
+  String get offers;
+
+  /// No description provided for @promos.
+  ///
+  /// In en, this message translates to:
+  /// **'Promos'**
+  String get promos;
+
+  /// No description provided for @referDiscounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Refer & Get Discounts'**
+  String get referDiscounts;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'SETTINGS'**
+  String get settings;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions'**
+  String get permissions;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

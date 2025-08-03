@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shohozkaz/services/auth_service.dart';
 
 class CustomDrawer extends StatelessWidget {
   final String userName;
@@ -16,21 +17,19 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      
       borderRadius: const BorderRadius.only(
         topRight: Radius.circular(60),
         bottomRight: Radius.circular(60),
       ),
       child: Drawer(
-        child: SafeArea( 
+        child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             children: [
               const SizedBox(height: 16),
               InkWell(
                 onTap: () {
-                  Navigator.pop(context);
-                  // Navigator.pushNamed(context, '/profile');
+                  Navigator.pushNamed(context, '/editprofile');
                 },
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -77,13 +76,15 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.category),
                       title: const Text('Dashboard'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/dashboard');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.home),
                       title: const Text('Home'),
                       onTap: () {
-                        Navigator.pushNamed(context, '/onboarding');
+                        // Navigate to home page
                       },
                     ),
                     ListTile(
@@ -96,7 +97,9 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.tick_square),
                       title: const Text('My Jobs'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/myjobs');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.add_square),
@@ -113,24 +116,37 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.wallet),
                       title: const Text('Wallet'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/userwallet');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.support),
                       title: const Text('Support'),
-                      onTap: () {},
+                      onTap: () {
+                        // Navigate to support page
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.setting),
                       title: const Text('Setting'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
                     ),
-                    const SizedBox(height: 20), 
+                    const SizedBox(height: 20),
                     ListTile(
                       leading: const Icon(Iconsax.logout, color: Colors.red),
                       title: const Text('Logout'),
-                      onTap: () {
-                        Navigator.pop(context);
+                      onTap: () async {
+                        await authService.value.signOut();
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushNamedAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          '/login',
+                          (route) => false,
+                        );
                       },
                     ),
                   ],

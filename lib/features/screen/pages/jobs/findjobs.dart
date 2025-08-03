@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:shohozkaz/core/constants.dart';
 
@@ -142,13 +143,28 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Find Local Jobs'),
-        leading: Navigator.of(context).canPop()
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            : null,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 16, top:0),
+          child: Text(
+            'Find Local Jobs',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+          ),
+        ),
+        toolbarHeight: 60,
+        //centerTitle: true,
+        actions: [
+              InkWell(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(Iconsax.notification),
+                ),
+              ),
+            ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(spacing),

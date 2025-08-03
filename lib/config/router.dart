@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
 import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
+import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
 import 'package:shohozkaz/features/screen/pages/design/nav.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/myjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/postjobs.dart';
+import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
+import 'package:shohozkaz/features/screen/pages/profile/user_info.dart';
+import 'package:shohozkaz/features/screen/pages/wallet/user_wallet.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
 import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
@@ -22,7 +27,10 @@ class AppRouter {
     switch (settings.name) {
       case '/nav':
         return MaterialPageRoute(
-          builder: (_) => BottomNavigation(toggleTheme: toggleTheme),
+          builder: (_) => BottomNavigation(
+            toggleTheme: toggleTheme,
+            onLanguageChange: changeLocale, 
+          ),
         );
 
       case '/home':
@@ -44,7 +52,6 @@ class AppRouter {
             ),
           ),
         );
-
       case '/test':
         return MaterialPageRoute(builder: (_) => const TestUi());
       case '/splash':
@@ -61,6 +68,19 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const FindJobsScreen());
       case '/postjobs':
         return MaterialPageRoute(builder: (_) => const CreateJobScreen());
+      case '/myjobs':
+        return MaterialPageRoute(builder: (_) => const MyJobsScreen());
+      case '/editprofile':
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
+      case '/dashboard':
+        return MaterialPageRoute(builder: (_) => const DashboardScreen());
+      case '/userwallet':
+        return MaterialPageRoute(builder: (_) => MyWalletScreen());
+      case '/settings':
+        return MaterialPageRoute(builder: (_) => AccountSettingsScreen(
+          toggleTheme: toggleTheme ?? (mode) {},
+          onLanguageChange: changeLocale ?? (locale) {},
+        ));
       case '/wrapper':
         return MaterialPageRoute(
           builder: (_) => AuthWrapper(toggleTheme: toggleTheme),

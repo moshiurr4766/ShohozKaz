@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/core/constants.dart';
-import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
-//import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
+import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/myjobs.dart';
 
 class BottomNavigation extends StatefulWidget {
   final Function(ThemeMode)? toggleTheme;
-  const BottomNavigation({super.key, this.toggleTheme});
+  final Function(Locale)? onLanguageChange;
+  const BottomNavigation({super.key, this.toggleTheme, this.onLanguageChange});
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
@@ -22,9 +24,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
     super.initState();
     widgetOptions = <Widget>[
       const Home(),
-      const About(),
-      ThemeCheck(toggleTheme: widget.toggleTheme), 
-      const Home(),
+      FindJobsScreen(),
+      MyJobsScreen(),
+      AccountSettingsScreen(
+        toggleTheme: widget.toggleTheme ?? (themeMode) {},
+        onLanguageChange: widget.onLanguageChange ?? (locale) {},
+      ),
     ];
   }
 
@@ -37,12 +42,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
-      body: IndexedStack(
-        index: selectedIndex,
-        children: widgetOptions,
-      ),
-      
-
+      body: IndexedStack(index: selectedIndex, children: widgetOptions),
 
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16),
@@ -61,14 +61,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
-            
+
             child: Theme(
-            data: Theme.of(context).copyWith(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              //splashFactory: NoSplash.splashFactory,
-            ),
+              data: Theme.of(context).copyWith(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                //splashFactory: NoSplash.splashFactory,
+              ),
               child: BottomNavigationBar(
                 currentIndex: selectedIndex,
                 onTap: _onItemTapped,
@@ -84,13 +84,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
+                    icon: Icon(Iconsax.briefcase),
+                    label: 'Find Job',
+                  ),
+                  BottomNavigationBarItem(
                     icon: Icon(Iconsax.tick_square),
                     label: 'My Job',
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Iconsax.support),
-                    label: 'Support',
-                  ),
+
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.menu),
                     label: 'Menu',
@@ -98,43 +99,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ],
               ),
             ),
-          ),        ),
+          ),
+        ),
       ),
-    
-    
-    
     );
     return scaffold;
-  }
-}
-
-
-class About extends StatelessWidget {
-  const About({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("About Page", style: TextStyle(fontSize: 24)));
-  }
-}
-
-// profile.dart
-
-class Profile extends StatelessWidget {
-  const Profile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Profile Page", style: TextStyle(fontSize: 24)));
-  }
-}
-
-
-class Manu extends StatelessWidget {
-  const Manu({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Manu Page", style: TextStyle(fontSize: 24)));
   }
 }

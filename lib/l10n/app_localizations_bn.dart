@@ -94,4 +94,46 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get resetSuccessText => 'পাসওয়ার্ড রিসেট লিংকটি আপনার ইমেইলে পাঠানো হয়েছে।';
+
+  @override
+  String get accountSettings => 'অ্যাকাউন্ট এবং সেটিংস';
+
+  @override
+  String get notifications => 'বিজ্ঞপ্তি';
+
+  @override
+  String get account => 'অ্যাকাউন্ট';
+
+  @override
+  String get profile => 'প্রোফাইল';
+
+  @override
+  String get businessProfile => 'ব্যবসায়িক প্রোফাইল';
+
+  @override
+  String get digitalPayment => 'ডিজিটাল পেমেন্ট';
+
+  @override
+  String get savedAddress => 'সংরক্ষিত ঠিকানা';
+
+  @override
+  String get offers => 'অফার';
+
+  @override
+  String get promos => 'প্রমো কোড';
+
+  @override
+  String get referDiscounts => 'রেফার করুন এবং ডিসকাউন্ট পান';
+
+  @override
+  String get settings => 'সেটিংস';
+
+  @override
+  String get language => 'ভাষা';
+
+  @override
+  String get permissions => 'অনুমতিসমূহ';
+
+  @override
+  String get darkMode => 'ডার্ক মোড';
 }
