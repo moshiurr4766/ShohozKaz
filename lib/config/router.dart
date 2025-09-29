@@ -9,7 +9,6 @@ import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/myjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/postjobs.dart';
 import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
-import 'package:shohozkaz/features/screen/pages/profile/user_info.dart';
 import 'package:shohozkaz/features/screen/pages/wallet/user_wallet.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
@@ -17,6 +16,7 @@ import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
 import 'package:shohozkaz/features/screen/user_auth/signup.dart';
 import 'package:shohozkaz/features/screen/user_auth/login.dart';
 import 'package:shohozkaz/widgets/language_switch.dart';
+
 
 class AppRouter {
   static Route<dynamic> generateRoute(
@@ -70,8 +70,6 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const CreateJobScreen());
       case '/myjobs':
         return MaterialPageRoute(builder: (_) => const MyJobsScreen());
-      case '/editprofile':
-        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
       case '/dashboard':
         return MaterialPageRoute(builder: (_) => const DashboardScreen());
       case '/userwallet':

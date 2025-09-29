@@ -1,4 +1,265 @@
+// import 'dart:io';
+// import 'package:flutter/material.dart';
+// import 'package:iconsax/iconsax.dart';
+// import 'package:image_picker/image_picker.dart';
+
+// class EditProfileScreen extends StatefulWidget {
+//   const EditProfileScreen({super.key});
+
+//   @override
+//   State<EditProfileScreen> createState() => _EditProfileScreenState();
+// }
+
+// class _EditProfileScreenState extends State<EditProfileScreen> {
+//   File? _imageFile;
+//   final picker = ImagePicker();
+
+//   Future<void> _pickImage() async {
+//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+//     if (pickedFile != null) setState(() => _imageFile = File(pickedFile.path));
+//   }
+
+//   final TextEditingController nameController = TextEditingController(
+//     text: 'Shahidul Islam',
+//   );
+//   final TextEditingController locationController = TextEditingController(
+//     text: 'Dhaka, Bangladesh',
+//   );
+//   final TextEditingController bioController = TextEditingController(
+//     text:
+//         'Experienced electrician with 5+ years in commercial and residential projects. Certified and reliable.',
+//   );
+
+//   String selectedRole = 'Worker';
+//   String selectedLanguage = 'English';
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final colorScheme = Theme.of(context).colorScheme;
+//     final isDark = Theme.of(context).brightness == Brightness.dark;
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Padding(
+//           padding: const EdgeInsets.only(left: 16, top: 0),
+//           child: Text(
+//             'Edit Profile',
+//             style: TextStyle(
+//               fontSize: 22,
+//               fontWeight: FontWeight.bold,
+//               color: colorScheme.onSurface,
+//             ),
+//           ),
+//         ),
+//         toolbarHeight: 60,
+//         centerTitle: true,
+//         actions: [
+//           InkWell(
+//             highlightColor: Colors.transparent,
+//             splashColor: Colors.transparent,
+//             hoverColor: Colors.transparent,
+//             onTap: () {},
+//             child: const Padding(
+//               padding: EdgeInsets.symmetric(horizontal: 16),
+//               child: Icon(Iconsax.notification),
+//             ),
+//           ),
+//         ],
+//       ),
+//       body: SingleChildScrollView(
+//         padding: const EdgeInsets.all(8),
+//         child: Column(
+//           children: [
+//             // Profile Card
+//             Card(
+//               elevation: isDark ? 0 : 2,
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(16),
+//               ),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(10),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       'Public Information',
+//                       style: Theme.of(context).textTheme.titleMedium,
+//                     ),
+//                     const SizedBox(height: 4),
+//                     Text(
+//                       'This information will be visible to others on the platform.',
+//                       style: Theme.of(context).textTheme.bodySmall,
+//                     ),
+//                     const SizedBox(height: 20),
+
+//                     // Profile Picture
+//                     Center(
+//                       child: GestureDetector(
+//                         onTap: _pickImage,
+//                         child: CircleAvatar(
+//                           radius: 50,
+//                           backgroundImage: _imageFile != null
+//                               ? FileImage(_imageFile!)
+//                               : null,
+//                           backgroundColor: colorScheme.surfaceContainerHighest,
+//                           child: _imageFile == null
+//                               ? const Icon(
+//                                   Icons.camera_alt_outlined,
+//                                   size: 28,
+//                                   color: Colors.grey,
+//                                 )
+//                               : null,
+//                         ),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 24),
+//                     _buildLabel('Full Name'),
+//                     TextFormField(
+//                       controller: nameController,
+//                       decoration: const InputDecoration(
+//                         border: UnderlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 16),
+//                     _buildLabel('Email Address'),
+//                     const TextField(
+//                       enabled: false,
+//                       decoration: InputDecoration(
+//                         hintText: 'shahidul@example.com',
+//                         border: UnderlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 16),
+//                     _buildLabel('Phone Number'),
+//                     const TextField(
+//                       enabled: false,
+//                       decoration: InputDecoration(
+//                         hintText: '017xxx xxxxxx',
+//                         border: UnderlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 16),
+//                     _buildLabel('Location'),
+//                     TextFormField(
+//                       controller: locationController,
+//                       decoration: const InputDecoration(
+//                         border: UnderlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 16),
+//                     _buildLabel('Primary Role'),
+//                     Container(
+//                       decoration: BoxDecoration(
+//                         color: colorScheme.surfaceContainerHighest,
+//                         borderRadius: BorderRadius.circular(12),
+//                       ),
+//                       padding: const EdgeInsets.all(8),
+//                       child: ToggleButtons(
+//                         isSelected: [
+//                           'Worker',
+//                           'Employer',
+//                         ].map((e) => e == selectedRole).toList(),
+//                         onPressed: (index) {
+//                           setState(() {
+//                             selectedRole = ['Worker', 'Employer'][index];
+//                           });
+//                         },
+//                         borderRadius: BorderRadius.circular(8),
+//                         selectedColor: colorScheme.onPrimary,
+//                         fillColor: colorScheme.primary,
+//                         color: colorScheme.onSurface,
+//                         constraints: const BoxConstraints(
+//                           minHeight: 42,
+//                           minWidth: 100,
+//                         ),
+//                         textStyle: const TextStyle(fontWeight: FontWeight.w500),
+//                         children: const [Text('Worker'), Text('Employer')],
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 16),
+//                     _buildLabel('Bio'),
+//                     TextFormField(
+//                       controller: bioController,
+//                       maxLines: 2,
+//                       decoration: const InputDecoration(
+//                         border: UnderlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 16),
+//                     _buildLabel('Preferred Language'),
+//                     Container(
+//                       decoration: BoxDecoration(
+//                         color: colorScheme.surfaceContainerHighest,
+//                         borderRadius: BorderRadius.circular(12),
+//                       ),
+//                       padding: const EdgeInsets.all(8),
+//                       child: ToggleButtons(
+//                         isSelected: [
+//                           'English',
+//                           'বাংলা',
+//                         ].map((e) => e == selectedRole).toList(),
+//                         onPressed: (index) {
+//                           setState(() {
+//                             selectedRole = ['English', 'বাংলা'][index];
+//                           });
+//                         },
+//                         borderRadius: BorderRadius.circular(8),
+//                         selectedColor: colorScheme.onPrimary,
+//                         fillColor: colorScheme.primary,
+//                         color: colorScheme.onSurface,
+//                         constraints: const BoxConstraints(
+//                           minHeight: 42,
+//                           minWidth: 100,
+//                         ),
+//                         textStyle: const TextStyle(fontWeight: FontWeight.w500),
+//                         children: const [Text('English'), Text('বাংলা')],
+//                       ),
+//                     ),
+//                     const SizedBox(height: 24),
+//                     SizedBox(
+//                       width: double.infinity,
+//                       height: 48,
+//                       child: FilledButton(
+//                         onPressed: () {
+//                           // Save logic
+//                         },
+//                         style: FilledButton.styleFrom(
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(8),
+//                           ),
+//                         ),
+//                         child: const Text("Save Changes"),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildLabel(String text) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 6),
+//       child: Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
+//     );
+//   }
+// }
+
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,63 +275,120 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   File? _imageFile;
   final picker = ImagePicker();
 
-  Future<void> _pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) setState(() => _imageFile = File(pickedFile.path));
-  }
-
-  final TextEditingController nameController = TextEditingController(
-    text: 'Shahidul Islam',
-  );
-  final TextEditingController locationController = TextEditingController(
-    text: 'Dhaka, Bangladesh',
-  );
-  final TextEditingController bioController = TextEditingController(
-    text:
-        'Experienced electrician with 5+ years in commercial and residential projects. Certified and reliable.',
-  );
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
 
   String selectedRole = 'Worker';
   String selectedLanguage = 'English';
+  String email = '';
+  String phone = '';
+  String? profileImageUrl;
+
+  bool _loading = true;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() => _imageFile = File(pickedFile.path));
+    }
+  }
+
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('userInfo')
+        .doc(user.uid)
+        .get();
+
+    if (doc.exists) {
+      final data = doc.data()!;
+      nameController.text = data['name'] ?? '';
+      locationController.text = data['location'] ?? '';
+      bioController.text = data['bio'] ?? '';
+      selectedRole = data['role'] ?? 'Worker';
+      selectedLanguage = data['language'] ?? 'English';
+      email = data['email'] ?? user.email ?? '';
+      phone = data['phoneNumber'] ?? '';
+      profileImageUrl = data['profileImage'];
+    }
+
+    setState(() => _loading = false);
+  }
+
+  Future<void> _saveChanges() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    String? uploadedImageUrl = profileImageUrl;
+
+    // Upload new profile image if selected
+    if (_imageFile != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('userprofile')
+          .child('${user.uid}.jpg');
+      await ref.putFile(_imageFile!);
+      uploadedImageUrl = await ref.getDownloadURL();
+    }
+
+    await FirebaseFirestore.instance.collection('userInfo').doc(user.uid).set({
+      'name': nameController.text.trim(),
+      'email': email,
+      'phoneNumber': phone,
+      'location': locationController.text.trim(),
+      'role': selectedRole,
+      'language': selectedLanguage,
+      'bio': bioController.text.trim(),
+      'profileImage': uploadedImageUrl,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Profile updated successfully"),
+        backgroundColor: Theme.of(
+          context,
+        ).colorScheme.primary, // your theme color
+        behavior: SnackBarBehavior.floating, // optional, makes it float
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // optional rounded corners
+        ),
+      ),
+    );
+
+    Navigator.pop(context); // go back
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 0),
-          child: Text(
-            'Edit Profile',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: colorScheme.onSurface,
-            ),
-          ),
-        ),
-        toolbarHeight: 60,
+        title: const Text('Edit Profile'),
         centerTitle: true,
         actions: [
-          InkWell(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(Iconsax.notification),
-            ),
-          ),
+          IconButton(onPressed: () {}, icon: const Icon(Iconsax.notification)),
         ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            // Profile Card
             Card(
               elevation: isDark ? 0 : 2,
               shape: RoundedRectangleBorder(
@@ -82,17 +400,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Public Information',
+                      "Public Information",
                       style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'This information will be visible to others on the platform.',
-                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 20),
 
-                    // Profile Picture
+                    // ✅ Profile Image
                     Center(
                       child: GestureDetector(
                         onTap: _pickImage,
@@ -100,9 +413,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           radius: 50,
                           backgroundImage: _imageFile != null
                               ? FileImage(_imageFile!)
-                              : null,
+                              : (profileImageUrl != null
+                                        ? NetworkImage(profileImageUrl!)
+                                        : null)
+                                    as ImageProvider?,
                           backgroundColor: colorScheme.surfaceContainerHighest,
-                          child: _imageFile == null
+                          child: _imageFile == null && profileImageUrl == null
                               ? const Icon(
                                   Icons.camera_alt_outlined,
                                   size: 28,
@@ -124,11 +440,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                     const SizedBox(height: 16),
                     _buildLabel('Email Address'),
-                    const TextField(
+                    TextField(
                       enabled: false,
                       decoration: InputDecoration(
-                        hintText: 'shahidul@example.com',
-                        border: UnderlineInputBorder(),
+                        hintText: email,
+                        border: const UnderlineInputBorder(),
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+                    _buildLabel('Phone Number'),
+                    TextField(
+                      enabled: true,
+                      decoration: InputDecoration(
+                        hintText: phone.isNotEmpty ? phone : 'Not Provided',
+                        border: const UnderlineInputBorder(),
                       ),
                     ),
 
@@ -143,33 +469,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                     const SizedBox(height: 16),
                     _buildLabel('Primary Role'),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(12),
+                    ToggleButtons(
+                      isSelected: [
+                        'Worker',
+                        'Employer',
+                      ].map((e) => e == selectedRole).toList(),
+                      onPressed: (index) {
+                        setState(() {
+                          selectedRole = ['Worker', 'Employer'][index];
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      selectedColor: colorScheme.onPrimary,
+                      fillColor: colorScheme.primary,
+                      color: colorScheme.onSurface,
+                      constraints: const BoxConstraints(
+                        minHeight: 42,
+                        minWidth: 100,
                       ),
-                      padding: const EdgeInsets.all(8),
-                      child: ToggleButtons(
-                        isSelected: [
-                          'Worker',
-                          'Employer',
-                        ].map((e) => e == selectedRole).toList(),
-                        onPressed: (index) {
-                          setState(() {
-                            selectedRole = ['Worker', 'Employer'][index];
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(8),
-                        selectedColor: colorScheme.onPrimary,
-                        fillColor: colorScheme.primary,
-                        color: colorScheme.onSurface,
-                        constraints: const BoxConstraints(
-                          minHeight: 42,
-                          minWidth: 100,
-                        ),
-                        textStyle: const TextStyle(fontWeight: FontWeight.w500),
-                        children: const [Text('Worker'), Text('Employer')],
-                      ),
+                      children: const [Text('Worker'), Text('Employer')],
                     ),
 
                     const SizedBox(height: 16),
@@ -184,42 +502,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                     const SizedBox(height: 16),
                     _buildLabel('Preferred Language'),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(12),
+                    ToggleButtons(
+                      isSelected: [
+                        'English',
+                        'বাংলা',
+                      ].map((e) => e == selectedLanguage).toList(),
+                      onPressed: (index) {
+                        setState(() {
+                          selectedLanguage = ['English', 'বাংলা'][index];
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      selectedColor: colorScheme.onPrimary,
+                      fillColor: colorScheme.primary,
+                      color: colorScheme.onSurface,
+                      constraints: const BoxConstraints(
+                        minHeight: 42,
+                        minWidth: 100,
                       ),
-                      padding: const EdgeInsets.all(8),
-                      child: ToggleButtons(
-                        isSelected: [
-                          'English',
-                          'বাংলা',
-                        ].map((e) => e == selectedRole).toList(),
-                        onPressed: (index) {
-                          setState(() {
-                            selectedRole = ['English', 'বাংলা'][index];
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(8),
-                        selectedColor: colorScheme.onPrimary,
-                        fillColor: colorScheme.primary,
-                        color: colorScheme.onSurface,
-                        constraints: const BoxConstraints(
-                          minHeight: 42,
-                          minWidth: 100,
-                        ),
-                        textStyle: const TextStyle(fontWeight: FontWeight.w500),
-                        children: const [Text('English'), Text('বাংলা')],
-                      ),
+                      children: const [Text('English'), Text('বাংলা')],
                     ),
+
                     const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       height: 48,
                       child: FilledButton(
-                        onPressed: () {
-                          // Save logic
-                        },
+                        onPressed: _saveChanges,
                         style: FilledButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),

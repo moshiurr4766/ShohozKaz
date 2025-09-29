@@ -37,8 +37,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.shohozkaz"
-        minSdkVersion(23)
-        targetSdkVersion(33) // Or whatever Flutter suggests
+        minSdkVersion(24)
+        targetSdkVersion(34) // Or whatever Flutter suggests
         versionCode = 1
         versionName = "1.0"
     }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shohozkaz/core/constants.dart';
+import 'package:shohozkaz/features/screen/pages/profile/user_info.dart';
 import 'package:shohozkaz/services/auth_service.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -18,10 +20,12 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-        topRight: Radius.circular(60),
-        bottomRight: Radius.circular(60),
+        topRight: Radius.circular(0),
+        bottomRight: Radius.circular(0),
       ),
       child: Drawer(
+       
+        width: MediaQuery.of(context).size.width * 0.65, 
         child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -29,7 +33,12 @@ class CustomDrawer extends StatelessWidget {
               const SizedBox(height: 16),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, '/editprofile');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditProfileScreen(),
+                    ),
+                  );
                 },
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -44,7 +53,41 @@ class CustomDrawer extends StatelessWidget {
                         color: Colors.blue,
                       ),
                       child: ClipOval(
-                        child: Image.asset(profileImage, fit: BoxFit.cover),
+                        child: profileImage.isNotEmpty
+                            ? Image.network(
+                                profileImage,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey[400],
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      userName.isNotEmpty
+                                          ? userName[0].toUpperCase()
+                                          : "?",
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(
+                                color: Colors.grey[400],
+                                alignment: Alignment.center,
+                                child: Text(
+                                  userName.isNotEmpty
+                                      ? userName[0].toUpperCase()
+                                      : "?",
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -52,8 +95,8 @@ class CustomDrawer extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(userName, style: const TextStyle(fontSize: 18)),
-                          Text(userType, style: const TextStyle(fontSize: 16)),
+                          Text(userName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text(userType, style: const TextStyle(fontSize: 12, color: AppColors.button)),
                         ],
                       ),
                     ),
@@ -62,9 +105,9 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
-              // Menu List with ripple effects disabled
+              // Menu List
               Theme(
                 data: Theme.of(context).copyWith(
                   splashColor: Colors.transparent,
@@ -76,37 +119,27 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.category),
                       title: const Text('Dashboard'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/dashboard');
-                      },
+                      onTap: () => Navigator.pushNamed(context, '/dashboard'),
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.home),
                       title: const Text('Home'),
-                      onTap: () {
-                        // Navigate to home page
-                      },
+                      onTap: () {},
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.briefcase),
                       title: const Text('Find Jobs'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/findjobs');
-                      },
+                      onTap: () => Navigator.pushNamed(context, '/findjobs'),
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.tick_square),
                       title: const Text('My Jobs'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/myjobs');
-                      },
+                      onTap: () => Navigator.pushNamed(context, '/myjobs'),
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.add_square),
                       title: const Text('Post Jobs'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/postjobs');
-                      },
+                      onTap: () => Navigator.pushNamed(context, '/postjobs'),
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.save_2),
@@ -116,25 +149,19 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.wallet),
                       title: const Text('Wallet'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/userwallet');
-                      },
+                      onTap: () => Navigator.pushNamed(context, '/userwallet'),
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.support),
                       title: const Text('Support'),
-                      onTap: () {
-                        // Navigate to support page
-                      },
+                      onTap: () {},
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.setting),
                       title: const Text('Setting'),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/settings');
-                      },
+                      onTap: () => Navigator.pushNamed(context, '/settings'),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
                     ListTile(
                       leading: const Icon(Iconsax.logout, color: Colors.red),
                       title: const Text('Logout'),
@@ -142,7 +169,6 @@ class CustomDrawer extends StatelessWidget {
                         await authService.value.signOut();
                         // ignore: use_build_context_synchronously
                         Navigator.pushNamedAndRemoveUntil(
-                          // ignore: use_build_context_synchronously
                           context,
                           '/login',
                           (route) => false,

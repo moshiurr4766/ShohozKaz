@@ -24,8 +24,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
     super.initState();
     widgetOptions = <Widget>[
       const Home(),
-      FindJobsScreen(),
-      MyJobsScreen(),
+      const FindJobsScreen(),
+      const MyJobsScreen(),
       AccountSettingsScreen(
         toggleTheme: widget.toggleTheme ?? (themeMode) {},
         onLanguageChange: widget.onLanguageChange ?? (locale) {},
@@ -41,19 +41,21 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffold = Scaffold(
-      body: IndexedStack(index: selectedIndex, children: widgetOptions),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    return Scaffold(
+      body: IndexedStack(index: selectedIndex, children: widgetOptions),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(0),
+        //padding: const EdgeInsets.all(12),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(0),
+            //borderRadius: BorderRadius.circular(30),
+            color: isDark ? Colors.grey[900] : Colors.white, 
             boxShadow: [
               BoxShadow(
-                // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withOpacity(0.01),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
@@ -61,15 +63,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
-
             child: Theme(
               data: Theme.of(context).copyWith(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 hoverColor: Colors.transparent,
-                //splashFactory: NoSplash.splashFactory,
               ),
               child: BottomNavigationBar(
+                backgroundColor: Colors.transparent, // ✅ rely on container bg
                 currentIndex: selectedIndex,
                 onTap: _onItemTapped,
                 selectedItemColor: AppColors.button,
@@ -91,7 +92,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     icon: Icon(Iconsax.tick_square),
                     label: 'My Job',
                   ),
-
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.menu),
                     label: 'Menu',
@@ -103,6 +103,5 @@ class _BottomNavigationState extends State<BottomNavigation> {
         ),
       ),
     );
-    return scaffold;
   }
 }
