@@ -8,24 +8,24 @@ class ChatServices {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// 🔹 Stream all users from `userInfo` collection
+  //Stream all users from `userInfo` collection
   Stream<List<Map<String, dynamic>>> getUsersStream() {
     return _db.collection('userInfo').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         final user = doc.data();
-        user['uid'] = doc.id; // ensure uid is included
+        user['uid'] = doc.id; 
         return user;
       }).toList();
     });
   }
 
-  /// 🔹 Create a stable chatRoomId (sorted by uid)
+  //Create a stable chatRoomId (sorted by uid)
   String _roomId(String a, String b) {
     final ids = [a, b]..sort();
     return ids.join('_');
   }
 
-  /// 🔹 Send a message
+  //Send a message
   Future<void> sendMessage({
     required String receiverId,
     required String message,
@@ -53,14 +53,14 @@ class ChatServices {
           .add(msg.toMap());
 
       if (kDebugMode) {
-        print("✅ Message sent to $roomId");
+        print("Message sent to $roomId");
       }
     } catch (e) {
-      debugPrint("❌ Error sending message: $e");
+      debugPrint("Error sending message: $e");
     }
   }
 
-  /// 🔹 Get messages between two users
+  //Get messages between two users
   Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
     final roomId = _roomId(userId, otherUserId);
     return _db

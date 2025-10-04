@@ -1,42 +1,45 @@
-
-
 import 'package:flutter/material.dart';
 
 class Usertile extends StatelessWidget {
-  final String text;
+  final String title;   
+  final String subtitle; 
+  final String? profileImage; 
   final void Function() onTap;
+
   const Usertile({
     super.key,
-    required this.text,
+    required this.title,
     required this.onTap,
+    this.subtitle = "",
+    this.profileImage,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.deepOrange,
-          borderRadius: BorderRadius.circular(12),
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      child: ListTile(
+        onTap: onTap,
+        leading: CircleAvatar(
+          radius: 24,
+          backgroundColor: Colors.deepOrange.shade200,
+          backgroundImage:
+              profileImage != null && profileImage!.isNotEmpty ? NetworkImage(profileImage!) : null,
+          child: (profileImage == null || profileImage!.isEmpty)
+              ? Text(
+                  title.isNotEmpty ? title[0].toUpperCase() : "?",
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                )
+              : null,
         ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              child: Text(text.isNotEmpty ? text[0].toUpperCase() : '?'),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18),
-          ],
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
+        subtitle: subtitle.isNotEmpty ? Text(subtitle) : null,
+        trailing: const Icon(Icons.chat_bubble_outline, color: Colors.deepOrange),
       ),
     );
   }
