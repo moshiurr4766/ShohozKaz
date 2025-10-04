@@ -154,7 +154,9 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.support),
                       title: const Text('Support'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/chathome');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.setting),
@@ -169,6 +171,7 @@ class CustomDrawer extends StatelessWidget {
                         await authService.value.signOut();
                         // ignore: use_build_context_synchronously
                         Navigator.pushNamedAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
                           context,
                           '/login',
                           (route) => false,

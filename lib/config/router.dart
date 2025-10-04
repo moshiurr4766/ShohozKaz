@@ -3,6 +3,7 @@ import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
 import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
 import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
+import 'package:shohozkaz/features/screen/pages/chatscreen/chat_home.dart';
 import 'package:shohozkaz/features/screen/pages/design/nav.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
@@ -87,6 +88,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ThemeCheck(toggleTheme: toggleTheme ?? (mode) {}),
         );
+
+      case '/chathome':
+        return MaterialPageRoute(
+          builder: (_) =>  ChatHomeScreen(),
+        );  
       default:
         return MaterialPageRoute(
           builder: (_) =>

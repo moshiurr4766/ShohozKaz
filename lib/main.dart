@@ -9,3 +9,4 @@ void main() async {
 
   runApp(const ShohozKazApp());
 }
+

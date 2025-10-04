@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 ValueNotifier<StoreService> storeService = ValueNotifier(StoreService());
 
-
 class StoreService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -16,6 +15,7 @@ class StoreService {
   }) async {
     try {
       await firestore.collection('userInfo').doc(uid).set({
+        'uid': uid,
         'name': name,
         'email': email,
         'phoneNumber': phone,

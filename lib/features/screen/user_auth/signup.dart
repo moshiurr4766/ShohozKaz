@@ -28,6 +28,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
+
   @override
   void dispose() {
     nameController.dispose();
@@ -41,7 +42,6 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoading = true;
     });
-
     try {
       await authService.value.signUp(
         email: emailController.text,
@@ -59,7 +59,11 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (!mounted) return;
+
       Navigator.pushReplacementNamed(context, '/nav');
+
+    
+
     } on FirebaseAuthException catch (e) {
       debugPrint("Registration failed: ${e.message}");
     } on FirebaseException catch (e) {
@@ -79,7 +83,9 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color actionColor = isDark ? Colors.white : const Color.fromARGB(255, 0, 0, 0);
+    final Color actionColor = isDark
+        ? Colors.white
+        : const Color.fromARGB(255, 0, 0, 0);
 
     return Scaffold(
       body: Center(
@@ -106,7 +112,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     labelText: loc.nameText,
                     labelStyle: TextStyle(color: actionColor),
                     border: const OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person_2_outlined, color: actionColor),
+                    prefixIcon: Icon(
+                      Icons.person_2_outlined,
+                      color: actionColor,
+                    ),
                   ),
                   style: TextStyle(color: actionColor),
                   validator: (value) =>
