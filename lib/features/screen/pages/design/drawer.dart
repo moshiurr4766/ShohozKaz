@@ -154,6 +154,13 @@ class CustomDrawer extends StatelessWidget {
                       onTap: () => Navigator.pushNamed(context, '/postjobs'),
                     ),
                     ListTile(
+                      leading: const Icon(Iconsax.user),
+                      title: const Text('Update Jobs'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/updatejobsscreen');
+                      },
+                    ),
+                    ListTile(
                       leading: const Icon(Iconsax.save_2),
                       title: const Text('Saved Jobs'),
                       onTap: () {

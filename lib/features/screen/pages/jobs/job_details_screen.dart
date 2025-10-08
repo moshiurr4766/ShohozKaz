@@ -23,7 +23,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // 🔹 Format Firestore timestamp
+    //  Format Firestore timestamp
     String postedDate = '';
     if (widget.job['postedAt'] != null) {
       try {
@@ -49,7 +49,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🔹 Job Image
+            //  Job Image
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: (widget.job['imageUrl'] != null &&
@@ -66,14 +66,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             ),
             const SizedBox(height: 20),
 
-            // 🔹 Title
+            //  Title
             Text(
               widget.job['title'] ?? '',
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
 
-            // 🔹 Location
+            //  Location
             Row(
               children: [
                 const Icon(Icons.location_on, size: 18, color: Colors.grey),
@@ -86,7 +86,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             ),
             const SizedBox(height: 8),
 
-            // 🔹 Salary
+            //  Salary
             Text(
               "৳ ${widget.job['salary'] ?? ''}",
               style: const TextStyle(
@@ -97,7 +97,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             ),
             const SizedBox(height: 6),
 
-            // 🔹 Posted Date
+            //  Posted Date
             if (postedDate.isNotEmpty)
               Text(
                 "Posted on $postedDate",
@@ -106,7 +106,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
             const Divider(height: 32, thickness: 0.8),
 
-            // 🔹 Summary
+            //  Summary
             if (widget.job['summary'] != null &&
                 widget.job['summary'].toString().isNotEmpty)
               _sectionCard(
@@ -116,7 +116,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 theme: theme,
               ),
 
-            // 🔹 Description
+            //  Description
             _sectionCard(
               title: "Job Description",
               content: widget.job['description'] ?? '',
@@ -124,7 +124,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               theme: theme,
             ),
 
-            // 🔹 Requirements
+            // Requirements
             _sectionCard(
               title: "Requirements",
               content:
@@ -135,12 +135,12 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
             const SizedBox(height: 25),
 
-            // 🔹 Live Chat
+            //  Live Chat
             _liveChatSection(context, theme),
 
             const SizedBox(height: 25),
 
-            // 🔹 Action Buttons
+            //  Action Buttons
             Row(
               children: [
                 Expanded(
@@ -188,7 +188,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     );
   }
 
-  // 🔸 Section Card
+  //  Section Card
   Widget _sectionCard({
     required String title,
     required String content,
@@ -228,7 +228,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     );
   }
 
-  // 🔸 Live Chat Section
+  //  Live Chat Section
   Widget _liveChatSection(BuildContext context, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -319,9 +319,11 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   // Save Job Function
   Future<void> _saveJob(BuildContext context) async {
     setState(() => _isSaving = true);
+    final theme = Theme.of(context);
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
+        if (mounted) setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please log in to save jobs.")),
         );
@@ -337,18 +339,40 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
       await savedJobRef.set(widget.job);
 
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Job saved successfully!"),
-          backgroundColor: AppColors.button,
-        ),
-      );
+
+       // ignore: use_build_context_synchronously
+       ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(' Job saved successfully!',
+            style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: theme.colorScheme.primary,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          ),
+        );
     } catch (e) {
+
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to save job: $e")),
-      );
+          SnackBar(
+            content: const Text(' Failed to save job!',
+            style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: theme.colorScheme.primary,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          ),
+        );
+      
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }

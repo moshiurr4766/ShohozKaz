@@ -1,20 +1,24 @@
+
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class CreateJobScreen extends StatefulWidget {
-  const CreateJobScreen({super.key});
+class EditJobScreen extends StatefulWidget {
+  final String jobId;
+  final Map<String, dynamic> jobData;
+
+  const EditJobScreen({super.key, required this.jobId, required this.jobData});
 
   @override
-  State<CreateJobScreen> createState() => _CreateJobScreenState();
+  State<EditJobScreen> createState() => _EditJobScreenState();
 }
 
-class _CreateJobScreenState extends State<CreateJobScreen> {
+class _EditJobScreenState extends State<EditJobScreen> {
   int _currentStep = 0;
-  bool _isPosting = false;
+  bool _isUpdating = false;
 
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -30,34 +34,37 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
 
-  final jobTypes = ['Part-time', 'Full-time', 'Remote', 'One-time'];
-  final skills = ['Electric', 'Plumbing', 'Driving', 'Cleaning'];
-  final experiences = ['None', '1+ year', '2+ years', '5+ years'];
-  final educations = ['None', 'Primary', 'Secondary', 'HSC', 'Graduate'];
+  @override
+  void initState() {
+    super.initState();
 
-  void _nextStep() {
-    if (_currentStep < 2) setState(() => _currentStep++);
+    _titleController.text = widget.jobData['title'] ?? '';
+    _descriptionController.text = widget.jobData['description'] ?? '';
+    _salaryController.text = widget.jobData['salary'] ?? '';
+    _summaryController.text = widget.jobData['summary'] ?? '';
+
+    selectedLocation = widget.jobData['location'] ?? 'Dhaka, Bangladesh';
+    selectedJobType = widget.jobData['jobType'] ?? 'Part-time';
+    selectedSkill = widget.jobData['skill'] ?? 'Driving';
+    selectedExperience = widget.jobData['experience'] ?? '1+ year';
+    selectedEducation = widget.jobData['education'] ?? 'Secondary';
   }
 
-  void _previousStep() {
-    if (_currentStep > 0) setState(() => _currentStep--);
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() => _selectedImage = File(pickedFile.path));
+    }
   }
 
-  // CHANGED: Updated job post function to include jobId
-  Future<void> _postJob() async {
-    if (_isPosting) return;
-    setState(() => _isPosting = true);
+  Future<void> _updateJob() async {
+    if (_isUpdating) return;
+    setState(() => _isUpdating = true);
+    final theme = Theme.of(context);
 
     try {
-      String? imageUrl;
+      String imageUrl = widget.jobData['imageUrl'] ?? '';
 
-      //  Get current user info
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception("User not logged in");
-      }
-
-      // Upload image to Firebase Storage
       if (_selectedImage != null) {
         final ref = FirebaseStorage.instance
             .ref()
@@ -67,12 +74,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         imageUrl = await ref.getDownloadURL();
       }
 
-      // CHANGED: create a custom doc reference first (to get jobId)
-      final jobRef = FirebaseFirestore.instance.collection('jobs').doc();
-
-      //  CHANGED: Save job with jobId included
-      await jobRef.set({
-        'jobId': jobRef.id, //  new line: store jobId inside document
+      await FirebaseFirestore.instance
+          .collection('jobs')
+          .doc(widget.jobId)
+          .update({
         'title': _titleController.text.trim(),
         'description': _descriptionController.text.trim(),
         'location': selectedLocation,
@@ -82,21 +87,16 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         'education': selectedEducation,
         'salary': _salaryController.text.trim(),
         'summary': _summaryController.text.trim(),
-        'imageUrl': imageUrl ?? '',
-        'postedAt': FieldValue.serverTimestamp(),
-        'employerId': user.uid,
-        'employerEmail': user.email,
+        'imageUrl': imageUrl,
+        'updatedAt': FieldValue.serverTimestamp(),
       });
 
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            ' Job Posted Successfully!',
-            style: TextStyle(color: Colors.white),
-          ),
-          // ignore: use_build_context_synchronously
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          content: const Text(' Job updated successfully!',
+            style: TextStyle(color: Colors.white),),
+          backgroundColor: theme.colorScheme.primary,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(
@@ -105,19 +105,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         ),
       );
-
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     } catch (e) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            ' Job Posted Failed!',
-            style: TextStyle(color: Colors.white),
-          ),
-          // ignore: use_build_context_synchronously
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          content: Text(' Failed to update: $e'),
+          backgroundColor: theme.colorScheme.error,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(
@@ -127,23 +122,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         ),
       );
     } finally {
-      if (mounted) setState(() => _isPosting = false);
+      if (mounted) setState(() => _isUpdating = false);
     }
   }
-  //  END CHANGED SECTION  
 
   void _cancel() {
-    if (_isPosting) return;
+    if (_isUpdating) return;
     Navigator.of(context).pop();
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
+  void _nextStep() {
+    if (_currentStep < 2) setState(() => _currentStep++);
+  }
+
+  void _previousStep() {
+    if (_currentStep > 0) setState(() => _currentStep--);
   }
 
   InputDecoration _inputDecoration(String hint) {
@@ -151,16 +144,23 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     return InputDecoration(
       hintText: hint,
       filled: true,
-      fillColor: isDark ? Colors.grey[900] : Colors.white,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.orange.shade200),
-      ),
+      fillColor: isDark ? Colors.grey[850] : Colors.white,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.orange.shade100),
+        borderSide: BorderSide(
+          // ignore: deprecated_member_use
+          color: Colors.deepOrange.withOpacity(0.4),
+        ),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.deepOrange, width: 1.5),
+      ),
+      hintStyle: TextStyle(
+        color: isDark ? Colors.grey[400] : Colors.grey[600],
+      ),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
     );
   }
 
@@ -195,10 +195,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 child: Row(
                   children: List.generate(totalSteps - 1, (_) {
                     return Expanded(
-                      child: Container(
-                        height: 4,
-                        color: Colors.orange.shade100,
-                      ),
+                      child: Container(height: 4, color: Colors.orange.shade100),
                     );
                   }),
                 ),
@@ -226,6 +223,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   Color color = isCompleted || isCurrent
                       ? Colors.deepOrange
                       : Colors.orange.shade100;
+
                   return Container(
                     width: 16,
                     height: 16,
@@ -243,12 +241,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     );
   }
 
-  Widget _buildDropdown(
-    String label,
-    String value,
-    List<String> items,
-    void Function(String?)? onChanged,
-  ) {
+  Widget _buildDropdown(String label, String value, List<String> items,
+      void Function(String?)? onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -269,147 +263,139 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   }
 
   Widget _buildJobDetailsPage() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text('Job Title', style: TextStyle(fontWeight: FontWeight.bold)),
-      const SizedBox(height: 6),
-      TextField(
-        controller: _titleController,
-        decoration: _inputDecoration('Title Here'),
-      ),
-      const SizedBox(height: 16),
-      const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
-      const SizedBox(height: 6),
-      TextField(
-        controller: _descriptionController,
-        maxLines: 4,
-        decoration: _inputDecoration('Sometext here...'),
-      ),
-      const SizedBox(height: 16),
-      _buildDropdown('Location', selectedLocation, [
-        'Dhaka, Bangladesh',
-        'Chittagong, Bangladesh',
-        'Sylhet, Bangladesh',
-      ], (val) => setState(() => selectedLocation = val!)),
-      const SizedBox(height: 16),
-      _buildDropdown(
-        'Job Type',
-        selectedJobType,
-        jobTypes,
-        (val) => setState(() => selectedJobType = val!),
-      ),
-    ],
-  );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Job Title', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 6),
+          TextField(
+              controller: _titleController,
+              decoration: _inputDecoration('Title Here')),
+          const SizedBox(height: 16),
+          const Text('Description',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _descriptionController,
+            maxLines: 4,
+            decoration: _inputDecoration('Sometext here...'),
+          ),
+          const SizedBox(height: 16),
+          _buildDropdown('Location', selectedLocation, [
+            'Dhaka, Bangladesh',
+            'Chittagong, Bangladesh',
+            'Sylhet, Bangladesh',
+          ], (val) => setState(() => selectedLocation = val!)),
+          const SizedBox(height: 16),
+          _buildDropdown('Job Type', selectedJobType,
+              ['Part-time', 'Full-time', 'Remote', 'One-time'],
+              (val) => setState(() => selectedJobType = val!)),
+        ],
+      );
 
   Widget _buildSkillsPage() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      _buildDropdown(
-        'Skill',
-        selectedSkill,
-        skills,
-        (val) => setState(() => selectedSkill = val!),
-      ),
-      const SizedBox(height: 16),
-      _buildDropdown(
-        'Experience',
-        selectedExperience,
-        experiences,
-        (val) => setState(() => selectedExperience = val!),
-      ),
-      const SizedBox(height: 16),
-      _buildDropdown(
-        'Education Level',
-        selectedEducation,
-        educations,
-        (val) => setState(() => selectedEducation = val!),
-      ),
-    ],
-  );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDropdown('Skill', selectedSkill,
+              ['Electric', 'Plumbing', 'Driving', 'Cleaning'],
+              (val) => setState(() => selectedSkill = val!)),
+          const SizedBox(height: 16),
+          _buildDropdown('Experience', selectedExperience,
+              ['None', '1+ year', '2+ years', '5+ years'],
+              (val) => setState(() => selectedExperience = val!)),
+          const SizedBox(height: 16),
+          _buildDropdown('Education Level', selectedEducation,
+              ['None', 'Primary', 'Secondary', 'HSC', 'Graduate'],
+              (val) => setState(() => selectedEducation = val!)),
+        ],
+      );
 
   Widget _buildPublishPage() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      GestureDetector(
-        onTap: _pickImage,
-        child: Container(
-          height: 150,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.orange[50],
-            borderRadius: BorderRadius.circular(12),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[850]
+                    : Colors.orange[50],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: _selectedImage != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.file(_selectedImage!, fit: BoxFit.cover),
+                    )
+                  : (widget.jobData['imageUrl'] != null &&
+                          widget.jobData['imageUrl'].toString().isNotEmpty)
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(widget.jobData['imageUrl'],
+                              fit: BoxFit.cover),
+                        )
+                      : const Icon(Icons.image,
+                          size: 80, color: Colors.orange),
+            ),
           ),
-          child: _selectedImage != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(_selectedImage!, fit: BoxFit.cover),
-                )
-              : const Icon(Icons.image, size: 80, color: Colors.orange),
-        ),
-      ),
-      const SizedBox(height: 16),
-      const Text(
-        'Expected Salary',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      const SizedBox(height: 6),
-      TextField(
-        controller: _salaryController,
-        decoration: _inputDecoration('৳1000/day'),
-      ),
-      const SizedBox(height: 16),
-      const Text('Job Summary', style: TextStyle(fontWeight: FontWeight.bold)),
-      const SizedBox(height: 6),
-      TextField(
-        controller: _summaryController,
-        maxLines: 4,
-        decoration: _inputDecoration('Sometext here...'),
-      ),
-      const SizedBox(height: 24),
-      _buildPublishBottomButtons(),
-    ],
-  );
+          const SizedBox(height: 16),
+          const Text('Expected Salary',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 6),
+          TextField(
+              controller: _salaryController,
+              decoration: _inputDecoration('৳1000/day')),
+          const SizedBox(height: 16),
+          const Text('Job Summary',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _summaryController,
+            maxLines: 4,
+            decoration: _inputDecoration('Sometext here...'),
+          ),
+          const SizedBox(height: 24),
+          _buildUpdateButtons(),
+        ],
+      );
 
-  Widget _buildPublishBottomButtons() {
+  Widget _buildUpdateButtons() {
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: _isPosting ? null : _previousStep,
+                onPressed: _isUpdating ? null : _previousStep,
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                  side: const BorderSide(color: Colors.deepOrange),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
-                  _isPosting ? 'Posting...' : 'Back',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+                child: const Text('Back',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange)),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: OutlinedButton(
-                onPressed: _isPosting ? null : _cancel,
+                onPressed: _isUpdating ? null : _cancel,
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                  side: const BorderSide(color: Colors.deepOrange),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                child: const Text('Cancel',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange)),
               ),
             ),
           ],
@@ -418,7 +404,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: _isPosting ? null : _postJob,
+            onPressed: _isUpdating ? null : _updateJob,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepOrange,
               foregroundColor: Colors.white,
@@ -427,7 +413,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: _isPosting
+            child: _isUpdating
                 ? const SizedBox(
                     width: 20,
                     height: 20,
@@ -436,10 +422,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                       strokeWidth: 2,
                     ),
                   )
-                : const Text(
-                    'Post Job',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                : const Text('Update Job',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ),
       ],
@@ -457,13 +441,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+                borderRadius: BorderRadius.circular(12)),
           ),
-          child: const Text(
-            'Next',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          child: const Text('Next',
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ),
       );
     } else if (_currentStep == 1) {
@@ -475,13 +456,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text(
-                'Back',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              child: const Text('Back',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
           const SizedBox(width: 12),
@@ -493,13 +471,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text(
-                'Next',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              child: const Text('Next',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -520,10 +495,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Create Job'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: const Text('Edit Job'),
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SafeArea(
         child: Padding(

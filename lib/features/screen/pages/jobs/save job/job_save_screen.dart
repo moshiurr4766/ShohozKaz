@@ -74,16 +74,18 @@ class SavedJobsScreen extends StatelessWidget {
                   ],
                 ),
                 child: ListTile(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   leading: Container(
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color:
-                          isDark ? Colors.grey[850] : Colors.orange.shade50,
-                      image: job['imageUrl'] != null &&
+                      color: isDark ? Colors.grey[850] : Colors.orange.shade50,
+                      image:
+                          job['imageUrl'] != null &&
                               (job['imageUrl'] as String).isNotEmpty
                           ? DecorationImage(
                               image: NetworkImage(job['imageUrl']),
@@ -91,7 +93,8 @@ class SavedJobsScreen extends StatelessWidget {
                             )
                           : null,
                     ),
-                    child: job['imageUrl'] == null ||
+                    child:
+                        job['imageUrl'] == null ||
                             (job['imageUrl'] as String).isEmpty
                         ? Icon(
                             Icons.work_outline,
@@ -121,9 +124,7 @@ class SavedJobsScreen extends StatelessWidget {
                           Icon(
                             Icons.location_on,
                             size: 14,
-                            color: isDark
-                                ? Colors.grey.shade400
-                                : Colors.grey,
+                            color: isDark ? Colors.grey.shade400 : Colors.grey,
                           ),
                           const SizedBox(width: 4),
                           Expanded(
@@ -158,7 +159,8 @@ class SavedJobsScreen extends StatelessWidget {
                     ),
                     color: isDark ? Colors.grey[900] : Colors.white,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     onSelected: (value) async {
                       if (value == 'view') {
                         Navigator.push(
@@ -171,8 +173,9 @@ class SavedJobsScreen extends StatelessWidget {
                         final confirm = await showDialog<bool>(
                           context: context,
                           builder: (context) => AlertDialog(
-                            backgroundColor:
-                                isDark ? Colors.grey[900] : Colors.white,
+                            backgroundColor: isDark
+                                ? Colors.grey[900]
+                                : Colors.white,
                             title: Text(
                               "Remove Saved Job",
                               style: TextStyle(
@@ -184,17 +187,16 @@ class SavedJobsScreen extends StatelessWidget {
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, false),
+                                onPressed: () => Navigator.pop(context, false),
                                 child: Text(
                                   "Cancel",
                                   style: TextStyle(
-                                      color: theme.colorScheme.primary),
+                                    color: theme.colorScheme.primary,
+                                  ),
                                 ),
                               ),
                               TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, true),
+                                onPressed: () => Navigator.pop(context, true),
                                 child: const Text(
                                   "Remove",
                                   style: TextStyle(color: Colors.red),
@@ -212,10 +214,22 @@ class SavedJobsScreen extends StatelessWidget {
                               .doc(doc.id)
                               .delete();
 
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Job removed from saved list."),
-                              backgroundColor: Colors.redAccent,
+                            SnackBar(
+                              content: const Text(' Job Remove successfully!',
+                              style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: theme.colorScheme.primary,
+                              behavior: SnackBarBehavior.floating,
+                              margin: const EdgeInsets.all(16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 14,
+                              ),
                             ),
                           );
                         }
@@ -226,14 +240,17 @@ class SavedJobsScreen extends StatelessWidget {
                         value: 'view',
                         child: Row(
                           children: [
-                            Icon(Icons.visibility_outlined,
-                                size: 18,
-                                color: theme.colorScheme.onSurface),
+                            Icon(
+                              Icons.visibility_outlined,
+                              size: 18,
+                              color: theme.colorScheme.onSurface,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               "View Details",
                               style: TextStyle(
-                                  color: theme.colorScheme.onSurface),
+                                color: theme.colorScheme.onSurface,
+                              ),
                             ),
                           ],
                         ),
@@ -242,13 +259,13 @@ class SavedJobsScreen extends StatelessWidget {
                         value: 'delete',
                         child: Row(
                           children: [
-                            Icon(Icons.delete_outline,
-                                color: Colors.red, size: 18),
-                            SizedBox(width: 8),
-                            Text(
-                              "Remove",
-                              style: TextStyle(color: Colors.red),
+                            Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
+                              size: 18,
                             ),
+                            SizedBox(width: 8),
+                            Text("Remove", style: TextStyle(color: Colors.red)),
                           ],
                         ),
                       ),

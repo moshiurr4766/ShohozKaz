@@ -9,6 +9,7 @@ import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/myjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/postjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/updatejobs/update_jobs.dart';
 import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
 import 'package:shohozkaz/features/screen/pages/wallet/user_wallet.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
@@ -92,7 +93,9 @@ class AppRouter {
       case '/chathome':
         return MaterialPageRoute(
           builder: (_) =>  ChatHomeScreen(),
-        );  
+        ); 
+      case '/updatejobsscreen':
+        return MaterialPageRoute(builder: (_) => const UpdateJobsScreen()); 
       default:
         return MaterialPageRoute(
           builder: (_) =>
