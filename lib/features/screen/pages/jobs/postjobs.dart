@@ -1,6 +1,12 @@
+
+
+
 // import 'package:flutter/material.dart';
 // import 'dart:io';
 // import 'package:image_picker/image_picker.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 // class CreateJobScreen extends StatefulWidget {
 //   const CreateJobScreen({super.key});
@@ -11,6 +17,7 @@
 
 // class _CreateJobScreenState extends State<CreateJobScreen> {
 //   int _currentStep = 0;
+//   bool _isPosting = false;
 
 //   final _titleController = TextEditingController();
 //   final _descriptionController = TextEditingController();
@@ -39,19 +46,70 @@
 //     if (_currentStep > 0) setState(() => _currentStep--);
 //   }
 
-//   void _postJob() {
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Job Posted!')),
-//     );
+//   // ✅ Updated job post function with employer info
+//   Future<void> _postJob() async {
+//     if (_isPosting) return;
+//     setState(() => _isPosting = true);
+
+//     try {
+//       String? imageUrl;
+
+//       // ✅ Get current user info
+//       final user = FirebaseAuth.instance.currentUser;
+//       if (user == null) {
+//         throw Exception("User not logged in");
+//       }
+
+//       // ✅ Upload image to Firebase Storage
+//       if (_selectedImage != null) {
+//         final ref = FirebaseStorage.instance
+//             .ref()
+//             .child('jobpost')
+//             .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+//         await ref.putFile(_selectedImage!);
+//         imageUrl = await ref.getDownloadURL();
+//       }
+
+//       // ✅ Save job to Firestore
+//       await FirebaseFirestore.instance.collection('jobs').add({
+//         'title': _titleController.text.trim(),
+//         'description': _descriptionController.text.trim(),
+//         'location': selectedLocation,
+//         'jobType': selectedJobType,
+//         'skill': selectedSkill,
+//         'experience': selectedExperience,
+//         'education': selectedEducation,
+//         'salary': _salaryController.text.trim(),
+//         'summary': _summaryController.text.trim(),
+//         'imageUrl': imageUrl ?? '',
+//         'postedAt': FieldValue.serverTimestamp(),
+
+//         // ✅ Add employer info from current user
+//         'employerId': user.uid,
+//         'employerEmail': user.email,
+//       });
+
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: const Text('Job Posted Successfully!'),
+//           backgroundColor: Theme.of(context).colorScheme.primary,
+//         ),
+//       );
+
+//       Navigator.of(context).pop();
+//     } catch (e) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text('Failed: $e')),
+//       );
+//     } finally {
+//       if (mounted) setState(() => _isPosting = false);
+//     }
 //   }
 
-//   void _saveDraft() {
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Saved as Draft')),
-//     );
+//   void _cancel() {
+//     if (_isPosting) return;
+//     Navigator.of(context).pop();
 //   }
-
-//   void _cancel() => Navigator.of(context).pop();
 
 //   Future<void> _pickImage() async {
 //     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -142,7 +200,8 @@
 //                   return Container(
 //                     width: 16,
 //                     height: 16,
-//                     decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+//                     decoration:
+//                         BoxDecoration(color: color, shape: BoxShape.circle),
 //                   );
 //                 }),
 //               ),
@@ -153,7 +212,8 @@
 //     );
 //   }
 
-//   Widget _buildDropdown(String label, String value, List<String> items, void Function(String?)? onChanged) {
+//   Widget _buildDropdown(String label, String value, List<String> items,
+//       void Function(String?)? onChanged) {
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
@@ -164,7 +224,8 @@
 //           decoration: _inputDecoration('Select $label'),
 //           isExpanded: true,
 //           icon: const Icon(Icons.arrow_drop_down),
-//           items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+//           items:
+//               items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
 //           onChanged: onChanged,
 //         ),
 //       ],
@@ -176,9 +237,12 @@
 //         children: [
 //           const Text('Job Title', style: TextStyle(fontWeight: FontWeight.bold)),
 //           const SizedBox(height: 6),
-//           TextField(controller: _titleController, decoration: _inputDecoration('Title Here')),
+//           TextField(
+//               controller: _titleController,
+//               decoration: _inputDecoration('Title Here')),
 //           const SizedBox(height: 16),
-//           const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+//           const Text('Description',
+//               style: TextStyle(fontWeight: FontWeight.bold)),
 //           const SizedBox(height: 6),
 //           TextField(
 //             controller: _descriptionController,
@@ -200,7 +264,8 @@
 //   Widget _buildSkillsPage() => Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
-//           _buildDropdown('Skill', selectedSkill, skills, (val) => setState(() => selectedSkill = val!)),
+//           _buildDropdown('Skill', selectedSkill, skills,
+//               (val) => setState(() => selectedSkill = val!)),
 //           const SizedBox(height: 16),
 //           _buildDropdown('Experience', selectedExperience, experiences,
 //               (val) => setState(() => selectedExperience = val!)),
@@ -227,15 +292,20 @@
 //                       borderRadius: BorderRadius.circular(12),
 //                       child: Image.file(_selectedImage!, fit: BoxFit.cover),
 //                     )
-//                   : const Icon(Icons.image, size: 80, color: Colors.orange),
+//                   : const Icon(Icons.image,
+//                       size: 80, color: Colors.orange),
 //             ),
 //           ),
 //           const SizedBox(height: 16),
-//           const Text('Expected Salary', style: TextStyle(fontWeight: FontWeight.bold)),
+//           const Text('Expected Salary',
+//               style: TextStyle(fontWeight: FontWeight.bold)),
 //           const SizedBox(height: 6),
-//           TextField(controller: _salaryController, decoration: _inputDecoration('৳1000/day')),
+//           TextField(
+//               controller: _salaryController,
+//               decoration: _inputDecoration('৳1000/day')),
 //           const SizedBox(height: 16),
-//           const Text('Job Summary', style: TextStyle(fontWeight: FontWeight.bold)),
+//           const Text('Job Summary',
+//               style: TextStyle(fontWeight: FontWeight.bold)),
 //           const SizedBox(height: 6),
 //           TextField(
 //             controller: _summaryController,
@@ -254,7 +324,7 @@
 //           children: [
 //             Expanded(
 //               child: OutlinedButton(
-//                 onPressed: _saveDraft,
+//                 onPressed: _isPosting ? null : _previousStep,
 //                 style: OutlinedButton.styleFrom(
 //                   padding: const EdgeInsets.symmetric(vertical: 16),
 //                   side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
@@ -262,13 +332,16 @@
 //                     borderRadius: BorderRadius.circular(12),
 //                   ),
 //                 ),
-//                 child: const Text('Save Draft', style: TextStyle(fontWeight: FontWeight.bold)),
+//                 child: Text(
+//                   _isPosting ? 'Posting...' : 'Back',
+//                   style: const TextStyle(fontWeight: FontWeight.bold),
+//                 ),
 //               ),
 //             ),
 //             const SizedBox(width: 12),
 //             Expanded(
 //               child: OutlinedButton(
-//                 onPressed: _cancel,
+//                 onPressed: _isPosting ? null : _cancel,
 //                 style: OutlinedButton.styleFrom(
 //                   padding: const EdgeInsets.symmetric(vertical: 16),
 //                   side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
@@ -276,7 +349,8 @@
 //                     borderRadius: BorderRadius.circular(12),
 //                   ),
 //                 ),
-//                 child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+//                 child: const Text('Cancel',
+//                     style: TextStyle(fontWeight: FontWeight.bold)),
 //               ),
 //             ),
 //           ],
@@ -285,7 +359,7 @@
 //         SizedBox(
 //           width: double.infinity,
 //           child: ElevatedButton(
-//             onPressed: _postJob,
+//             onPressed: _isPosting ? null : _postJob,
 //             style: ElevatedButton.styleFrom(
 //               backgroundColor: Colors.deepOrange,
 //               foregroundColor: Colors.white,
@@ -294,7 +368,17 @@
 //                 borderRadius: BorderRadius.circular(12),
 //               ),
 //             ),
-//             child: const Text('Post Job', style: TextStyle(fontWeight: FontWeight.bold)),
+//             child: _isPosting
+//                 ? const SizedBox(
+//                     width: 20,
+//                     height: 20,
+//                     child: CircularProgressIndicator(
+//                       color: Colors.white,
+//                       strokeWidth: 2,
+//                     ),
+//                   )
+//                 : const Text('Post Job',
+//                     style: TextStyle(fontWeight: FontWeight.bold)),
 //           ),
 //         ),
 //       ],
@@ -311,9 +395,11 @@
 //             backgroundColor: Colors.deepOrange,
 //             foregroundColor: Colors.white,
 //             padding: const EdgeInsets.symmetric(vertical: 16),
-//             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//             shape:
+//                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 //           ),
-//           child: const Text('Next', style: TextStyle(fontWeight: FontWeight.bold)),
+//           child: const Text('Next',
+//               style: TextStyle(fontWeight: FontWeight.bold)),
 //         ),
 //       );
 //     } else if (_currentStep == 1) {
@@ -324,9 +410,11 @@
 //               onPressed: _previousStep,
 //               style: OutlinedButton.styleFrom(
 //                 padding: const EdgeInsets.symmetric(vertical: 16),
-//                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(12)),
 //               ),
-//               child: const Text('Back', style: TextStyle(fontWeight: FontWeight.bold)),
+//               child: const Text('Back',
+//                   style: TextStyle(fontWeight: FontWeight.bold)),
 //             ),
 //           ),
 //           const SizedBox(width: 12),
@@ -337,9 +425,11 @@
 //                 backgroundColor: Colors.deepOrange,
 //                 foregroundColor: Colors.white,
 //                 padding: const EdgeInsets.symmetric(vertical: 16),
-//                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(12)),
 //               ),
-//               child: const Text('Next', style: TextStyle(fontWeight: FontWeight.bold)),
+//               child: const Text('Next',
+//                   style: TextStyle(fontWeight: FontWeight.bold)),
 //             ),
 //           ),
 //         ],
@@ -372,7 +462,8 @@
 //             children: [
 //               _buildStepIndicator(),
 //               const SizedBox(height: 24),
-//               Expanded(child: SingleChildScrollView(child: pages[_currentStep])),
+//               Expanded(
+//                   child: SingleChildScrollView(child: pages[_currentStep])),
 //               const SizedBox(height: 16),
 //               _buildBottomNavigation(),
 //             ],
@@ -389,15 +480,12 @@
 
 
 
-
-
-
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateJobScreen extends StatefulWidget {
   const CreateJobScreen({super.key});
@@ -408,7 +496,7 @@ class CreateJobScreen extends StatefulWidget {
 
 class _CreateJobScreenState extends State<CreateJobScreen> {
   int _currentStep = 0;
-  bool _isPosting = false; // 👈 prevents multiple clicks
+  bool _isPosting = false;
 
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -437,26 +525,36 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     if (_currentStep > 0) setState(() => _currentStep--);
   }
 
+  // ✅ CHANGED: Updated job post function to include jobId
   Future<void> _postJob() async {
-    if (_isPosting) return; // 👈 block multiple taps
+    if (_isPosting) return;
     setState(() => _isPosting = true);
 
     try {
       String? imageUrl;
 
-      // Upload image to Firebase Storage
+      // ✅ Get current user info
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("User not logged in");
+      }
+
+      // ✅ Upload image to Firebase Storage
       if (_selectedImage != null) {
         final ref = FirebaseStorage.instance
             .ref()
             .child('jobpost')
             .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
-
         await ref.putFile(_selectedImage!);
         imageUrl = await ref.getDownloadURL();
       }
 
-      // Save job details to Firestore
-      await FirebaseFirestore.instance.collection('jobs').add({
+      // ✅ CHANGED: create a custom doc reference first (to get jobId)
+      final jobRef = FirebaseFirestore.instance.collection('jobs').doc();
+
+      // ✅ CHANGED: Save job with jobId included
+      await jobRef.set({
+        'jobId': jobRef.id, // ✅ new line: store jobId inside document
         'title': _titleController.text.trim(),
         'description': _descriptionController.text.trim(),
         'location': selectedLocation,
@@ -468,9 +566,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         'summary': _summaryController.text.trim(),
         'imageUrl': imageUrl ?? '',
         'postedAt': FieldValue.serverTimestamp(),
+        'employerId': user.uid,
+        'employerEmail': user.email,
       });
 
-      // ✅ Success snackbar with theme color
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Job Posted Successfully!'),
@@ -478,7 +577,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         ),
       );
 
-      // ✅ Go back after success
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -488,9 +586,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
       if (mounted) setState(() => _isPosting = false);
     }
   }
+  // ✅ END CHANGED SECTION
 
   void _cancel() {
-    if (_isPosting) return; // 👈 prevent cancel during posting
+    if (_isPosting) return;
     Navigator.of(context).pop();
   }
 
@@ -607,8 +706,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           decoration: _inputDecoration('Select $label'),
           isExpanded: true,
           icon: const Icon(Icons.arrow_drop_down),
-          items:
-              items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+          items: items
+              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              .toList(),
           onChanged: onChanged,
         ),
       ],
@@ -707,10 +807,11 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: _isPosting ? null : _previousStep, // 👈 back to previous step
+                onPressed: _isPosting ? null : _previousStep,
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                  side:
+                      BorderSide(color: Theme.of(context).colorScheme.onSurface),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -727,7 +828,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 onPressed: _isPosting ? null : _cancel,
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                  side:
+                      BorderSide(color: Theme.of(context).colorScheme.onSurface),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -778,8 +880,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             backgroundColor: Colors.deepOrange,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
           ),
           child: const Text('Next',
               style: TextStyle(fontWeight: FontWeight.bold)),
@@ -856,10 +958,3 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     );
   }
 }
-
-
-
-
-
-
-

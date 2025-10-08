@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -109,10 +107,7 @@ class _ChatPageState extends State<ChatPage> {
                       : null,
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 18),
-                ),
+                Text(name, style: const TextStyle(fontSize: 18)),
               ],
             );
           },
@@ -123,8 +118,10 @@ class _ChatPageState extends State<ChatPage> {
           // 🔹 MESSAGES AREA
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  _chatServices.getMessages(currentUserId, widget.receiverId),
+              stream: _chatServices.getMessages(
+                currentUserId,
+                widget.receiverId,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Center(child: Text("Error loading messages"));
@@ -171,7 +168,9 @@ class _ChatPageState extends State<ChatPage> {
 
   // 🔹 Build message list with date separators
   List<Widget> _buildMessageList(
-      List<QueryDocumentSnapshot> docs, String currentUserId) {
+    List<QueryDocumentSnapshot> docs,
+    String currentUserId,
+  ) {
     List<Widget> widgets = [];
     DateTime? lastDate;
 
@@ -231,10 +230,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: sendMessage,
-          ),
+          IconButton(icon: const Icon(Icons.send), onPressed: sendMessage),
         ],
       ),
     );
@@ -265,13 +261,9 @@ class _ChatDateSeparator extends StatelessWidget {
             color: bgColor,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(
-            label,
-            style: TextStyle(fontSize: 12, color: textColor),
-          ),
+          child: Text(label, style: TextStyle(fontSize: 12, color: textColor)),
         ),
       ),
     );
   }
 }
-

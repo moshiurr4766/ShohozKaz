@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/core/constants.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/save%20job/job_save_screen.dart';
 import 'package:shohozkaz/features/screen/pages/profile/user_info.dart';
 import 'package:shohozkaz/services/auth_service.dart';
 
@@ -24,8 +25,7 @@ class CustomDrawer extends StatelessWidget {
         bottomRight: Radius.circular(0),
       ),
       child: Drawer(
-       
-        width: MediaQuery.of(context).size.width * 0.65, 
+        width: MediaQuery.of(context).size.width * 0.65,
         child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -95,8 +95,20 @@ class CustomDrawer extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(userName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                          Text(userType, style: const TextStyle(fontSize: 12, color: AppColors.button)),
+                          Text(
+                            userName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            userType,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.button,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -144,7 +156,14 @@ class CustomDrawer extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Iconsax.save_2),
                       title: const Text('Saved Jobs'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SavedJobsScreen(),
+                          ),
+                        );
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Iconsax.wallet),

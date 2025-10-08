@@ -46,16 +46,17 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Scaffold(
       body: IndexedStack(index: selectedIndex, children: widgetOptions),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(0),
-        //padding: const EdgeInsets.all(12),
+        //padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(12),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
-            //borderRadius: BorderRadius.circular(30),
+            //borderRadius: BorderRadius.circular(0),
+            borderRadius: BorderRadius.circular(30),
             color: isDark ? Colors.grey[900] : Colors.white, 
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.01),
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.1),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
