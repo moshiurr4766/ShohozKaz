@@ -6,8 +6,11 @@ import 'package:shohozkaz/features/screen/pages/account_settings/account_setting
 import 'package:shohozkaz/features/screen/pages/chatscreen/chat_home.dart';
 import 'package:shohozkaz/features/screen/pages/design/nav.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/pending_jobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/poster_pending_jobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/user_pending_jobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/myjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/myjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/postjobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/updatejobs/update_jobs.dart';
 import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
@@ -96,6 +99,13 @@ class AppRouter {
         ); 
       case '/updatejobsscreen':
         return MaterialPageRoute(builder: (_) => const UpdateJobsScreen()); 
+      case '/pendingjobs':
+        return MaterialPageRoute(builder: (_) => const PendingJobsScreen());
+
+      case '/userpendingjobs':
+        return MaterialPageRoute(builder: (_) => const UserPendingJobsScreen());
+      case '/posterpendingjobs':
+        return MaterialPageRoute(builder: (_) => const PosterPendingJobsScreen());
       default:
         return MaterialPageRoute(
           builder: (_) =>

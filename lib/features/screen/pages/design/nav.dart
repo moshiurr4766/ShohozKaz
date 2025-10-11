@@ -4,7 +4,7 @@ import 'package:shohozkaz/features/screen/pages/account_settings/account_setting
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/myjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/myjobs.dart';
 
 class BottomNavigation extends StatefulWidget {
   final Function(ThemeMode)? toggleTheme;
@@ -87,11 +87,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.briefcase),
-                    label: 'Find Job',
+                    label: 'Search Jobs',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.tick_square),
-                    label: 'My Job',
+                    label: 'On Going',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.menu),

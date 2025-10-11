@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/core/constants.dart';
+
 import 'package:shohozkaz/features/screen/pages/jobs/save%20job/job_save_screen.dart';
 import 'package:shohozkaz/features/screen/pages/profile/user_info.dart';
 import 'package:shohozkaz/services/auth_service.dart';
@@ -190,6 +191,34 @@ class CustomDrawer extends StatelessWidget {
                       onTap: () => Navigator.pushNamed(context, '/settings'),
                     ),
                     const SizedBox(height: 5),
+
+                    ListTile(
+                      leading: const Icon(Iconsax.check1),
+                      title: const Text('Pending Jobs'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/pendingjobs');
+                      },
+                    ),
+                    const SizedBox(height: 5),
+
+                    ListTile(
+                      leading: const Icon(Iconsax.check1),
+                      title: const Text('User Pending'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/userpendingjobs');
+                      },
+                    ),
+                    const SizedBox(height: 5),
+
+                    ListTile(
+                      leading: const Icon(Iconsax.check1),
+                      title: const Text('Poster Pending'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/posterpendingjobs');
+                      },
+                    ),
+                    const SizedBox(height: 5),
+
                     ListTile(
                       leading: const Icon(Iconsax.logout, color: Colors.red),
                       title: const Text('Logout'),
