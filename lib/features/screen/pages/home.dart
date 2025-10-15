@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/core/constants.dart';
-import 'package:shohozkaz/features/screen/pages/design/drawer.dart';
+import 'package:shohozkaz/features/screen/pages/design/employer_drawer.dart';
 import 'package:shohozkaz/features/screen/pages/design/widgets/home_banner.dart';
 
 class Home extends StatefulWidget {

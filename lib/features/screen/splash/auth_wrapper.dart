@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
-import 'package:shohozkaz/features/screen/pages/design/nav.dart';
+import 'package:shohozkaz/features/screen/pages/design/employer_navbar.dart';
 
 class AuthWrapper extends StatelessWidget {
   final Function(ThemeMode)? toggleTheme;

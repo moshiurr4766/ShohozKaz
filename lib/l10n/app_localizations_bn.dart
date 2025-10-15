@@ -93,7 +93,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get forgotPasswordText => 'পাসওয়ার্ড ভুলে গেছেন?';
 
   @override
-  String get resetSuccessText => 'পাসওয়ার্ড রিসেট লিংকটি আপনার ইমেইলে পাঠানো হয়েছে।';
+  String get resetSuccessText =>
+      'পাসওয়ার্ড রিসেট লিংকটি আপনার ইমেইলে পাঠানো হয়েছে।';
 
   @override
   String get accountSettings => 'অ্যাকাউন্ট এবং সেটিংস';
@@ -108,7 +109,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get profile => 'প্রোফাইল';
 
   @override
-  String get businessProfile => 'ব্যবসায়িক প্রোফাইল';
+  String get workerAccount => 'কর্মী অ্যাকাউন্ট';
 
   @override
   String get digitalPayment => 'ডিজিটাল পেমেন্ট';
@@ -136,4 +137,5 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get darkMode => 'ডার্ক মোড';
+  
 }

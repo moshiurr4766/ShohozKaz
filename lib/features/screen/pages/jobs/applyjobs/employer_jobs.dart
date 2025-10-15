@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/canceled_jobs.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/completed_jobs.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/openjobs.dart';
-
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/completed/completed_jobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/openjobs/open_jobs_tab.dart';
 
 class MyJobsScreen extends StatefulWidget {
   const MyJobsScreen({super.key});
@@ -80,9 +79,9 @@ class _MyJobsScreenState extends State<MyJobsScreen> {
             child: IndexedStack(
               index: selectedTab,
               children: const [
-                OpenJobsTab(),
-                CompletedJobsTab(),
-                CanceledJobsTab(),
+                OpenJobsTab(isUser: true,),
+                CompletedJobsTab(isUser: true,),
+                CanceledJobsTab(isUser: true,),
               ],
             ),
           ),

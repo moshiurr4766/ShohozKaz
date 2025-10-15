@@ -93,7 +93,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPasswordText => 'Forgot Password';
 
   @override
-  String get resetSuccessText => 'Password reset link has been sent to your email.';
+  String get resetSuccessText =>
+      'Password reset link has been sent to your email.';
 
   @override
   String get accountSettings => 'Account & Settings';
@@ -108,7 +109,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
-  String get businessProfile => 'Business Profile';
+  String get workerAccount => 'Worker Account';
 
   @override
   String get digitalPayment => 'Digital Payment';

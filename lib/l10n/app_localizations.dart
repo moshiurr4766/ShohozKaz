@@ -297,7 +297,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Business Profile'**
-  String get businessProfile;
+  String get workerAccount;
 
   /// No description provided for @digitalPayment.
   ///

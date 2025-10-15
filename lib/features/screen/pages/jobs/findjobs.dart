@@ -450,7 +450,15 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
+                      
+
                     ),
+                  ),
+                  Text(
+                    job['skill'] ?? '',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(fontSize: 13),
                   ),
                   const SizedBox(height: 2),
                   Text(

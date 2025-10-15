@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shohozkaz/features/screen/pages/profile/user_info.dart';
 import 'package:shohozkaz/l10n/app_localizations.dart';
 
 class AccountSettingsScreen extends StatefulWidget {
@@ -63,8 +64,17 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           _buildDivider(),
 
           _buildSectionTitle(loc.account),
-          _buildTile(Iconsax.user, loc.profile),
-          _buildTile(Iconsax.briefcase, loc.businessProfile),
+          _buildTile(Iconsax.user, loc.profile,onTap: () {
+                              Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditProfileScreen(),
+                    ),
+                  );
+          },),
+          _buildTile(Iconsax.briefcase, loc.workerAccount,onTap: (){
+            Navigator.pushNamed(context, '/workernavbar');
+          }),
           _buildTile(Iconsax.card, loc.digitalPayment),
           _buildTile(Iconsax.bookmark, loc.savedAddress),
           _buildDivider(),
@@ -264,6 +274,22 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // import 'package:flutter/material.dart';

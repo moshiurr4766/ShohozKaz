@@ -4,7 +4,7 @@ import 'package:shohozkaz/features/screen/pages/account_settings/account_setting
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/myjobs.dart';
+import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/employer_jobs.dart';
 
 class BottomNavigation extends StatefulWidget {
   final Function(ThemeMode)? toggleTheme;
@@ -52,7 +52,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           decoration: BoxDecoration(
             //borderRadius: BorderRadius.circular(0),
             borderRadius: BorderRadius.circular(30),
-            color: isDark ? Colors.grey[900] : Colors.white, 
+            color: isDark ? Colors.grey[900] : Colors.white,
             boxShadow: [
               BoxShadow(
                 // ignore: deprecated_member_use
@@ -82,20 +82,20 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 type: BottomNavigationBarType.fixed,
                 items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(Iconsax.home),
-                    label: 'Home',
+                    icon: Icon(Iconsax.home_2),
+                    label: 'Explore',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Iconsax.search_normal),
+                    label: 'Find Jobs',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.briefcase),
-                    label: 'Search Jobs',
+                    label: 'My Jobs',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Iconsax.tick_square),
-                    label: 'On Going',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Iconsax.menu),
-                    label: 'Menu',
+                    icon: Icon(Iconsax.user),
+                    label: 'Account',
                   ),
                 ],
               ),
