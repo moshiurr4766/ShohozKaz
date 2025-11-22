@@ -5,11 +5,8 @@ import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
 import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
 import 'package:shohozkaz/features/screen/pages/chatscreen/chat_home.dart';
 import 'package:shohozkaz/features/screen/pages/design/employer_navbar.dart';
+import 'package:shohozkaz/features/screen/pages/help_support/help_support.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/completed/completed_jobs_applicant_tab.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/completed/completed_jobs_poster_tab.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/openjobs/open_jobs_employer_tab.dart';
-import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/openjobs/open_jobs_worker_tab.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/pendingjobs/pending_jobs.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/pendingjobs/rejected_jobs_screen.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
@@ -19,7 +16,7 @@ import 'package:shohozkaz/features/screen/pages/jobs/updatejobs/update_jobs.dart
 import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
 import 'package:shohozkaz/features/screen/pages/wallet/user_wallet.dart';
 import 'package:shohozkaz/features/screen/pages/design/worker_navbar.dart';
-import 'package:shohozkaz/features/screen/pages/worker_account/worker_Verification.dart';
+import 'package:shohozkaz/features/screen/pages/worker_account/kycscreen/worker_kyc.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
 import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
@@ -112,10 +109,6 @@ class AppRouter {
         ); 
       case '/updatejobsscreen':
         return MaterialPageRoute(builder: (_) => const UpdateJobsScreen()); 
-      case '/pendingjobs':
-        return MaterialPageRoute(builder: (_) => const PendingJobsScreen(isUser: true,));
-
-
 
 
       case '/userpendingjobs':
@@ -124,20 +117,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const PendingJobsScreen(isUser: false,));
       case '/rejectedjobs':
         return MaterialPageRoute(builder: (_) => const RejectedJobsScreen());
-      case '/openusers':
-        return MaterialPageRoute(builder: (_) => const OpenJobsApplicantTab());
-      case '/openposter':
-        return MaterialPageRoute(builder: (_) => const OpenJobsPosterTab());
-      case '/completedusers':
-        return MaterialPageRoute(builder: (_) => const CompletedJobsApplicantTab());
-      case '/completedposter':
-        return MaterialPageRoute(builder: (_) => const CompletedJobsPosterTab());
-      
-
 
       case '/workerverification':
-        return MaterialPageRoute(builder: (_) => const WorkerVerificationScreen());
+        return MaterialPageRoute(builder: (_) => const KycWizard());
 
+      case '/helpsupport':
+        return MaterialPageRoute(builder: (_) => const SupportHubScreen());
 
       default:
         return MaterialPageRoute(

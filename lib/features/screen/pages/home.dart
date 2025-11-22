@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,17 +21,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final uid = _auth.currentUser?.uid;
     if (uid == null) {
-      return const Scaffold(
-        body: Center(child: Text("User not logged in")),
-      );
+      return const Scaffold(body: Center(child: Text("User not logged in")));
     }
 
-    //StreamBuilder instead of FutureBuilder
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: FirebaseFirestore.instance
           .collection('userInfo')
           .doc(uid)
-          .snapshots(), //live updates
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
@@ -48,7 +42,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           );
         }
 
-        //  Extract Firestore data
         final userData = snapshot.data!.data()!;
         final userName = userData['name'] ?? 'No Name';
         final userType = userData['role'] ?? 'Unknown';
@@ -57,9 +50,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         return Scaffold(
           drawer: CustomDrawer(
             userName: userName,
-            profileImage: userImg.isNotEmpty
-                ? userImg
-                : 'assets/images/logo/logo.png', // fallback if empty
+            profileImage:
+                userImg.isNotEmpty ? userImg : 'assets/images/logo/logo.png',
             userType: userType,
           ),
           appBar: AppBar(
@@ -85,7 +77,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Promo Banner
                 Center(
                   child: TPromoSlide(
                     banners: [
@@ -97,8 +88,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 const SizedBox(height: 10),
-
-                // Category Section
                 buildCategorySection(),
               ],
             ),
@@ -108,7 +97,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  //ategories Section
   Widget buildCategorySection() {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color actionColor =
@@ -118,19 +106,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       {"name": "Plumbing", "icon": Iconsax.setting_2},
       {"name": "Cleaning", "icon": Iconsax.broom},
       {"name": "Electrician", "icon": Iconsax.electricity},
-      {"name": "Painting", "icon": Iconsax.paintbucket},
-      {"name": "AC Repair", "icon": Iconsax.airdrop},
+      {"name": "House Painting", "icon": Iconsax.paintbucket},
+      {"name": "AC Repair & Servicing", "icon": Iconsax.airdrop},
       {"name": "Carpentry", "icon": Iconsax.toggle_off},
-      {"name": "Laundry", "icon": Iconsax.cloud_sunny},
+      {"name": "Laundry & Ironing", "icon": Iconsax.cloud_sunny},
       {"name": "Gardening", "icon": Iconsax.tree},
-      {"name": "Mechanic", "icon": Iconsax.car},
-      {"name": "Delivery", "icon": Iconsax.truck_fast},
-      {"name": "Computer Help", "icon": Iconsax.monitor1},
-      {"name": "Tutor", "icon": Iconsax.teacher},
+      {"name": "Mechanic (Bike/Car)", "icon": Iconsax.car},
+      {"name": "Home Delivery/Parcel", "icon": Iconsax.truck_fast},
+      {"name": "Computer & IT Support", "icon": Iconsax.monitor1},
+      {"name": "Private Tutor", "icon": Iconsax.teacher},
       {"name": "Pest Control", "icon": Iconsax.building},
-      {"name": "Cooking", "icon": Iconsax.clock},
-      {"name": "Babysitting", "icon": Iconsax.user_cirlce_add},
-      {"name": "Security", "icon": Iconsax.shield_tick},
+      {"name": "Cooking & Catering", "icon": Iconsax.clock},
+      {"name": "Babysitting & Nanny", "icon": Iconsax.user_cirlce_add},
+      {"name": "Security Guard", "icon": Iconsax.shield_tick},
+      {"name": "House Shift / Movers", "icon": Iconsax.truck_fast},
+      {"name": "Mobile Repair", "icon": Iconsax.mobile},
+      {"name": "Home Salon & Beauty", "icon": Iconsax.brush_4},
+      {"name": "Driving", "icon": Iconsax.driving},
     ];
 
     return AnimatedSize(
@@ -147,10 +139,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
+
             LayoutBuilder(
               builder: (context, constraints) {
                 double maxWidth = constraints.maxWidth;
-                int count = 4;
+                int count = 3;
                 double spacing = 12;
                 double itemWidth =
                     (maxWidth - (spacing * (count - 1))) / count;
@@ -158,49 +151,58 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 return Wrap(
                   spacing: spacing,
                   runSpacing: spacing,
-                  children:
-                      (_showAllCategories ? categories : categories.take(8))
-                          .map(
-                            (item) => GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, '/${item['name']}');
-                              },
-                              child: Container(
-                                width: itemWidth,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: actionColor,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: actionColor),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(item['icon'],
-                                        size: 28, color: AppColors.button),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      item['name'],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: isDark
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                  children: (_showAllCategories
+                          ? categories
+                          : categories.take(8))
+                      .map(
+                        (item) => GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, '/${item['name']}');
+                          },
+                          child: Container(
+                            width: itemWidth,
+                            height: 105, // SAME SIZE FOR ALL TILES
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: actionColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: actionColor),
                             ),
-                          )
-                          .toList(),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  item['icon'],
+                                  size: 28,
+                                  color: AppColors.button,
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  item['name'],
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isDark
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 );
               },
             ),
+
             const SizedBox(height: 5),
+
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
@@ -211,7 +213,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 },
                 child: Text(
                   _showAllCategories ? "Close" : "All Services",
-                  style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                  style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black),
                 ),
               ),
             ),
