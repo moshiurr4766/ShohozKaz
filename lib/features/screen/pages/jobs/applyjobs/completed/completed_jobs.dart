@@ -190,7 +190,8 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
   Future<void> _submitFeedback(Map<String, dynamic> jobData, String feedback,
       double rating, bool isPoster, String currentUid) async {
     final firestore = FirebaseFirestore.instance;
-    final jobId = jobData['jobOrderId'] ?? '';
+    final jobId = jobData['jobId'] ?? '';
+    final jobOrderId = jobData['jobOrderId'] ?? '';
     final posterId = jobData['posterId'];
     final applicantId = jobData['applicantId'];
 
@@ -198,6 +199,7 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
       if (isPoster) {
         await firestore.collection('userFeedback').add({
           'jobId': jobId,
+          'jobOrderId': jobOrderId,
           'posterId': posterId,
           'posterEmail': jobData['posterEmail'],
           'userId': applicantId,
@@ -213,6 +215,7 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
       } else {
         await firestore.collection('jobFeedback').add({
           'jobId': jobId,
+          'jobOrderId': jobOrderId,
           'posterId': posterId,
           'posterEmail': jobData['posterEmail'],
           'userId': applicantId,
@@ -372,7 +375,8 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
                                 ? 'userFeedback'
                                 : 'jobFeedback')
                             .where('jobId',
-                                isEqualTo: data['jobOrderId'])
+                                isEqualTo: data['jobId'])
+                            .where('jobOrderId', isEqualTo: data['jobOrderId'])
                             .where('givenBy', isEqualTo: uid)
                             .get(),
                         builder: (context, snapshot) {
@@ -429,3 +433,12 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
     );
   }
 }
+
+
+
+
+
+
+
+
+

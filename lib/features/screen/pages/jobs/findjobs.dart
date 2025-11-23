@@ -1,5 +1,6 @@
 
 
+// Working Code
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iconsax/iconsax.dart';
@@ -58,7 +59,7 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
         padding: const EdgeInsets.all(spacing),
         child: Column(
           children: [
-            // Search bar
+            // SEARCH BAR
             Row(
               children: [
                 Expanded(
@@ -102,7 +103,7 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
 
             const SizedBox(height: spacing),
 
-            // Jobs list
+            // JOB LIST
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -119,12 +120,15 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
 
                   final jobs = snapshot.data!.docs;
 
-                  // 🔹 Filter out current user's job posts
+                  // FILTER JOBS
                   final filtered = jobs.where((doc) {
                     final data = doc.data() as Map<String, dynamic>;
                     final posterId = data['employerId'] ?? data['posterId'];
-                    if (posterId == currentUserId) return false; // exclude own jobs
+
+                    if (posterId == currentUserId)
+                      return false; // exclude own jobs
                     if (query.isEmpty) return true;
+
                     return data.values.any(
                       (value) => value.toString().toLowerCase().contains(query),
                     );
@@ -132,7 +136,8 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
 
                   if (filtered.isEmpty) {
                     return const Center(
-                        child: Text("No jobs available right now."));
+                      child: Text("No jobs available right now."),
+                    );
                   }
 
                   return MasonryGridView.count(
@@ -155,107 +160,194 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
     );
   }
 
+  //JOB CARD WITH RATING + SAFE NULL HANDLING
   Widget _buildJobCard(Map<String, dynamic> job) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(12),
-                ),
-                image: job['imageUrl'] != null && job['imageUrl'] != ''
-                    ? DecorationImage(
-                        image: NetworkImage(job['imageUrl']),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    job['title'] ?? '',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      
+    final String jobId = job['jobId']?.toString() ?? "";
 
-                    ),
+    // prevent crash if jobId is missing
+    if (jobId.isEmpty) return const SizedBox();
+
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('jobFeedback')
+          .where('jobId', isEqualTo: jobId)
+          .get(),
+      builder: (context, snapshot) {
+        int totalFeedback = 0;
+        double avgRating = 0;
+
+        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+          totalFeedback = snapshot.data!.docs.length;
+
+          double total = 0;
+          for (var doc in snapshot.data!.docs) {
+            total += (doc['rating'] ?? 0).toDouble();
+          }
+
+          avgRating = total / totalFeedback;
+        }
+
+        return Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // IMAGE
+              Container(
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
                   ),
-                  Text(
-                    job['skill'] ?? '',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(fontSize: 13),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    job['location'] ?? '',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(fontSize: 13),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    "৳ ${job['salary'] ?? ''}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: AppColors.button,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          job['jobType'] ?? '',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => JobDetailsScreen(job: job),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'View',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  color: Colors.grey[300],
+                  image:
+                      (job['imageUrl'] != null &&
+                          job['imageUrl'].toString().isNotEmpty)
+                      ? DecorationImage(
+                          image: NetworkImage(job['imageUrl']),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 10, 14, 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      job['title']?.toString() ?? '',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Text(
+                      job['skill']?.toString() ?? '',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      job['location']?.toString() ?? '',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+
+                    const SizedBox(height: 2),
+                    Text(
+                      "৳ ${job['salary']?.toString() ?? ''}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: AppColors.button,
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    //  FIXED HEIGHT RATING ROW
+                    SizedBox(
+                      height: 20,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            size: 16,
+                            color:
+                                totalFeedback > 0 ? Colors.orange : Colors.grey,
+                          ),
+
+                          Text(
+                            totalFeedback == 0
+                                ? "No ratings"
+                                : avgRating.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          if (totalFeedback > 0)
+                            Text(
+                              " ($totalFeedback reviews)",
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                   
+                    // if (totalFeedback > 0)
+                    //   SizedBox(
+                    //     height: 20,
+                    //     child: Row(
+                    //       children: [
+                    //         const Icon(
+                    //           Icons.star,
+                    //           size: 16,
+                    //           color: Colors.orange,
+                    //         ),
+
+                    //         const SizedBox(width: 4),
+
+                    //         Text(
+                    //           avgRating.toStringAsFixed(1),
+                    //           style: const TextStyle(
+                    //             fontSize: 12,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+
+                    //         Text(
+                    //           " ($totalFeedback reviews)",
+                    //           style: const TextStyle(fontSize: 11),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   )
+                    // else
+                    //   const SizedBox(), // hide completely
+
+                    const SizedBox(height: 6),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            job['jobType']?.toString() ?? '',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => JobDetailsScreen(job: job),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'View',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
-
-
-
-

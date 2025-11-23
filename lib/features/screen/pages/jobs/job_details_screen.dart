@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shohozkaz/core/constants.dart';
@@ -50,7 +49,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: (widget.job['imageUrl'] != null &&
+              child:
+                  (widget.job['imageUrl'] != null &&
                       widget.job['imageUrl'].toString().isNotEmpty)
                   ? Image.network(
                       widget.job['imageUrl'],
@@ -62,6 +62,43 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     )
                   : _imageFallback("No Image Available"),
             ),
+            const SizedBox(height: 20),
+
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("jobFeedback")
+                  .where("jobId", isEqualTo: widget.job['jobId'])
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox();
+
+                final docs = snapshot.data!.docs;
+                if (docs.isEmpty) return const SizedBox();
+
+                double avg = 0;
+                for (var d in docs) {
+                  final r = (d['rating'] ?? 0);
+                  if (r is num) avg += r.toDouble();
+                }
+                avg /= docs.length;
+
+                return GestureDetector(
+                  onTap: () => _showFeedbackSheet(context, docs),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.orange, size: 20),
+                      const SizedBox(width: 4),
+                      Text(
+                        avg.toStringAsFixed(1),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(" (${docs.length} reviews)"),
+                    ],
+                  ),
+                );
+              },
+            ),
+
             const SizedBox(height: 20),
 
             Text(
@@ -154,14 +191,17 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed:
-                        _isApplying ? null : () => _confirmRequestJob(context),
+                    onPressed: _isApplying
+                        ? null
+                        : () => _confirmRequestJob(context),
                     icon: _isApplying
                         ? const SizedBox(
                             height: 16,
                             width: 16,
                             child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white),
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           )
                         : const Icon(Icons.work_outline),
                     label: const Text("Request Job"),
@@ -198,8 +238,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.button),
-            child: const Text("Confirm",
-                style: TextStyle(color: Colors.white)),
+            child: const Text("Confirm", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -209,7 +248,6 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       await _requestJob(context);
     }
   }
-
 
   // Prevent duplicate job requests
 
@@ -245,8 +283,10 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       }
 
       // 🔹 Create new job request
-      final jobOrderId =
-          FirebaseFirestore.instance.collection('pendingJobs').doc().id;
+      final jobOrderId = FirebaseFirestore.instance
+          .collection('pendingJobs')
+          .doc()
+          .id;
 
       final requestData = {
         "jobOrderId": jobOrderId,
@@ -283,21 +323,228 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   void _showSnack(BuildContext context, String message, bool success) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor:
-            success ? AppColors.button : Theme.of(context).colorScheme.primary,
+        content: Text(message, style: const TextStyle(color: Colors.white)),
+        backgroundColor: success
+            ? AppColors.button
+            : Theme.of(context).colorScheme.primary,
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       ),
     );
   }
+
+  // Rating Ui start
+  void _showFeedbackSheet(
+    BuildContext context,
+    List<QueryDocumentSnapshot> docs,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  width: 40,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // header
+                Row(
+                  children: [
+                    SizedBox(height: 10,),
+                    Text(
+                      "Ratings & Reviews",
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    _avgRating(docs),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (_, i) => _reviewCard(docs[i]),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _avgRating(List<QueryDocumentSnapshot> docs) {
+    double avg = 0;
+    for (var d in docs) {
+      final r = (d['rating'] ?? 0);
+      if (r is num) avg += r.toDouble();
+    }
+    avg /= docs.length;
+
+    return Row(
+      children: [
+        Text(
+          avg.toStringAsFixed(1),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(width: 4),
+        Icon(Icons.star, color: Colors.orange, size: 18),
+      ],
+    );
+  }
+
+  Widget _reviewCard(QueryDocumentSnapshot snap) {
+    final data = snap.data() as Map<String, dynamic>;
+
+    final rating = (data['rating'] ?? 0).toDouble();
+    final comment = data['feedback']?.toString() ?? "";
+    final List images = (data['images'] ?? []);
+
+    String date = "";
+    if (data['createdAt'] is Timestamp) {
+      date = DateFormat("d MMM yyyy").format(data['createdAt'].toDate());
+    }
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection("userInfo")
+          .doc(data['givenBy'])
+          .get(),
+      builder: (context, snapshot) {
+        String name = "User";
+        String avatar = "";
+
+        if (snapshot.hasData && snapshot.data!.exists) {
+          name = snapshot.data!['name'] ?? "User";
+          avatar = snapshot.data!['profileImage'] ?? "";
+        }
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey[900]
+                : Colors.grey[200],
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Profile row
+              Row(
+                children: [
+                  // avatar
+                  avatar.isNotEmpty
+                      ? CircleAvatar(backgroundImage: NetworkImage(avatar))
+                      : CircleAvatar(
+                          backgroundColor: Colors.deepPurple,
+                          child: Text(
+                            name.isNotEmpty ? name[0].toUpperCase() : "?",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                  const SizedBox(width: 10),
+
+                  // name + date
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      if (date.isNotEmpty)
+                        Text(
+                          date,
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 12,
+                          ),
+                        ),
+                    ],
+                  ),
+
+                  const Spacer(),
+
+                  // rating
+                  Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.orange.shade400, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        rating.toStringAsFixed(1),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              //  Feedback message section
+              Text(
+                comment.isNotEmpty ? comment : "No message provided",
+                style: const TextStyle(fontSize: 13, height: 1.5),
+              ),
+
+              //  Images row
+              if (images.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 80,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: images.length,
+                    itemBuilder: (_, i) => ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        images[i],
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //End
 
   Widget _sectionCard({
     required String title,
@@ -326,9 +573,13 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             children: [
               Icon(icon, color: AppColors.button),
               const SizedBox(width: 6),
-              Text(title,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -379,8 +630,10 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
             ),
           ),
         ],
@@ -413,9 +666,11 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           .collection('users')
           .doc(user.uid)
           .collection('savedJobs')
-          .doc(jobId.isNotEmpty
-              ? jobId
-              : DateTime.now().millisecondsSinceEpoch.toString());
+          .doc(
+            jobId.isNotEmpty
+                ? jobId
+                : DateTime.now().millisecondsSinceEpoch.toString(),
+          );
 
       await savedJobRef.set(widget.job);
       _showSnack(context, "Job saved successfully!", true);
@@ -426,3 +681,4 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     }
   }
 }
+

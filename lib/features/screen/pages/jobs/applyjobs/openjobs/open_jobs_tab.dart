@@ -143,6 +143,7 @@ class _OpenJobsTabState extends State<OpenJobsTab> {
           'cancelReason': cancelReason,
           'jobOrderId': data['jobOrderId'] ?? docId,
           'posterId': data['posterId'],
+          //'jobId':data['jobId'],
           'applicantId': data['applicantId'],
           'canceledAt': FieldValue.serverTimestamp(),
         };

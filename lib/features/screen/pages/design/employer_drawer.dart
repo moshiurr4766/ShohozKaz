@@ -107,12 +107,12 @@ class CustomDrawer extends StatelessWidget {
                     //   'Find Workers',
                     //   () => Navigator.pushNamed(context, '/findjobs'),
                     // ),
-                    _buildListTile(
-                      context,
-                      Iconsax.profile_tick,
-                      'Profile Verification',
-                      () => Navigator.pushNamed(context, '/workerverification'),
-                    ),
+                    // _buildListTile(
+                    //   context,
+                    //   Iconsax.profile_tick,
+                    //   'Profile Verification',
+                    //   () => Navigator.pushNamed(context, '/workerverification'),
+                    // ),
                     _buildListTile(
                       context,
                       Iconsax.timer,

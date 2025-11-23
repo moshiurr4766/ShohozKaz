@@ -16,7 +16,7 @@ import 'package:shohozkaz/features/screen/pages/jobs/updatejobs/update_jobs.dart
 import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
 import 'package:shohozkaz/features/screen/pages/wallet/user_wallet.dart';
 import 'package:shohozkaz/features/screen/pages/design/worker_navbar.dart';
-import 'package:shohozkaz/features/screen/pages/worker_account/kycscreen/worker_kyc.dart';
+import 'package:shohozkaz/features/screen/pages/worker_account/kycscreen/kyc_home.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
 import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
@@ -119,7 +119,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const RejectedJobsScreen());
 
       case '/workerverification':
-        return MaterialPageRoute(builder: (_) => const KycWizard());
+        return MaterialPageRoute(builder: (_) => const KyCHomePage());
 
       case '/helpsupport':
         return MaterialPageRoute(builder: (_) => const SupportHubScreen());
