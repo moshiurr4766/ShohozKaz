@@ -22,10 +22,11 @@ class _MyJobsScreenState extends State<MyJobsScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 0),
+          padding: const EdgeInsets.only(left: 8, top: 0),
           child: Text(
-            'My Jobs',
+            'Jobs Status',
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: colorScheme.onSurface),
           ),
         ),
@@ -63,7 +64,7 @@ class _MyJobsScreenState extends State<MyJobsScreen> {
                   color: colorScheme.onSurface.withOpacity(0.6),
                   borderColor: Colors.transparent,
                   selectedBorderColor: colorScheme.primary,
-                  constraints: const BoxConstraints(minHeight: 40, minWidth: 100),
+                  constraints: const BoxConstraints(minHeight: 40, minWidth: 120),
                   children: tabs
                       .map((e) => Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/core/constants.dart';
-import 'package:shohozkaz/features/screen/pages/account_settings/worker_setting.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/worker_jobs.dart';
+import 'package:shohozkaz/features/screen/pages/worker_account/worker_feature.dart';
 import 'package:shohozkaz/features/screen/pages/worker_account/worker_home.dart';
 
 class WorkerNavBar extends StatefulWidget {
@@ -22,9 +22,9 @@ class _WorkerNavBarState extends State<WorkerNavBar> {
   void initState() {
     super.initState();
     widgetOptions = <Widget>[
-      const WorkerHome(),
+      const WorkerHomeDashboard(),
       const WorkerJobsScreen(),
-      WorkerSettingsScreen(
+      WorkerSetting(
         toggleTheme: widget.toggleTheme ?? (themeMode) {},
         onLanguageChange: widget.onLanguageChange ?? (locale) {},
       ),

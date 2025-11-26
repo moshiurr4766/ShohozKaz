@@ -22,10 +22,11 @@ class _WorkerJobsScreenState extends State<WorkerJobsScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 0),
+          padding: const EdgeInsets.only(left: 8, top: 0),
           child: Text(
-            'My Jobs',
+            'Jobs Status',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -54,8 +55,8 @@ class _WorkerJobsScreenState extends State<WorkerJobsScreen> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(horizontal: 0),
+                padding: const EdgeInsets.symmetric(vertical: 0),
                 child: ToggleButtons(
                   isSelected: List.generate(3, (i) => i == selectedTab),
                   onPressed: (index) => setState(() => selectedTab = index),
@@ -66,7 +67,7 @@ class _WorkerJobsScreenState extends State<WorkerJobsScreen> {
                   borderColor: Colors.transparent,
                   selectedBorderColor: colorScheme.primary,
                   constraints:
-                      const BoxConstraints(minHeight: 40, minWidth: 100),
+                      const BoxConstraints(minHeight: 40, minWidth: 120),
                   children: tabs
                       .map(
                         (e) => Padding(
@@ -98,3 +99,15 @@ class _WorkerJobsScreenState extends State<WorkerJobsScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

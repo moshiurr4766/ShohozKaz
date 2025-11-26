@@ -49,7 +49,7 @@ class AppRouter {
         );
 
       case '/home':
-        return MaterialPageRoute(builder: (_) => const Home());
+        return MaterialPageRoute(builder: (_) => const HomeModern());
 
       case '/theme':
         return MaterialPageRoute(

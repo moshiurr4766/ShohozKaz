@@ -148,7 +148,7 @@ class WorkerDrawer extends StatelessWidget {
                       context,
                       Iconsax.message_question,
                       'Help & Support',
-                      () => Navigator.pushNamed(context, '/chathome'),
+                      () => Navigator.pushNamed(context, '/helpsupport'),
                     ),
                     _buildListTile(
                       context,

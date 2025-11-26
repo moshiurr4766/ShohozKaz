@@ -23,7 +23,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void initState() {
     super.initState();
     widgetOptions = <Widget>[
-      const Home(),
+      const HomeModern(),
       const FindJobsScreen(),
       const MyJobsScreen(),
       AccountSettingsScreen(
