@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shohozkaz/core/constants.dart';
 
 class CreateJobScreen extends StatefulWidget {
   const CreateJobScreen({super.key});
@@ -44,93 +45,194 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   }
 
   // CHANGED: Updated job post function to include jobId
+  // Future<void> _postJob() async {
+  //   if (_isPosting) return;
+  //   setState(() => _isPosting = true);
+
+  //   try {
+  //     String? imageUrl;
+
+  //     //  Get current user info
+  //     final user = FirebaseAuth.instance.currentUser;
+  //     if (user == null) {
+  //       throw Exception("User not logged in");
+  //     }
+
+  //     // Upload image to Firebase Storage
+  //     if (_selectedImage != null) {
+  //       final ref = FirebaseStorage.instance
+  //           .ref()
+  //           .child('jobpost')
+  //           .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+  //       await ref.putFile(_selectedImage!);
+  //       imageUrl = await ref.getDownloadURL();
+  //     }
+
+  //     // CHANGED: create a custom doc reference first (to get jobId)
+  //     final jobRef = FirebaseFirestore.instance.collection('jobs').doc();
+
+  //     //  CHANGED: Save job with jobId included
+  //     await jobRef.set({
+  //       'jobId': jobRef.id, //  new line: store jobId inside document
+  //       'title': _titleController.text.trim(),
+  //       'description': _descriptionController.text.trim(),
+  //       'location': selectedLocation,
+  //       'jobType': selectedJobType,
+  //       'skill': selectedSkill,
+  //       'experience': selectedExperience,
+  //       'education': selectedEducation,
+  //       'salary': _salaryController.text.trim(),
+  //       'summary': _summaryController.text.trim(),
+  //       'imageUrl': imageUrl ?? '',
+  //       'postedAt': FieldValue.serverTimestamp(),
+  //       'employerId': user.uid,
+  //       'employerEmail': user.email,
+  //     });
+
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: const Text(
+  //           ' Job Posted Successfully!',
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         // ignore: use_build_context_synchronously
+  //         backgroundColor: Theme.of(context).colorScheme.primary,
+  //         behavior: SnackBarBehavior.floating,
+  //         margin: const EdgeInsets.all(16),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(14),
+  //         ),
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+  //       ),
+  //     );
+
+  //     // ignore: use_build_context_synchronously
+  //     Navigator.of(context).pop();
+  //   } catch (e) {
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: const Text(
+  //           ' Job Posted Failed!',
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         // ignore: use_build_context_synchronously
+  //         backgroundColor: Theme.of(context).colorScheme.primary,
+  //         behavior: SnackBarBehavior.floating,
+  //         margin: const EdgeInsets.all(16),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(14),
+  //         ),
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+  //       ),
+  //     );
+  //   } finally {
+  //     if (mounted) setState(() => _isPosting = false);
+  //   }
+  // }
+
   Future<void> _postJob() async {
     if (_isPosting) return;
     setState(() => _isPosting = true);
 
     try {
-      String? imageUrl;
-
-      //  Get current user info
+      // 1️⃣ Get current user
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        throw Exception("User not logged in");
+        _showError("You must be logged in to post jobs.");
+        setState(() => _isPosting = false);
+        return;
       }
 
-      // Upload image to Firebase Storage
+      // 2️⃣ Check workerKyc status
+      final doc = await FirebaseFirestore.instance
+          .collection("workerKyc")
+          .doc(user.uid)
+          .get();
+
+      if (!doc.exists) {
+        _showError("You must complete KYC verification before posting jobs.");
+        setState(() => _isPosting = false);
+        return;
+      }
+
+      final status = doc["status"] ?? "pending";
+
+      if (status != "approved") {
+        _showError("Your KYC is not approved yet. You cannot post jobs.");
+        setState(() => _isPosting = false);
+        return;
+      }
+
+      // 3️⃣ Upload image (if selected)
+      String? imageUrl;
       if (_selectedImage != null) {
         final ref = FirebaseStorage.instance
             .ref()
-            .child('jobpost')
-            .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+            .child("jobpost")
+            .child("${DateTime.now().millisecondsSinceEpoch}.jpg");
+
         await ref.putFile(_selectedImage!);
         imageUrl = await ref.getDownloadURL();
       }
 
-      // CHANGED: create a custom doc reference first (to get jobId)
-      final jobRef = FirebaseFirestore.instance.collection('jobs').doc();
+      // 4️⃣ Create job document
+      final jobRef = FirebaseFirestore.instance.collection("jobs").doc();
 
-      //  CHANGED: Save job with jobId included
       await jobRef.set({
-        'jobId': jobRef.id, //  new line: store jobId inside document
-        'title': _titleController.text.trim(),
-        'description': _descriptionController.text.trim(),
-        'location': selectedLocation,
-        'jobType': selectedJobType,
-        'skill': selectedSkill,
-        'experience': selectedExperience,
-        'education': selectedEducation,
-        'salary': _salaryController.text.trim(),
-        'summary': _summaryController.text.trim(),
-        'imageUrl': imageUrl ?? '',
-        'postedAt': FieldValue.serverTimestamp(),
-        'employerId': user.uid,
-        'employerEmail': user.email,
+        "jobId": jobRef.id,
+        "title": _titleController.text.trim(),
+        "description": _descriptionController.text.trim(),
+        "location": selectedLocation,
+        "jobType": selectedJobType,
+        "skill": selectedSkill,
+        "experience": selectedExperience,
+        "education": selectedEducation,
+        "salary": _salaryController.text.trim(),
+        "summary": _summaryController.text.trim(),
+        "imageUrl": imageUrl ?? "",
+        "postedAt": FieldValue.serverTimestamp(),
+        "employerId": user.uid,
+        "employerEmail": user.email,
       });
 
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            ' Job Posted Successfully!',
-            style: TextStyle(color: Colors.white),
-          ),
-          // ignore: use_build_context_synchronously
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        ),
-      );
+      // 5️⃣ Success message
+      _showSuccess("Job Posted Successfully!");
 
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
+      if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            ' Job Posted Failed!',
-            style: TextStyle(color: Colors.white),
-          ),
-          // ignore: use_build_context_synchronously
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        ),
-      );
+      _showError("Job posting failed: $e");
     } finally {
       if (mounted) setState(() => _isPosting = false);
     }
   }
-  //  END CHANGED SECTION  
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(color: Colors.white)),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+    );
+  }
+
+  void _showSuccess(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(color: Colors.white)),
+        backgroundColor: AppColors.button,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+    );
+  }
+
+  //  END CHANGED SECTION
 
   void _cancel() {
     if (_isPosting) return;

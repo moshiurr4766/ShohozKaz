@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen1.dart';
 import 'package:shohozkaz/features/screen/darktheme/testscreen2.dart';
 import 'package:shohozkaz/features/screen/onboard_screen/onboard.dart';
-import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
+import 'package:shohozkaz/features/screen/pages/account_settings/account_feature/change_password.dart';
+//import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
 import 'package:shohozkaz/features/screen/pages/chatscreen/chat_home.dart';
 import 'package:shohozkaz/features/screen/pages/design/employer_navbar.dart';
 import 'package:shohozkaz/features/screen/pages/help_support/help_support.dart';
@@ -89,11 +90,11 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const DashboardScreen());
       case '/userwallet':
         return MaterialPageRoute(builder: (_) => MyWalletScreen());
-      case '/settings':
-        return MaterialPageRoute(builder: (_) => AccountSettingsScreen(
-          toggleTheme: toggleTheme ?? (mode) {},
-          onLanguageChange: changeLocale ?? (locale) {},
-        ));
+      // case '/settings':
+      //   return MaterialPageRoute(builder: (_) => AccountSettingsScreen(
+      //     toggleTheme: toggleTheme ?? (mode) {},
+      //     onLanguageChange: changeLocale ?? (locale) {},
+      //   ));
       case '/wrapper':
         return MaterialPageRoute(
           builder: (_) => AuthWrapper(toggleTheme: toggleTheme),
@@ -123,6 +124,8 @@ class AppRouter {
 
       case '/helpsupport':
         return MaterialPageRoute(builder: (_) => const SupportHubScreen());
+      case '/changepassword':
+        return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
 
       default:
         return MaterialPageRoute(

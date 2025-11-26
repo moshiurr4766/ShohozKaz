@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/core/constants.dart';
-import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
+import 'package:shohozkaz/features/screen/pages/account_settings/account_feature/account_settings.dart';
+//import 'package:shohozkaz/features/screen/pages/account_settings/account_settings.dart';
 import 'package:shohozkaz/features/screen/pages/home.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/findjobs.dart';
@@ -28,11 +29,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
       const MyJobsScreen(),
       AccountSettingsScreen(
         toggleTheme: widget.toggleTheme ?? (themeMode) {},
-        onLanguageChange: widget.onLanguageChange ?? (locale) {},
       ),
     ];
   }
 
+
+      // AccountSettingsScreen(
+      //   toggleTheme: widget.toggleTheme ?? (themeMode) {},
+      //   onLanguageChange: widget.onLanguageChange ?? (locale) {},
+      // ),
   void _onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -71,7 +76,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 hoverColor: Colors.transparent,
               ),
               child: BottomNavigationBar(
-                backgroundColor: Colors.transparent, // ✅ rely on container bg
+                backgroundColor: Colors.transparent, //  rely on container bg
                 currentIndex: selectedIndex,
                 onTap: _onItemTapped,
                 selectedItemColor: AppColors.button,
@@ -87,11 +92,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.search_normal),
-                    label: 'Find Jobs',
+                    label: 'Searching',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.briefcase),
-                    label: 'My Jobs',
+                    label: 'Jobs Status',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.user),

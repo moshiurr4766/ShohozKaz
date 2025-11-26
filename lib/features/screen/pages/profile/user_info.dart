@@ -71,7 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     try {
       String? uploadedImageUrl = profileImageUrl;
 
-      // ✅ Upload new profile image if selected
+      //  Upload new profile image if selected
       if (_imageFile != null) {
         final ref = FirebaseStorage.instance
             .ref()
@@ -81,7 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         uploadedImageUrl = await ref.getDownloadURL();
       }
 
-      // ✅ Save to Firestore
+      //  Save to Firestore
       await FirebaseFirestore.instance.collection('userInfo').doc(user.uid).set({
         'name': nameController.text.trim(),
         'email': email,
@@ -166,7 +166,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // ✅ Profile Image
+                    //  Profile Image
                     Center(
                       child: GestureDetector(
                         onTap: _pickImage,

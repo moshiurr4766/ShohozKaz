@@ -3,7 +3,7 @@
 // Working Code
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:iconsax/iconsax.dart';
+//import 'package:iconsax/iconsax.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shohozkaz/core/constants.dart';
@@ -33,6 +33,7 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: Text(
@@ -45,15 +46,15 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
           ),
         ),
         toolbarHeight: 60,
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(Iconsax.notification),
-            ),
-          ),
-        ],
+        // actions: [
+        //   InkWell(
+        //     onTap: () {},
+        //     child: const Padding(
+        //       padding: EdgeInsets.symmetric(horizontal: 16),
+        //       child: Icon(Iconsax.notification),
+        //     ),
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(spacing),

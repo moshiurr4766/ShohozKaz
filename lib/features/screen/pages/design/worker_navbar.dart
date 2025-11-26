@@ -85,7 +85,7 @@ class _WorkerNavBarState extends State<WorkerNavBar> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.briefcase),
-                    label: 'My Jobs',
+                    label: 'Jobs Status',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.profile_circle),

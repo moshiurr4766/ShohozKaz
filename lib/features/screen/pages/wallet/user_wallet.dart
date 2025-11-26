@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 // Custom colors
@@ -69,13 +68,8 @@ class MyWalletScreen extends StatelessWidget {
           ),
         ),
         toolbarHeight: 60,
-        //centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Iconsax.notification),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
+
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),

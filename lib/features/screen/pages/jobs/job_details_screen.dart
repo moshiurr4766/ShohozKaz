@@ -251,24 +251,120 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
   // Prevent duplicate job requests
 
+  // Future<void> _requestJob(BuildContext context) async {
+  //   setState(() => _isApplying = true);
+  //   try {
+  //     final user = FirebaseAuth.instance.currentUser;
+  //     if (user == null) {
+  //       _showSnack(context, "Please log in to request a job.", false);
+  //       setState(() => _isApplying = false);
+  //       return;
+  //     }
+
+  //     final jobId = widget.job['jobId'] ?? widget.job['id'] ?? '';
+  //     if (jobId.isEmpty) {
+  //       _showSnack(context, "Invalid job ID.", false);
+  //       setState(() => _isApplying = false);
+  //       return;
+  //     }
+
+  //     // 🔹 Check if already requested (pending)
+  //     final existing = await FirebaseFirestore.instance
+  //         .collection('pendingJobs')
+  //         .where('jobId', isEqualTo: jobId)
+  //         .where('applicantId', isEqualTo: user.uid)
+  //         .limit(1)
+  //         .get();
+
+  //     if (existing.docs.isNotEmpty) {
+  //       _showSnack(context, "You have already requested this job.", false);
+  //       setState(() => _isApplying = false);
+  //       return;
+  //     }
+
+  //     // 🔹 Create new job request
+  //     final jobOrderId = FirebaseFirestore.instance
+  //         .collection('pendingJobs')
+  //         .doc()
+  //         .id;
+
+  //     final requestData = {
+  //       "jobOrderId": jobOrderId,
+  //       "jobId": jobId,
+  //       "posterId": widget.job['employerId'],
+  //       "posterEmail": widget.job['employerEmail'],
+  //       "applicantId": user.uid,
+  //       "applicantEmail": user.email,
+  //       "jobTitle": widget.job['title'],
+  //       "location": widget.job['location'],
+  //       "salary": widget.job['salary'],
+  //       "jobType": widget.job['jobType'],
+  //       "skill": widget.job['skill'],
+  //       "experience": widget.job['experience'],
+  //       "education": widget.job['education'],
+  //       "status": "pending",
+  //       "note": _noteController.text.trim(),
+  //       "requestedAt": FieldValue.serverTimestamp(),
+  //     };
+
+  //     await FirebaseFirestore.instance
+  //         .collection('pendingJobs')
+  //         .doc(jobOrderId)
+  //         .set(requestData);
+
+  //     _showSnack(context, "Job request submitted successfully.", true);
+  //   } catch (e) {
+  //     _showSnack(context, "Job request failed! $e", false);
+  //   } finally {
+  //     if (mounted) setState(() => _isApplying = false);
+  //   }
+  // }
+
   Future<void> _requestJob(BuildContext context) async {
     setState(() => _isApplying = true);
+
     try {
       final user = FirebaseAuth.instance.currentUser;
+
       if (user == null) {
         _showSnack(context, "Please log in to request a job.", false);
         setState(() => _isApplying = false);
         return;
       }
 
+      //  CHECK USER STATUS FROM userInfo COLLECTION
+      final userDoc = await FirebaseFirestore.instance
+          .collection("userInfo")
+          .doc(user.uid)
+          .get();
+
+      if (!userDoc.exists) {
+        _showSnack(context, "User information not found!", false);
+        setState(() => _isApplying = false);
+        return;
+      }
+
+      final status = userDoc['status'] ?? "inactive";
+
+      if (status != "active") {
+        _showSnack(
+          context,
+          "Your account is not active. You cannot request jobs.",
+          false,
+        );
+        setState(() => _isApplying = false);
+        return;
+      }
+
+      // CHECK IF JOB ALREADY REQUESTED
       final jobId = widget.job['jobId'] ?? widget.job['id'] ?? '';
+
       if (jobId.isEmpty) {
         _showSnack(context, "Invalid job ID.", false);
         setState(() => _isApplying = false);
         return;
       }
 
-      // 🔹 Check if already requested (pending)
       final existing = await FirebaseFirestore.instance
           .collection('pendingJobs')
           .where('jobId', isEqualTo: jobId)
@@ -282,7 +378,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
         return;
       }
 
-      // 🔹 Create new job request
+      // CREATE REQUEST IF USER IS ACTIVE
       final jobOrderId = FirebaseFirestore.instance
           .collection('pendingJobs')
           .doc()
@@ -367,7 +463,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 // header
                 Row(
                   children: [
-                    SizedBox(height: 10,),
+                    SizedBox(height: 10),
                     Text(
                       "Ratings & Reviews",
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -681,4 +777,3 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     }
   }
 }
-

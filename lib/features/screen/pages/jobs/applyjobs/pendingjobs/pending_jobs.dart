@@ -14,22 +14,41 @@ class PendingJobsScreen extends StatefulWidget {
 }
 
 class _PendingJobsScreenState extends State<PendingJobsScreen> {
+  String userStatus = "loading";
+
+  Future<void> _loadUserStatus() async {
+    final snap = await FirebaseFirestore.instance
+        .collection("userInfo")
+        .doc(currentUid)
+        .get();
+
+    setState(() {
+      userStatus = snap.exists ? (snap["status"] ?? "active") : "active";
+    });
+  }
+
+  bool get isActiveUser => userStatus == "active";
+
   late final String currentUid;
 
   @override
   void initState() {
     super.initState();
     currentUid = FirebaseAuth.instance.currentUser!.uid;
+    _loadUserStatus();
   }
 
   Stream<QuerySnapshot> _pendingJobsStream() {
     return FirebaseFirestore.instance
         .collection('pendingJobs')
-        .where(widget.isUser ? 'applicantId' : 'posterId', isEqualTo: currentUid)
+        .where(
+          widget.isUser ? 'applicantId' : 'posterId',
+          isEqualTo: currentUid,
+        )
         .snapshots();
   }
 
-  //  ACCEPT by poster 
+  //  ACCEPT by poster
   Future<void> _acceptApplicant(Map<String, dynamic> data) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('openJobs').doc();
@@ -67,23 +86,23 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
     }
   }
 
-  // CONFIRM by user 
+  // CONFIRM by user
   Future<void> _confirmJob(Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance
           .collection('pendingJobs')
           .doc(data['docId'])
           .update({
-        'status': 'confirmed',
-        'confirmedAt': FieldValue.serverTimestamp(),
-      });
+            'status': 'confirmed',
+            'confirmedAt': FieldValue.serverTimestamp(),
+          });
       _showSnack('Job confirmed. Waiting for employer acceptance.', true);
     } catch (e) {
       _showSnack('Error confirming job: $e', false);
     }
   }
 
-  // CANCEL CONFIRMATION by user 
+  // CANCEL CONFIRMATION by user
   Future<void> _cancelConfirmation(Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance.collection('rejectJobs').doc().set({
@@ -106,13 +125,10 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: const TextStyle(color: Colors.white)),
-        backgroundColor:
-            success ? AppColors.button : Colors.redAccent.shade200,
+        backgroundColor: success ? AppColors.button : Colors.redAccent.shade200,
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
     );
   }
@@ -121,13 +137,15 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.isUser ? 'My Pending Jobs' : 'Pending Jobs Posted')),
+        title: Text(widget.isUser ? 'My Pending Jobs' : 'Pending Jobs Posted'),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _pendingJobsStream(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(
-                child: Text('Permission denied or query error.'));
+              child: Text('Permission denied or query error.'),
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -155,16 +173,21 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
               return Card(
                 margin: const EdgeInsets.only(bottom: 12),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 2,
                 child: Padding(
                   padding: const EdgeInsets.all(14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(data['jobTitle'] ?? 'Unknown Job',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text(
+                        data['jobTitle'] ?? 'Unknown Job',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       Text("Skill: ${data['skill'] ?? 'N/A'}"),
                       const SizedBox(height: 4),
@@ -174,18 +197,19 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
                         isPoster
                             ? "Applicant: $applicantEmail"
                             : "Poster: $posterEmail",
-                        style:
-                            const TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(height: 12),
 
                       // Chat button
                       OutlinedButton.icon(
                         onPressed: () {
-                          final receiverId =
-                              isPoster ? data['applicantId'] : data['posterId'];
-                          final receiverEmail =
-                              isPoster ? data['applicantEmail'] : data['posterEmail'];
+                          final receiverId = isPoster
+                              ? data['applicantId']
+                              : data['posterId'];
+                          final receiverEmail = isPoster
+                              ? data['applicantEmail']
+                              : data['posterEmail'];
 
                           Navigator.push(
                             context,
@@ -197,10 +221,14 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
                             ),
                           );
                         },
-                        icon: Icon(Icons.chat_bubble_outline,
-                            color: AppColors.button),
-                        label: Text("Chat",
-                            style: TextStyle(color: AppColors.button)),
+                        icon: Icon(
+                          Icons.chat_bubble_outline,
+                          color: AppColors.button,
+                        ),
+                        label: Text(
+                          "Chat",
+                          style: TextStyle(color: AppColors.button),
+                        ),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: AppColors.button, width: 1.5),
                           backgroundColor: Colors.white,
@@ -213,21 +241,24 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
 
                       const SizedBox(height: 10),
 
-                      // ===== Role + Status Buttons =====
                       if (isUser && status == 'pending') ...[
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () => _confirmJob(data),
+                                onPressed: isActiveUser
+                                    ? () => _confirmJob(data)
+                                    : () => _showSnack(
+                                        "Your account is not active.",
+                                        false,
+                                      ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.button,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  minimumSize:
-                                      const Size(double.infinity, 45),
+                                  minimumSize: const Size(double.infinity, 45),
                                 ),
                                 child: const Text('Confirm Job'),
                               ),
@@ -235,18 +266,26 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () => _rejectJob(data, 'Applicant'),
+                                onPressed: isActiveUser
+                                    ? () => _rejectJob(data, 'Applicant')
+                                    : () => _showSnack(
+                                        "Your account is not active.",
+                                        false,
+                                      ),
                                 style: OutlinedButton.styleFrom(
                                   side: const BorderSide(
-                                      color: Colors.red, width: 1.5),
+                                    color: Colors.red,
+                                    width: 1.5,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  minimumSize:
-                                      const Size(double.infinity, 45),
+                                  minimumSize: const Size(double.infinity, 45),
                                 ),
-                                child: const Text('Reject',
-                                    style: TextStyle(color: Colors.red)),
+                                child: const Text(
+                                  'Reject',
+                                  style: TextStyle(color: Colors.red),
+                                ),
                               ),
                             ),
                           ],
@@ -255,43 +294,59 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
                         const Text(
                           "Waiting for employer acceptance...",
                           style: TextStyle(
-                              color: Colors.grey, fontStyle: FontStyle.italic),
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ] else if (isUser && status == 'confirmed') ...[
-                        // Show cancel confirmation button for user
                         OutlinedButton(
-                          onPressed: () => _cancelConfirmation(data),
+                          onPressed: isActiveUser
+                              ? () => _cancelConfirmation(data)
+                              : () => _showSnack(
+                                  "Your account is not active.",
+                                  false,
+                                ),
                           style: OutlinedButton.styleFrom(
-                            side:
-                                const BorderSide(color: Colors.red, width: 1.5),
+                            side: const BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                             minimumSize: const Size(double.infinity, 45),
                           ),
-                          child: const Text('Cancel',
-                              style: TextStyle(color: Colors.red)),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           "Job already confirmed. You can cancel confirmation.",
                           style: TextStyle(
-                              color: Colors.grey, fontStyle: FontStyle.italic),
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ] else if (isPoster && status == 'confirmed') ...[
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () => _acceptApplicant(data),
+                                onPressed: isActiveUser
+                                    ? () => _acceptApplicant(data)
+                                    : () => _showSnack(
+                                        "Your account is not active.",
+                                        false,
+                                      ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.button,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  minimumSize:
-                                      const Size(double.infinity, 45),
+                                  minimumSize: const Size(double.infinity, 45),
                                 ),
                                 child: const Text('Accept Job'),
                               ),
@@ -299,47 +354,68 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () => _rejectJob(data, 'Poster'),
+                                onPressed: isActiveUser
+                                    ? () => _rejectJob(data, 'Poster')
+                                    : () => _showSnack(
+                                        "Your account is not active.",
+                                        false,
+                                      ),
                                 style: OutlinedButton.styleFrom(
                                   side: const BorderSide(
-                                      color: Colors.red, width: 1.5),
+                                    color: Colors.red,
+                                    width: 1.5,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  minimumSize:
-                                      const Size(double.infinity, 45),
+                                  minimumSize: const Size(double.infinity, 45),
                                 ),
-                                child: const Text('Reject',
-                                    style: TextStyle(color: Colors.red)),
+                                child: const Text(
+                                  'Reject',
+                                  style: TextStyle(color: Colors.red),
+                                ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           "Job confirmed by applicant. Waiting for your action.",
                           style: TextStyle(
-                              color: Colors.grey, fontStyle: FontStyle.italic),
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ] else if (isPoster && status == 'pending') ...[
                         OutlinedButton(
-                          onPressed: () => _rejectJob(data, 'Poster'),
+                          onPressed: isActiveUser
+                              ? () => _rejectJob(data, 'Poster')
+                              : () => _showSnack(
+                                  "Your account is not active.",
+                                  false,
+                                ),
                           style: OutlinedButton.styleFrom(
-                            side:
-                                const BorderSide(color: Colors.red, width: 1.5),
+                            side: const BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                             minimumSize: const Size(double.infinity, 45),
                           ),
-                          child: const Text('Reject',
-                              style: TextStyle(color: Colors.red)),
+                          child: const Text(
+                            'Reject',
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           "Waiting for applicant confirmation...",
                           style: TextStyle(
-                              color: Colors.grey, fontStyle: FontStyle.italic),
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ],
                     ],
