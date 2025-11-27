@@ -57,9 +57,7 @@ class KyCHomePage extends StatelessWidget {
     );
   }
 
-  // ---------------------------------------------------------------------------  
   //                        DIFFERENT STATE SCREENS  
-  // ---------------------------------------------------------------------------  
 
   /// User has not submitted a KYC yet
   Widget _noKycScreen(BuildContext context) {
@@ -205,9 +203,7 @@ class KyCHomePage extends StatelessWidget {
     );
   }
 
-  // ---------------------------------------------------------------------------  
   //                    REUSABLE COMPONENTS (CARD BUILDER)  
-  // ---------------------------------------------------------------------------  
 
   Widget _centerCard(
     BuildContext context, {

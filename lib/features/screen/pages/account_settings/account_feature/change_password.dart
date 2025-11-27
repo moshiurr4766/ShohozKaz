@@ -39,14 +39,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
     if (user == null || user.email == null) {
       setState(() => _loading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("User not logged in")),
-      );
+      _showSnack(context, "User not logged in", false);
       return;
     }
 
     try {
-      // Re-authenticate user with current password
+      // Re-authenticate user
       final cred = EmailAuthProvider.credential(
         email: user.email!,
         password: _currentCtrl.text.trim(),
@@ -59,32 +57,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
       setState(() => _loading = false);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password updated successfully")),
-      );
+      _showSnack(context, "Password updated successfully", true);
 
-      Navigator.pop(context); // go back to settings
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       setState(() => _loading = false);
 
-      String message = "Something went wrong";
+      String message = "Enter correct credential !";
       if (e.code == 'wrong-password') {
         message = "Current password is incorrect.";
       } else if (e.code == 'weak-password') {
         message = "New password is too weak.";
       } else if (e.code == 'requires-recent-login') {
-        message =
-            "Please log in again and then try to change your password.";
+        message = "Please log in again before changing your password.";
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      _showSnack(context, message, false);
     } catch (e) {
       setState(() => _loading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      _showSnack(context, "Error: $e", false);
     }
   }
 
@@ -93,10 +84,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Change Password"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Change Password"), centerTitle: true),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -149,9 +137,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       labelText: "New Password",
                       prefixIcon: const Icon(Iconsax.lock_1),
                       suffixIcon: IconButton(
-                        icon: Icon(
-                          _showNew ? Iconsax.eye_slash : Iconsax.eye,
-                        ),
+                        icon: Icon(_showNew ? Iconsax.eye_slash : Iconsax.eye),
                         onPressed: () {
                           setState(() => _showNew = !_showNew);
                         },
@@ -216,7 +202,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -229,11 +215,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           if (_loading)
             Container(
               color: Colors.black45,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
+      ),
+    );
+  }
+
+  void _showSnack(BuildContext context, String message, bool success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(color: Colors.white)),
+        backgroundColor: success
+            ? AppColors.button
+            : Theme.of(context).colorScheme.primary,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       ),
     );
   }

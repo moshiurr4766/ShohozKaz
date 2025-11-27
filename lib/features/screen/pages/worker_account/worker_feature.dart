@@ -1,5 +1,4 @@
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shohozkaz/core/constants.dart';
@@ -21,12 +20,20 @@ class WorkerSetting extends StatefulWidget {
 class _WorkerSettingState extends State<WorkerSetting> {
   bool isDark = false;
 
+  // LOGOUT
+  Future<void> _logout() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0E0E0E) : const Color(0xFFF5F5F7),
+      backgroundColor: isDark
+          ? const Color(0xFF0E0E0E)
+          : const Color(0xFFF5F5F7),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: isDark ? Colors.black : Colors.white,
@@ -49,7 +56,6 @@ class _WorkerSettingState extends State<WorkerSetting> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               _sectionTitle("Account"),
               _settingsTile(
                 icon: Iconsax.category,
@@ -59,7 +65,8 @@ class _WorkerSettingState extends State<WorkerSetting> {
               _settingsTile(
                 icon: Iconsax.shield_tick,
                 label: "Verify Account",
-                onTap: () => Navigator.pushNamed(context, '/workerverification'),
+                onTap: () =>
+                    Navigator.pushNamed(context, '/workerverification'),
               ),
 
               const SizedBox(height: 16),
@@ -113,12 +120,61 @@ class _WorkerSettingState extends State<WorkerSetting> {
 
               _themeSwitcher(),
               const SizedBox(height: 40),
+
+              _logoutTile(
+                icon: Iconsax.logout,
+                label: "Logout",
+                onTap: () => _logout(),
+              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
       ),
     );
   }
+
+Widget _logoutTile({
+  required IconData icon,
+  required String label,
+  required VoidCallback onTap,
+}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(14),
+    child: Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.red.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,   
+        children: [
+          Icon(icon, color: Colors.white, size: 24),
+          const SizedBox(width: 10),                  
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   // STYLISH SECTION TITLE
   Widget _sectionTitle(String title) {

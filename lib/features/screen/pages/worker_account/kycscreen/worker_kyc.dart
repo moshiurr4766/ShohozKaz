@@ -7,9 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:camera/camera.dart';
 
-/// ------------------------------
 /// KYC WIZARD SCREEN
-/// ------------------------------
 class KycWizard extends StatefulWidget {
   const KycWizard({super.key});
 
@@ -39,9 +37,7 @@ class _KycWizardState extends State<KycWizard> {
   final fatherCtrl = TextEditingController();
   final motherCtrl = TextEditingController();
 
-  // -----------------------------
   // LIFECYCLE
-  // -----------------------------
   @override
   void dispose() {
     nameCtrl.dispose();
@@ -56,9 +52,7 @@ class _KycWizardState extends State<KycWizard> {
     super.dispose();
   }
 
-  // -----------------------------
   // IMAGE PICKER (for NID front/back)
-  // -----------------------------
   Future<File?> _pickImageDialog() async {
     final src = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -84,9 +78,7 @@ class _KycWizardState extends State<KycWizard> {
     return x == null ? null : File(x.path);
   }
 
-  // -----------------------------
   // OCR / BARCODE HELPERS
-  // -----------------------------
   Future<RecognizedText> _ocr(File file) async {
     final input = InputImage.fromFile(file);
     final r = GoogleMlKit.vision.textRecognizer();
@@ -103,9 +95,7 @@ class _KycWizardState extends State<KycWizard> {
     return out;
   }
 
-  // -----------------------------
   // TEXT PARSERS
-  // -----------------------------
   String? _extractNidNumber(String s) =>
       RegExp(r'\b\d{10,17}\b').firstMatch(s)?.group(0);
 
@@ -145,9 +135,7 @@ class _KycWizardState extends State<KycWizard> {
   String _norm(String s) =>
       s.replaceAll(RegExp(r'[\u200B-\u200D\uFEFF]'), ' ').trim();
 
-  // -----------------------------
   // FRONT IMAGE PARSE
-  // -----------------------------
   Future<void> _parseFront(File file) async {
     final text = await _ocr(file);
     final lines = <String>[];
@@ -192,9 +180,7 @@ class _KycWizardState extends State<KycWizard> {
     }
   }
 
-  // -----------------------------
   // BACK IMAGE PARSE
-  // -----------------------------
   Future<void> _parseBack(File file) async {
     final text = await _ocr(file);
     final barcodes = await _scanBarcodes(file);
@@ -247,9 +233,7 @@ class _KycWizardState extends State<KycWizard> {
     }
   }
 
-  // -----------------------------
   // SUBMIT → Upload + Save
-  // -----------------------------
   Future<void> _submit() async {
     // Make sure user is logged in
     final user = FirebaseAuth.instance.currentUser;
@@ -297,8 +281,8 @@ class _KycWizardState extends State<KycWizard> {
         'dob': dobCtrl.text.trim(),
         'bloodGroup': bloodCtrl.text.trim(),
         'address': addressCtrl.text.trim(),
-        'postOffice': postOfficeCtrl.text.trim(),
-        'postcode': postcodeCtrl.text.trim(),
+        //'postOffice': postOfficeCtrl.text.trim(),
+        'postcode': postOfficeCtrl.text.trim(),
         'fatherName': fatherCtrl.text.trim(),
         'motherName': motherCtrl.text.trim(),
         'nidFrontUrl': frontUrl,
@@ -324,9 +308,7 @@ class _KycWizardState extends State<KycWizard> {
   void _snack(String m) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(m)));
 
-  // -----------------------------
   // UI
-  // -----------------------------
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -518,17 +500,17 @@ class _KycWizardState extends State<KycWizard> {
                             ),
                             Row(
                               children: [
+                                // Expanded(
+                                //   child: _field(
+                                //     postOfficeCtrl,
+                                //     'Post office',
+                                //     icon: Icons.local_post_office_outlined,
+                                //   ),
+                                // ),
+                                const SizedBox(width: 0),
                                 Expanded(
                                   child: _field(
                                     postOfficeCtrl,
-                                    'Post office',
-                                    icon: Icons.local_post_office_outlined,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: _field(
-                                    postcodeCtrl,
                                     'Postcode',
                                     keyboard: TextInputType.number,
                                     icon: Icons.location_on_outlined,
@@ -703,9 +685,7 @@ class _KycWizardState extends State<KycWizard> {
   }
 }
 
-/// ------------------------------
 /// STATUS PAGE
-/// ------------------------------
 class _KycStatusPage extends StatelessWidget {
   const _KycStatusPage();
 
@@ -781,9 +761,7 @@ class _KycStatusPage extends StatelessWidget {
   }
 }
 
-/// ------------------------------
 /// SELFIE CAMERA SCREEN
-/// ------------------------------
 /// Live camera preview → capture → return File to KycWizard
 class SelfieCameraScreen extends StatefulWidget {
   const SelfieCameraScreen({super.key});

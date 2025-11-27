@@ -228,11 +228,11 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
 
                     Text(
                       job['skill']?.toString() ?? '',
-                      style: const TextStyle(fontSize: 13),
+                      style: const TextStyle(fontSize: 12,color: AppColors.button,),
                     ),
                     Text(
                       job['location']?.toString() ?? '',
-                      style: const TextStyle(fontSize: 13),
+                      style: const TextStyle(fontSize: 10),
                     ),
 
                     const SizedBox(height: 2),
@@ -240,7 +240,7 @@ class _FindJobsScreenState extends State<FindJobsScreen> {
                       "৳ ${job['salary']?.toString() ?? ''}",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                        fontSize: 12,
                         color: AppColors.button,
                       ),
                     ),

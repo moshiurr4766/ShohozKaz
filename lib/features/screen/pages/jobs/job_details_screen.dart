@@ -154,7 +154,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             ),
 
             _sectionCard(
-              title: "Requirements",
+              title: "Worker Qualifications",
               content:
                   "Skill: ${widget.job['skill'] ?? 'Not specified'}\nExperience: ${widget.job['experience'] ?? 'Not specified'}\nEducation: ${widget.job['education'] ?? 'Not specified'}",
               icon: Icons.build_circle_outlined,
