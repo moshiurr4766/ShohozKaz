@@ -23,6 +23,7 @@ import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
 import 'package:shohozkaz/features/screen/user_auth/forgot_pass.dart';
 import 'package:shohozkaz/features/screen/user_auth/signup.dart';
 import 'package:shohozkaz/features/screen/user_auth/login.dart';
+import 'package:shohozkaz/features/screen/user_auth/terms_conditions.dart';
 import 'package:shohozkaz/widgets/language_switch.dart';
 
 
@@ -99,10 +100,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => AuthWrapper(toggleTheme: toggleTheme),
         );
-      case '/Plumbing':
-        return MaterialPageRoute(
-          builder: (_) => ThemeCheck(toggleTheme: toggleTheme ?? (mode) {}),
-        );
+
 
       case '/chathome':
         return MaterialPageRoute(
@@ -126,7 +124,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SupportHubScreen());
       case '/changepassword':
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
-
+      case '/termsandconditions':
+        return MaterialPageRoute(builder: (_) => const TermsAndConditionsScreen());
       default:
         return MaterialPageRoute(
           builder: (_) =>

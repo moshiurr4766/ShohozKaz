@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "349686080727-g485fhuilmucmv6vle0mfolbq7pcolia.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shohozkaz",
+            "certificate_hash": "1874ea1cbb6bd2e4764cd9771e5a141b9c811773"
+          }
+        },
+        {
           "client_id": "349686080727-b88n59gbfgfefk48rg6o8cmni7o704j8.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,49 @@
             {
               "client_id": "349686080727-b88n59gbfgfefk48rg6o8cmni7o704j8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "349686080727-l2jglmhmnu9ov7nf9cvs7n9gcd7k8tq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shozkazAdmin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349686080727:android:c09a858b002730f6217c92",
+        "android_client_info": {
+          "package_name": "com.example.shozkaz_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349686080727-b88n59gbfgfefk48rg6o8cmni7o704j8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiKSzcOyQ4LeqXz67jGpco5HVFU1e2YG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349686080727-b88n59gbfgfefk48rg6o8cmni7o704j8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "349686080727-l2jglmhmnu9ov7nf9cvs7n9gcd7k8tq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shozkazAdmin"
+              }
             }
           ]
         }

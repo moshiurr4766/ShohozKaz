@@ -193,7 +193,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                   child: ElevatedButton.icon(
                     onPressed: _isApplying
                         ? null
-                        : () => _confirmRequestJob(context),
+                        : () {
+                          _confirmRequestJob(context);
+                          },
                     icon: _isApplying
                         ? const SizedBox(
                             height: 16,

@@ -12,6 +12,7 @@ class StoreService {
     required String name,
     required String email,
     required String phone,
+    required String status,
   }) async {
     try {
       await firestore.collection('userInfo').doc(uid).set({
@@ -19,10 +20,23 @@ class StoreService {
         'name': name,
         'email': email,
         'phoneNumber': phone,
+        'status':status,
         'registrationDate': DateTime.now().toIso8601String(),
       });
     } on FirebaseException {
       rethrow; // or log/handle more gracefully if desired
     }
   }
+
+
+  Future<bool> phoneExists(String phone) async {
+  final result = await FirebaseFirestore.instance
+      .collection('userInfo')
+      .where("phoneNumber", isEqualTo: phone)
+      .limit(1)
+      .get();
+
+  return result.docs.isNotEmpty;
+}
+
 }

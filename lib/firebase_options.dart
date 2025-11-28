@@ -70,7 +70,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '349686080727',
     projectId: 'shohozkaz',
     storageBucket: 'shohozkaz.firebasestorage.app',
+    androidClientId: '349686080727-g485fhuilmucmv6vle0mfolbq7pcolia.apps.googleusercontent.com',
     iosClientId: '349686080727-robs952iiknr6b6pae5mtrtdvjds12on.apps.googleusercontent.com',
     iosBundleId: 'com.example.shohozkaz',
   );
+
 }
