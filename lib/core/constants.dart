@@ -63,6 +63,7 @@ class AppImages {
   static const String promoBanner2 = "assets/images/banner/b2.png";
   static const String promoBanner3 = "assets/images/banner/b3.png";
   static const String promoBanner4 = "assets/images/banner/b4.png";
+  static const String promoBanner5 = "assets/images/banner/b5.png";
 
   //Onboarding
   static const String onBoard1 = "assets/animations/loading/handshake.gif";
@@ -73,9 +74,12 @@ class AppImages {
 class AppTexts {
   //Onboarding Title Description
   static const String title1 = "Find Nearby Jobs Instantly";
-  static const String description1 ="Get local jobs fast based on your skills and location";
+  static const String description1 =
+      "Get local jobs fast based on your skills and location";
   static const String title2 = "Hire Local Workers Fast";
-  static const String description2 = "Quickly connect with nearby workers for any short task";
+  static const String description2 =
+      "Quickly connect with nearby workers for any short task";
   static const String title3 = "Secure Digital Payments";
-  static const String description3 = "Pay workers securely via bKash or Nagad anytime";
+  static const String description3 =
+      "Pay workers securely via bKash or Nagad anytime";
 }

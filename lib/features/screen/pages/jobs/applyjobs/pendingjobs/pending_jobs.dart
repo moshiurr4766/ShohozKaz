@@ -137,7 +137,7 @@ class _PendingJobsScreenState extends State<PendingJobsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isUser ? 'My Pending Jobs' : 'Pending Jobs Posted'),
+        title: Text(widget.isUser ? 'Pending Services' : 'Pending Jobs'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _pendingJobsStream(),

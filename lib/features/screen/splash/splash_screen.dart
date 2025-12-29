@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shohozkaz/core/constants.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shohozkaz/l10n/app_localizations.dart';
 
@@ -29,13 +30,23 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/animations/loading/handshake.gif', height: 280),
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                AppColors.button, 
+                BlendMode.srcIn, 
+              ),
+              child: Image.asset(
+                'assets/animations/loading/handshake.gif',
+                height: 280,
+              ),
+            ),
+
             Text(
               loc.appTitle,
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal,
+                color: AppColors.button,
               ),
             ),
           ],
@@ -44,5 +55,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-

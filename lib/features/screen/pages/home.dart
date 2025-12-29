@@ -23,7 +23,6 @@ class _HomeModernState extends State<HomeModern> with TickerProviderStateMixin {
   Future<List<Map<String, dynamic>>> getTopRatedWorkers() async {
     final snap = await FirebaseFirestore.instance
         .collection('userInfo')
-        //.where('role', isEqualTo: 'Worker') // Only workers
         .where('ratingWorkerCount', isGreaterThan: 0) // Must have reviews
         .get();
 
@@ -163,6 +162,50 @@ class _HomeModernState extends State<HomeModern> with TickerProviderStateMixin {
               ),
             ),
 
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 10,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // YOUR LOGO
+                      const SizedBox(height: 45),
+
+                      // Image.asset(
+                      //   'assets/logo1.png', // Change if needed
+                      //   height: 24,width: 24,
+                      // ),
+                      ClipOval(
+                        child: Image.asset(
+                          'assets/logo1.png',
+                          height: 24,
+                          width: 24,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+
+                      const SizedBox(width: 6),
+
+                      // YOUR APP NAME
+                      const Text(
+                        "SHOHOZKAZ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
             // Notification button
             Positioned(
               top: MediaQuery.of(context).padding.top + 8,
@@ -281,18 +324,17 @@ class _HomeModernState extends State<HomeModern> with TickerProviderStateMixin {
           // BANNER SLIDER
           TPromoSlide(
             banners: [
-              AppImages.promoBanner1,
               AppImages.promoBanner2,
-              AppImages.promoBanner4,
+              AppImages.promoBanner3,
+              AppImages.promoBanner5,
             ],
           ),
 
           const SizedBox(height: 18),
 
           // QUICK ACTIONS
-          _buildQuickActionsRow(context),
-
-          const SizedBox(height: 24),
+          //_buildQuickActionsRow(context),
+          const SizedBox(height: 0),
 
           // POPULAR SERVICES
           //_buildCategorySection(context),
@@ -334,86 +376,11 @@ class _HomeModernState extends State<HomeModern> with TickerProviderStateMixin {
     );
   }
 
-  // QUICK ACTIONS (Find, Post, Top Rated)
-  Widget _buildQuickActionsRow(BuildContext context) {
-    //final screenWidth = MediaQuery.of(context).size.width;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _quickBtn(
-          context,
-          icon: Iconsax.briefcase,
-          title: "Find Job",
-          onTap: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (_) => const FindJobsScreen()));
-          },
-        ),
-        _quickBtn(
-          context,
-          icon: Iconsax.add_circle,
-          title: "Post Job",
-          onTap: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (_) => const PostJobsScreen()));
-          },
-        ),
-        _quickBtn(
-          context,
-          icon: Iconsax.star,
-          title: "Top Rated",
-          onTap: () {
-            // Can scroll to top rated section, or navigate to a dedicated page
-            // For now, do nothing or add custom logic
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _quickBtn(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    final brightness = Theme.of(context).brightness;
-
-    return Column(
-      children: [
-        InkWell(
-          borderRadius: BorderRadius.circular(40),
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.all(13),
-            decoration: BoxDecoration(
-              color: brightness == Brightness.dark
-                  ? const Color(0xFF1E1E1E)
-                  : Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: brightness == Brightness.dark
-                      ? Colors.black.withOpacity(0.4)
-                      : Colors.black12,
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(icon, color: AppColors.button, size: 26),
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(title, style: const TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-
   // HOW IT WORKS
   Widget _buildHowItWorksRow(BuildContext context) {
     final brightness = Theme.of(context).brightness;
 
-    Widget _item(IconData icon, String title, String subtitle) {
+    Widget item(IconData icon, String title, String subtitle) {
       return Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,22 +428,22 @@ class _HomeModernState extends State<HomeModern> with TickerProviderStateMixin {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _item(
+        item(
           Iconsax.user_edit,
           "Create Your Profile",
           "Sign up and showcase your skills to local customers.",
         ),
         const SizedBox(width: 12),
-        _item(
+        item(
           Iconsax.briefcase,
-          "Find & Apply",
+          "Find & Request",
           "Browse local jobs and apply with a single tap.",
         ),
         const SizedBox(width: 12),
-        _item(
+        item(
           Iconsax.money_send,
-          "Get Hired & Paid",
-          "Complete tasks, get reviews, and receive payments securely.",
+          "Get Hire & Pay",
+          "View Services, get reviews, and pay securely.",
         ),
       ],
     );
@@ -720,7 +687,7 @@ class _PopularServicesSectionState extends State<PopularServicesSection>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Popular Services",
+              "Our Services",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),

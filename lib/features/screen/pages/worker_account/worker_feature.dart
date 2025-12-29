@@ -69,7 +69,14 @@ class _WorkerSettingState extends State<WorkerSetting> {
                     Navigator.pushNamed(context, '/workerverification'),
               ),
 
+           _settingsTile(
+                icon: Iconsax.repeat,
+                label: "Switch to Employer",
+                onTap: () => Navigator.pushNamed(context, '/nav'),
+              ),
+
               const SizedBox(height: 16),
+
 
               _sectionTitle("Jobs"),
               _settingsTile(
@@ -110,11 +117,7 @@ class _WorkerSettingState extends State<WorkerSetting> {
               const SizedBox(height: 16),
 
               _sectionTitle("System"),
-              _settingsTile(
-                icon: Iconsax.repeat,
-                label: "Switch to Employer",
-                onTap: () => Navigator.pushNamed(context, '/nav'),
-              ),
+  
 
               const SizedBox(height: 20),
 

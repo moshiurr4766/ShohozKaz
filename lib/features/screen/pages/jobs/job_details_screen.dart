@@ -36,7 +36,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
-          'Job Details',
+          'Service Details',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -178,9 +178,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.bookmark_border),
-                    label: const Text("Save Job"),
+                    label: const Text("Save Service"),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       side: BorderSide(color: theme.colorScheme.primary),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -206,11 +206,11 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                             ),
                           )
                         : const Icon(Icons.work_outline),
-                    label: const Text("Request Job"),
+                    label: const Text("Request Service"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.button,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -251,76 +251,6 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     }
   }
 
-  // Prevent duplicate job requests
-
-  // Future<void> _requestJob(BuildContext context) async {
-  //   setState(() => _isApplying = true);
-  //   try {
-  //     final user = FirebaseAuth.instance.currentUser;
-  //     if (user == null) {
-  //       _showSnack(context, "Please log in to request a job.", false);
-  //       setState(() => _isApplying = false);
-  //       return;
-  //     }
-
-  //     final jobId = widget.job['jobId'] ?? widget.job['id'] ?? '';
-  //     if (jobId.isEmpty) {
-  //       _showSnack(context, "Invalid job ID.", false);
-  //       setState(() => _isApplying = false);
-  //       return;
-  //     }
-
-  //     // 🔹 Check if already requested (pending)
-  //     final existing = await FirebaseFirestore.instance
-  //         .collection('pendingJobs')
-  //         .where('jobId', isEqualTo: jobId)
-  //         .where('applicantId', isEqualTo: user.uid)
-  //         .limit(1)
-  //         .get();
-
-  //     if (existing.docs.isNotEmpty) {
-  //       _showSnack(context, "You have already requested this job.", false);
-  //       setState(() => _isApplying = false);
-  //       return;
-  //     }
-
-  //     // 🔹 Create new job request
-  //     final jobOrderId = FirebaseFirestore.instance
-  //         .collection('pendingJobs')
-  //         .doc()
-  //         .id;
-
-  //     final requestData = {
-  //       "jobOrderId": jobOrderId,
-  //       "jobId": jobId,
-  //       "posterId": widget.job['employerId'],
-  //       "posterEmail": widget.job['employerEmail'],
-  //       "applicantId": user.uid,
-  //       "applicantEmail": user.email,
-  //       "jobTitle": widget.job['title'],
-  //       "location": widget.job['location'],
-  //       "salary": widget.job['salary'],
-  //       "jobType": widget.job['jobType'],
-  //       "skill": widget.job['skill'],
-  //       "experience": widget.job['experience'],
-  //       "education": widget.job['education'],
-  //       "status": "pending",
-  //       "note": _noteController.text.trim(),
-  //       "requestedAt": FieldValue.serverTimestamp(),
-  //     };
-
-  //     await FirebaseFirestore.instance
-  //         .collection('pendingJobs')
-  //         .doc(jobOrderId)
-  //         .set(requestData);
-
-  //     _showSnack(context, "Job request submitted successfully.", true);
-  //   } catch (e) {
-  //     _showSnack(context, "Job request failed! $e", false);
-  //   } finally {
-  //     if (mounted) setState(() => _isApplying = false);
-  //   }
-  // }
 
   Future<void> _requestJob(BuildContext context) async {
     setState(() => _isApplying = true);
@@ -709,14 +639,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               Icon(Icons.note_alt_outlined, color: AppColors.button),
               SizedBox(width: 6),
               Text(
-                "Your Notes / Resources",
+                "Additional Notes / Resources",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           const SizedBox(height: 10),
           const Text(
-            "You can save any additional notes or resource links related to this job for later reference.",
+            "You can save any additional notes or resource links related to this service for later reference.",
             style: TextStyle(color: Colors.grey, fontSize: 13),
           ),
           const SizedBox(height: 12),
@@ -754,7 +684,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        _showSnack(context, "Please log in to save jobs.", false);
+        _showSnack(context, "Please log in to save service.", false);
         setState(() => _isSaving = false);
         return;
       }
@@ -771,9 +701,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           );
 
       await savedJobRef.set(widget.job);
-      _showSnack(context, "Job saved successfully!", true);
+      _showSnack(context, "Service saved successfully!", true);
     } catch (e) {
-      _showSnack(context, "Failed to save job: $e", false);
+      _showSnack(context, "Failed to save service: $e", false);
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }

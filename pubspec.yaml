@@ -43,15 +43,19 @@ dependencies:
   camera: ^0.11.3
   flutter_image_compress: ^2.4.0
   bkash: ^0.0.2
+  flutter_launcher_icons: ^0.14.4
 
 
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo1.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logo1.png"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
   flutter_lints: ^6.0.0
 
 
@@ -60,22 +64,22 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/logo/logo.png
     - assets/images/logo/google.png
     - assets/images/
     - assets/images/banner/
     - assets/animations/loading/
+    - assets/
 
 # For details regarding adding assets from package dependencies for slash screen,
 flutter_native_splash:
   color: "#ffffff"  # Background color
-  image: assets/images/logo/logo.png  # Path to your logo
+  image: assets/logo.png  # Path to your logo
   android_gravity: center
   ios_content_mode: center
   fullscreen: true
 
   android_12:
-    image: assets/images/logo/logo.png
+    image: assets/logo.png
     icon_background_color: "#ffffff"
 
 

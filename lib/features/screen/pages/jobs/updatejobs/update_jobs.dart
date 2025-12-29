@@ -14,7 +14,7 @@ class UpdateJobsScreen extends StatefulWidget {
 class _UpdateJobsScreenState extends State<UpdateJobsScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
-  // 🗑 Delete job with confirmation
+  //  Delete job with confirmation
   Future<void> _confirmDelete(String jobId) async {
     final confirm = await showDialog<bool>(
       context: context,

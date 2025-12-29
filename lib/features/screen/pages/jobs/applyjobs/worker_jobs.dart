@@ -16,7 +16,7 @@ class _WorkerJobsScreenState extends State<WorkerJobsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> tabs = ['Open', 'Completed', 'Canceled'];
+    final List<String> tabs = ['Active', 'Completed', 'Canceled'];
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(

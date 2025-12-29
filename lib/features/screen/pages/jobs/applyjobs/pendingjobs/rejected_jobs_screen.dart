@@ -40,7 +40,7 @@ class _RejectedJobsScreenState extends State<RejectedJobsScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text('Rejected Jobs'),
+        title: const Text('Rejected'),
         backgroundColor: backgroundColor,
         foregroundColor: textColor,
         elevation: 0,

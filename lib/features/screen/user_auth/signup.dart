@@ -264,10 +264,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           setState(
                             () => _passwordError = "Password is required",
                           );
-                        } else if (value.length < 6) {
+                        } else if (value.length < 8) {
                           setState(
                             () => _passwordError =
-                                "Password must be at least 6 characters",
+                                "Password must be at least 8 characters",
                           );
                         }
                         return null;

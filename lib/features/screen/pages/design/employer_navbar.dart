@@ -96,7 +96,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.briefcase),
-                    label: 'Jobs Status',
+                    label: 'Status',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Iconsax.user),

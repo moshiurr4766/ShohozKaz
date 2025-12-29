@@ -16,7 +16,7 @@ class _MyJobsScreenState extends State<MyJobsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> tabs = ['Open', 'Completed', 'Canceled'];
+    final List<String> tabs = ['Active', 'Completed', 'Canceled'];
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -26,7 +26,7 @@ class _MyJobsScreenState extends State<MyJobsScreen> {
         title: Padding(
           padding: const EdgeInsets.only(left: 8, top: 0),
           child: Text(
-            'Jobs Status',
+            'Services Status',
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: colorScheme.onSurface),
           ),
         ),
