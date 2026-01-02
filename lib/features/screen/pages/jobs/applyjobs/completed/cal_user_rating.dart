@@ -12,7 +12,6 @@ class UserRatingCalculator {
           .collection('userFeedback')
           .where('userId', isEqualTo: userId)
           .get();
-
       if (snapshot.docs.isEmpty) {
         // If no ratings exist, reset rating in userInfo
         await _firestore.collection('userInfo').doc(userId).set({

@@ -9,7 +9,7 @@ import 'package:shohozkaz/features/screen/pages/chatscreen/chat_page.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/openjobs/payment_screen.dart';
 
 class OpenJobsTab extends StatefulWidget {
-  final bool isUser; // <-- New parameter
+  final bool isUser; //  New parameter
   const OpenJobsTab({super.key, required this.isUser});
 
   @override

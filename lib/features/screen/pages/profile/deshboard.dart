@@ -1,124 +1,191 @@
+
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:iconsax/iconsax.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  StreamSubscription<DocumentSnapshot>? _walletSub;
+
+  int walletBalance = 0;
+  int totalEarning = 0;
+  List<int> monthlyEarnings = List.filled(6, 0);
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    _listenWallet(user.uid);
+    _loadMonthlyEarnings(user.uid);
+  }
+
+  ///HELPERS 
+
+  int _parseInt(dynamic v) {
+    if (v is int) return v;
+    if (v is double) return v.toInt();
+    if (v is String) {
+      return int.tryParse(v.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+    }
+    return 0;
+  }
+
+  /// WALLET 
+
+  void _listenWallet(String uid) {
+    _walletSub = _db
+        .collection('earningWallet')
+        .doc(uid)
+        .snapshots()
+        .listen((doc) {
+      final data = doc.data();
+      if (data == null || !mounted) return;
+
+      setState(() {
+        walletBalance = _parseInt(data['currentBalance']);
+        totalEarning = _parseInt(data['totalEarning']);
+      });
+    });
+  }
+
+  /// MONTHLY EARNINGS 
+  Future<void> _loadMonthlyEarnings(String uid) async {
+    final now = DateTime.now();
+    final temp = List<int>.filled(6, 0);
+
+    final snap = await _db
+        .collection('completedJobs')
+        .where('posterId', isEqualTo: uid)
+        .get();
+
+    for (final doc in snap.docs) {
+      final data = doc.data();
+      final salary = _parseInt(data['salary']);
+      final ts = data['completedAt'];
+
+      if (ts is! Timestamp) continue;
+      final date = ts.toDate();
+
+      final diff =
+          (now.year - date.year) * 12 + (now.month - date.month);
+
+      if (diff >= 0 && diff < 6) {
+        temp[5 - diff] += salary;
+      }
+    }
+
+    if (!mounted) return;
+    setState(() => monthlyEarnings = temp);
+  }
+
+  @override
+  void dispose() {
+    _walletSub?.cancel();
+    super.dispose();
+  }
+
+  /// UI 
+
+  @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme;
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: Text("Please login first")),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 16),
+        title: const Padding(
+          padding: EdgeInsets.only(left: 16),
           child: Text(
             'Dashboard',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: color.onSurface,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
         ),
-        toolbarHeight: 60,
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(Iconsax.notification),
-            ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Icon(Iconsax.notification),
           ),
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          /// TOP CARDS
           LayoutBuilder(
             builder: (context, constraints) {
-              final cardWidth = (constraints.maxWidth - 12) / 2;
+              final width = (constraints.maxWidth - 12) / 2;
               return Wrap(
                 spacing: 12,
                 runSpacing: 12,
                 children: [
                   _dashboardCard(
-                    context,
                     icon: Icons.account_balance_wallet_outlined,
                     title: 'Wallet Balance',
-                    value: '৳12,345.67',
-                    subtitle: '+20.1% from last month',
-                    width: cardWidth,
+                    value: '৳$walletBalance',
+                    subtitle: 'Available balance',
+                    width: width,
                   ),
                   _dashboardCard(
-                    context,
-                    icon: Icons.work_outline,
-                    title: 'Active Jobs',
-                    value: '+5',
-                    subtitle: '+1 since last week',
-                    width: cardWidth,
-                  ),
-                  _dashboardCard(
-                    context,
-                    icon: Icons.star_border,
-                    title: 'Your Rating',
-                    value: '4.8 ⭐',
-                    subtitle: 'Based on 24 reviews',
-                    width: cardWidth,
-                  ),
-                  _dashboardCard(
-                    context,
-                    icon: Icons.military_tech_outlined,
-                    title: 'Worker Level',
-                    value: 'Silver',
-                    subtitle: '3 jobs away from Gold',
-                    width: cardWidth,
+                    icon: Icons.trending_up,
+                    title: 'Total Earning',
+                    value: '৳$totalEarning',
+                    subtitle: 'Lifetime earning',
+                    width: width,
                   ),
                 ],
               );
             },
           ),
+
           const SizedBox(height: 20),
+
+          /// BAR CHART
           _sectionCard(
-            context,
             title: 'Earnings Overview',
-            subtitle: 'Your earnings over the last 6 months.',
-            child: SizedBox(height: 200, child: _buildBarChart(context)),
+            subtitle: 'Last 6 months',
+            child: SizedBox(height: 220, child: _buildBarChart()),
           ),
+
           const SizedBox(height: 20),
+
+          /// GROWTH TIPS
           _sectionCard(
-            context,
-            title: 'Recent Activity',
-            subtitle: 'You have successfully completed 3 jobs this week.',
-            child: Column(
-              children: const [
-                ActivityTile('Shahidul Islam', 'Plumbing for kitchen sink', '৳1,999.00'),
-                ActivityTile('Anisul Khan', 'Electrical wiring for new office', '৳3,900.00'),
-                ActivityTile('Fatima Rahman', 'House cleaning (weekly)', '৳2,999.00'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          _sectionCard(
-            context,
-            title: 'Daily Skill Tip',
-            subtitle: 'Always double-check your electrical connections for safety.',
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                'Safety first! Before starting any electrical work, make sure the main power is turned off at the circuit breaker. '
-                'Use a voltage tester to confirm there is no live current. This simple step can prevent serious injuries.',
-              ),
-            ),
+            title: 'Tips for More Growth',
+            subtitle: 'Increase your earnings faster',
+            child: _growthTips(),
           ),
         ],
       ),
     );
   }
 
-  Widget _dashboardCard(
-    BuildContext context, {
+  ///  COMPONENTS 
+
+  Widget _dashboardCard({
     required IconData icon,
     required String title,
     required String value,
@@ -130,9 +197,7 @@ class DashboardScreen extends StatelessWidget {
     return SizedBox(
       width: width,
       child: Card(
-        color: color.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 1,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -140,21 +205,25 @@ class DashboardScreen extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topRight,
-                child: Icon(icon, size: 20, color: color.primary),
+                child: Icon(icon, color: color.primary),
               ),
               const SizedBox(height: 8),
               Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: color.onSurface,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(title, style: TextStyle(fontSize: 14, color: color.onSurface)),
-              const SizedBox(height: 2),
-              Text(subtitle, style: TextStyle(fontSize: 12, color: color.onSurfaceVariant)),
+              Text(title),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: color.onSurfaceVariant,
+                ),
+              ),
             ],
           ),
         ),
@@ -162,26 +231,21 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _sectionCard(
-    BuildContext context, {
+  Widget _sectionCard({
     required String title,
     required String subtitle,
     required Widget child,
   }) {
-    final color = Theme.of(context).colorScheme;
-
     return Card(
-      color: color.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color.onSurface)),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            Text(subtitle, style: TextStyle(fontSize: 13, color: color.onSurfaceVariant)),
+            Text(subtitle, style: const TextStyle(fontSize: 12)),
             const SizedBox(height: 12),
             child,
           ],
@@ -190,74 +254,114 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBarChart(BuildContext context) {
-    final color = Theme.of(context).colorScheme;
+  ///  BAR CHART 
+
+  Widget _buildBarChart() {
+    if (monthlyEarnings.every((e) => e == 0)) {
+      return const Center(child: Text("No earnings yet"));
+    }
+
     final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    final barGroups = [1000, 15500, 18000, 22000, 13000, 26000]
-        .asMap()
-        .entries
-        .map(
-          (entry) => BarChartGroupData(
-            x: entry.key,
-            barRods: [
-              BarChartRodData(
-                toY: entry.value.toDouble(),
-                width: 18,
-                borderRadius: BorderRadius.circular(4),
-                color: color.primary,
-              ),
-            ],
-          ),
-        )
-        .toList();
+    final color = Theme.of(context).colorScheme;
+    final maxValue =
+        monthlyEarnings.reduce((a, b) => a > b ? a : b);
 
     return BarChart(
       BarChartData(
-        barGroups: barGroups,
+        maxY: maxValue * 1.2,
+        gridData: FlGridData(
+          show: true,
+          horizontalInterval: maxValue / 4,
+          drawVerticalLine: false,
+        ),
+        borderData: FlBorderData(show: false),
         titlesData: FlTitlesData(
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 42)),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: maxValue / 4,
+              reservedSize: 40,
+              getTitlesWidget: (v, _) =>
+                  Text("৳${v.toInt()}", style: const TextStyle(fontSize: 10)),
+            ),
+          ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              getTitlesWidget: (value, _) {
-                if (value.toInt() < 0 || value.toInt() >= months.length) return const SizedBox.shrink();
-                return Text(months[value.toInt()], style: TextStyle(fontSize: 10, color: color.onSurface));
-              },
+              getTitlesWidget: (v, _) =>
+                  Text(months[v.toInt()], style: const TextStyle(fontSize: 11)),
             ),
           ),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
-        borderData: FlBorderData(show: false),
-        gridData: FlGridData(show: true),
+        barGroups: monthlyEarnings.asMap().entries.map((e) {
+          return BarChartGroupData(
+            x: e.key,
+            barRods: [
+              BarChartRodData(
+                toY: e.value.toDouble(),
+                width: 14,
+                borderRadius: BorderRadius.circular(6),
+                color: color.primary,
+              ),
+            ],
+          );
+        }).toList(),
       ),
+    );
+  }
+
+  /// GROWTH TIPS
+
+  Widget _growthTips() {
+    return Column(
+      children: const [
+        _TipTile(
+          icon: Icons.star,
+          title: "Complete jobs on time",
+          subtitle: "Faster completion increases client trust and ratings.",
+        ),
+        _TipTile(
+          icon: Icons.thumb_up,
+          title: "Maintain high ratings",
+          subtitle: "Better ratings help you get more job requests.",
+        ),
+        _TipTile(
+          icon: Icons.trending_up,
+          title: "Accept high-value jobs",
+          subtitle: "Choose jobs with better payouts to grow faster.",
+        ),
+      ],
     );
   }
 }
 
-class ActivityTile extends StatelessWidget {
-  final String name;
-  final String task;
-  final String amount;
+/// TIP TILE 
 
-  const ActivityTile(this.name, this.task, this.amount, {super.key});
+class _TipTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _TipTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
 
     return ListTile(
+      contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
-        radius: 20,
         backgroundColor: color.primary.withOpacity(0.1),
-        child: Icon(Icons.person, color: color.primary),
+        child: Icon(icon, color: color.primary),
       ),
-      title: Text(name, style: TextStyle(fontWeight: FontWeight.w600, color: color.onSurface)),
-      subtitle: Text(task, style: TextStyle(color: color.onSurfaceVariant)),
-      trailing: Text(
-        '+$amount',
-        style: TextStyle(fontWeight: FontWeight.bold, color: color.onSurface),
-      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(subtitle),
     );
   }
 }

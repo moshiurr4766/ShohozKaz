@@ -1,361 +1,199 @@
+// import 'package:flutter/material.dart';
+// import 'package:bkash/bkash.dart';
+
+// class PayWithBkash extends StatefulWidget {
+//   final String amount;
+//   final String invoiceId;
+//   final void Function(String trxId) onSuccess;
+
+//   const PayWithBkash({
+//     super.key,
+//     required this.amount,
+//     required this.invoiceId,
+//     required this.onSuccess,
+//   });
+
+//   @override
+//   State<PayWithBkash> createState() => _PayWithBkashState();
+// }
+
+// class _PayWithBkashState extends State<PayWithBkash> {
+//   late final Bkash _bkash;
+//   bool _loading = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     _bkash = Bkash(
+//       bkashCredentials: BkashCredentials(
+        // username: '01923311458',
+        // password: 'An1_A2B<B+U',
+        // appKey: 'TE6qdG43nBFqXOqYFvmjAeHZtc',
+        // appSecret: '0cJxlGoVk2xfbZvT1slluQQipUX4tE3n4JhftBhtRJvufKD0rE64',
+//         isSandbox: false, 
+//       ),
+//       logResponse: true,
+//     );
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       _pay();
+//     });
+//   }
+
+//   String _cleanAmount(String raw) {
+//     return raw.replaceAll(RegExp(r'[^0-9]'), '');
+//   }
+
+//   Future<void> _pay() async {
+//     if (_loading) return;
+
+//     setState(() => _loading = true);
+
+//     try {
+//       final response = await _bkash.pay(
+//         context: context,
+//         amount: double.parse(_cleanAmount(widget.amount)),
+//         merchantInvoiceNumber: widget.invoiceId,
+//       );
+
+//       // SUCCESS
+//       widget.onSuccess(response.trxId);
+//     } on BkashFailure catch (e) {
+//       _showError(e.message);
+//     } catch (_) {
+//       _showError("Unexpected error occurred");
+//     } finally {
+//       if (mounted) {
+//         setState(() => _loading = false);
+//       }
+//     }
+//   }
+
+//   void _showError(String message) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(
+//         content: Text(message),
+//         backgroundColor: Colors.red,
+//       ),
+//     );
+//   }
+
+//   // SIMPLE REDIRECT UI
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Scaffold(
+//       body: Center(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             CircularProgressIndicator(),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
+
+
 import 'package:flutter/material.dart';
+import 'package:bkash/bkash.dart';
 
-class FakeBkashCheckout extends StatefulWidget {
+class PayWithBkash extends StatefulWidget {
   final String amount;
+  final String invoiceId;
+  final void Function(String trxId) onSuccess;
 
-  const FakeBkashCheckout({super.key, required this.amount});
+  const PayWithBkash({
+    super.key,
+    required this.amount,
+    required this.invoiceId,
+    required this.onSuccess,
+  });
 
   @override
-  State<FakeBkashCheckout> createState() => _FakeBkashCheckoutState();
+  State<PayWithBkash> createState() => _PayWithBkashState();
 }
 
-class _FakeBkashCheckoutState extends State<FakeBkashCheckout> {
-  int step = 1; // 1=Phone, 2=OTP, 3=PIN
+class _PayWithBkashState extends State<PayWithBkash> {
+  late final Bkash _bkash;
+  bool _loading = false;
 
-  final phoneController = TextEditingController();
-  final otpController = TextEditingController();
-  final pinController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
 
-  bool loading = false;
+    _bkash = Bkash(
+      bkashCredentials: BkashCredentials(
+        username: 'username',
+        password: 'password',
+        appKey: 'apikey',
+        appSecret: 'secretKey',
+        isSandbox: false, // true for sandbox
+      ),
+      logResponse: true,
+    );
 
-  Future<void> _nextStep() async {
-    setState(() => loading = true);
-    await Future.delayed(const Duration(milliseconds: 600));
-    setState(() => loading = false);
-
-    if (step < 3) {
-      setState(() => step++);
-    } else {
-      Navigator.pop(context, true);
-    }
+    // AUTO START PAYMENT AFTER FIRST FRAME
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _pay();
+    });
   }
 
-  void _close() {
-    Navigator.pop(context, false);
+  String _cleanAmount(String raw) {
+    return raw.replaceAll(RegExp(r'[^0-9]'), '');
+  }
+
+  Future<void> _pay() async {
+    if (_loading) return;
+
+    setState(() => _loading = true);
+
+    try {
+      final response = await _bkash.pay(
+        context: context,
+        amount: double.parse(_cleanAmount(widget.amount)),
+        merchantInvoiceNumber: widget.invoiceId,
+      );
+
+      // PAYMENT SUCCESS
+      widget.onSuccess(response.trxId);
+
+    } on BkashFailure {
+      //  USER CANCELLED → JUST GO BACK
+      if (mounted) {
+        Navigator.pop(context, false);
+      }
+
+    } catch (_) {
+      //  ANY ERROR → GO BACK SILENTLY
+      if (mounted) {
+        Navigator.pop(context, false);
+      }
+
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 198, 17, 117), // FULL WHITE PAGE BACKGROUND
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Color(0xFFE2136E)),
-        title: const Text(
-          "Pay With Bkash",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFE2136E),
-          ),
+    return WillPopScope(
+      onWillPop: () async {
+        // prevent accidental back while loading
+        return !_loading;
+      },
+      child: const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
         ),
       ),
-
-      body: SingleChildScrollView(                  
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            
-            children: [
-              const SizedBox(height: 120),
-
-              _buildBkashCard(),                    
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  //  MAIN CARD 
-
-  Widget _buildBkashCard() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),                     
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            spreadRadius: 1,
-            offset: const Offset(0, 4),
-          )
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // bKash Logo Header
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: const Text(
-              "বিকাশ",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFFE2136E),
-              ),
-            ),
-          ),
-
-          Container(height: 2, color: const Color(0xFFE2136E)),
-
-          if (step == 1) _buildPhoneStep(),
-          if (step == 2) _buildOtpStep(),
-          if (step == 3) _buildPinStep(),
-
-          // Hotline footer inside card
-          Container(
-            color: Colors.grey.shade100,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: const Center(
-              child: Text(
-                "16247",
-                style: TextStyle(
-                  color: Color(0xFFE2136E),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // REUSABLE TOP MERCHANT ROW 
-
-  Widget _merchantRow() {
-    return Row(
-      children: [
-        // Country badge
-        Container(
-          width: 32,
-          height: 32,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.green,
-          ),
-          alignment: Alignment.center,
-          child: const Text(
-            "BD",
-            style: TextStyle(color: Colors.white, fontSize: 11),
-          ),
-        ),
-
-        const SizedBox(width: 10),
-
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text("ShohoKaz",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              SizedBox(height: 2),
-              Text("Invoice: 1526",
-                  style: TextStyle(fontSize: 11, color: Colors.grey)),
-            ],
-          ),
-        ),
-
-        Text(
-          "৳${widget.amount}",
-          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-
-  //  STEP 1: Phone 
-
-  Widget _buildPhoneStep() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Column(
-        children: [
-          _merchantRow(),
-          const SizedBox(height: 20),
-
-          const Text(
-            "Enter your bKash mobile number",
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 10),
-
-          TextField(
-            controller: phoneController,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              hintText: "01XXXXXXXXX",
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              contentPadding: const EdgeInsets.all(12),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-          _bottomButtons("CLOSE", "NEXT", _close, _nextStep),
-        ],
-      ),
-    );
-  }
-
-  //  STEP 2: OTP 
-  Widget _buildOtpStep() {
-    return Column(
-      children: [
-        Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-            child: _merchantRow()),
-
-        // Pink gradient area
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(16, 18, 16, 24),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFE2136E), Color(0xFFB40C56)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                "Enter verification code sent to\n${phoneController.text.isNotEmpty ? phoneController.text : "01X ** *** ***"}",
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              const SizedBox(height: 14),
-
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: TextField(
-                  controller: otpController,
-                  maxLength: 6,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    counterText: "",
-                    hintText: "bKash Verification Code",
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 6),
-              Text(
-                "Didn't receive code? Resend code in 9s",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        _bottomButtons("CLOSE", "CONFIRM", _close, _nextStep),
-      ],
-    );
-  }
-
-  // STEP 3: PIN 
-
-  Widget _buildPinStep() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Column(
-        children: [
-          _merchantRow(),
-          const SizedBox(height: 20),
-
-          const Text(
-            "Enter bKash PIN",
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 10),
-
-          TextField(
-            controller: pinController,
-            maxLength: 5,
-            obscureText: true,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              counterText: "",
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              contentPadding: const EdgeInsets.all(12),
-            ),
-          ),
-
-          const SizedBox(height: 18),
-          _bottomButtons("CLOSE", "CONFIRM", _close, _nextStep),
-        ],
-      ),
-    );
-  }
-
-  //  BOTTOM BUTTON BAR 
-
-  Widget _bottomButtons(
-      String left, String right, VoidCallback onLeft, VoidCallback onRight) {
-    return Column(
-      children: [
-        Container(height: 1, color: Colors.grey.shade300),
-        SizedBox(
-          height: 48,
-          child: Row(
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: loading ? null : onLeft,
-                  child: Text(
-                    left,
-                    style: const TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-              Container(width: 1, color: Colors.grey.shade300),
-              Expanded(
-                child: TextButton(
-                  onPressed: loading ? null : onRight,
-                  child: loading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Color(0xFFE2136E),
-                          ),
-                        )
-                      : Text(
-                          right,
-                          style: const TextStyle(
-                            color: Color(0xFFE2136E),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

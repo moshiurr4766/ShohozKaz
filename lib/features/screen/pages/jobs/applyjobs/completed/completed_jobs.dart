@@ -90,7 +90,7 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // ⭐ HEADER TEXT
+                        //  HEADER TEXT
                         Text(
                           "Your opinion matters to us!",
                           style: TextStyle(
@@ -114,7 +114,7 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
 
                         const SizedBox(height: 20),
 
-                        // ⭐ STARS
+                        //  STARS
                         StatefulBuilder(
                           builder: (context, setState) {
                             return Row(
@@ -139,7 +139,7 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
 
                         const SizedBox(height: 12),
 
-                        // ⭐ FEEDBACK INPUT
+                        //  FEEDBACK INPUT
                         TextField(
                           controller: feedbackController,
                           maxLines: 3,
@@ -158,7 +158,7 @@ class _CompletedJobsTabState extends State<CompletedJobsTab> {
 
                         const SizedBox(height: 20),
 
-                        // ⭐ RATE NOW BUTTON
+                        //  RATE NOW BUTTON
                         GestureDetector(
                           onTap: () async {
                             Navigator.pop(context);

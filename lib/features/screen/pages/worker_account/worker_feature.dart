@@ -106,7 +106,7 @@ class _WorkerSettingState extends State<WorkerSetting> {
               _settingsTile(
                 icon: Iconsax.wallet_3,
                 label: "Earnings Wallet",
-                onTap: () => Navigator.pushNamed(context, '/userwallet'),
+                onTap: () => Navigator.pushNamed(context, '/workerwallet'),
               ),
               _settingsTile(
                 icon: Iconsax.message_question,

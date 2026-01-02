@@ -1,7 +1,7 @@
-
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shohozkaz/features/screen/pages/jobs/applyjobs/openjobs/bkash_payment.dart';
-//import 'package:bkash/bkash.dart';
+
 
 class PaymentScreen extends StatefulWidget {
   final String jobOrderId;
@@ -20,7 +20,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  //final Bkash _bkash = Bkash(logResponse: true);
+  
 
   final bool _loading = false;
   String? _paymentResult;
@@ -29,42 +29,30 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return raw.replaceAll(RegExp(r'[^0-9]'), '');
   }
 
-  //   Future<void> _startBkashPayment() async {
-  //     setState(() {
-  //       _loading = true;
-  //       _paymentResult = null;
-  //     });
+//   Future<void> _updateCompletedJobAfterPayment() async {
+//   final query = await FirebaseFirestore.instance
+//       .collection('completedJobs')
+//       .where('jobOrderId', isEqualTo: widget.jobOrderId)
+//       .limit(1)
+//       .get();
 
-  //     try {
-  //       final response = await _bkash.pay(
-  //         context: context,
-  //         amount: double.parse(cleanAmount(widget.amount)),
-  //         merchantInvoiceNumber: widget.jobOrderId,
-  //       );
+//   if (query.docs.isEmpty) return;
 
-  //       setState(() {
-  //         _paymentResult =
-  //             """
-  // ✔ Payment Successful
-  // Transaction ID: ${response.trxId}
-  // Payment ID: ${response.paymentId}
-  // Customer: ${response.customerMsisdn}
-  // """;
-  //       });
+//   final docId = query.docs.first.id;
 
-  //       Navigator.pop(context, true);
-  //     } on BkashFailure catch (e) {
-  //       setState(() {
-  //         _paymentResult = " Payment failed: ${e.message}";
-  //       });
-  //     } catch (e) {
-  //       setState(() {
-  //         _paymentResult = "⚠ Error: $e";
-  //       });
-  //     } finally {
-  //       setState(() => _loading = false);
-  //     }
-  //   }
+//   await FirebaseFirestore.instance
+//       .collection('completedJobs')
+//       .doc(docId)
+//       .update({
+//     'amount': int.parse(cleanAmount(widget.amount)),
+//     'paymentMethod': 'bKash',
+//     'paymentStatus': 'paid',
+//     'paidAt': FieldValue.serverTimestamp(),
+//     'ratedByApplicant': false,
+//     'ratedByPoster': false,
+//   });
+// }
+
 
   //  SUCCESS HANDLER FOR NAGAD & ROCKET
   void showSuccessPopup(String method) {
@@ -259,8 +247,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => FakeBkashCheckout(
-                              amount: cleanAmount(widget.amount),
+                            builder: (_) => PayWithBkash(
+                              amount: widget.amount,
+                              //invoiceId: widget.jobOrderId,
+                              invoiceId: "Shohozkaz_1234",
+                              onSuccess: (trxId) {
+                                //await _updateCompletedJobAfterPayment();
+                                Navigator.pop(context, true); // Payment success
+                              },
                             ),
                           ),
                         );
@@ -296,53 +290,53 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
                   const SizedBox(height: 12),
 
-                  // Nagad
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => showSuccessPopup("Nagad"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF4E00),
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: const Text(
-                        "Pay with Nagad",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // // Nagad
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton(
+                  //     onPressed: () => showSuccessPopup("Nagad"),
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: const Color(0xFFFF4E00),
+                  //       padding: const EdgeInsets.symmetric(vertical: 15),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(14),
+                  //       ),
+                  //     ),
+                  //     child: const Text(
+                  //       "Pay with Nagad",
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                   const SizedBox(height: 12),
 
-                  // Rocket
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => showSuccessPopup("Rocket"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF7A1EA1),
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: const Text(
-                        "Pay with Rocket",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // // Rocket
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton(
+                  //     onPressed: () => showSuccessPopup("Rocket"),
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: const Color(0xFF7A1EA1),
+                  //       padding: const EdgeInsets.symmetric(vertical: 15),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(14),
+                  //       ),
+                  //     ),
+                  //     child: const Text(
+                  //       "Pay with Rocket",
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

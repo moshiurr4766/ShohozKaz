@@ -17,6 +17,7 @@ import 'package:shohozkaz/features/screen/pages/jobs/updatejobs/update_jobs.dart
 import 'package:shohozkaz/features/screen/pages/profile/deshboard.dart';
 import 'package:shohozkaz/features/screen/pages/wallet/user_wallet.dart';
 import 'package:shohozkaz/features/screen/pages/design/worker_navbar.dart';
+import 'package:shohozkaz/features/screen/pages/wallet/worker_wallet.dart';
 import 'package:shohozkaz/features/screen/pages/worker_account/kycscreen/kyc_home.dart';
 import 'package:shohozkaz/features/screen/splash/auth_wrapper.dart';
 import 'package:shohozkaz/features/screen/splash/splash_screen.dart';
@@ -25,7 +26,6 @@ import 'package:shohozkaz/features/screen/user_auth/signup.dart';
 import 'package:shohozkaz/features/screen/user_auth/login.dart';
 import 'package:shohozkaz/features/screen/user_auth/terms_conditions.dart';
 import 'package:shohozkaz/widgets/language_switch.dart';
-
 
 class AppRouter {
   static Route<dynamic> generateRoute(
@@ -38,7 +38,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => BottomNavigation(
             toggleTheme: toggleTheme,
-            onLanguageChange: changeLocale, 
+            onLanguageChange: changeLocale,
           ),
         );
 
@@ -46,7 +46,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => WorkerNavBar(
             toggleTheme: toggleTheme,
-            onLanguageChange: changeLocale, 
+            onLanguageChange: changeLocale,
           ),
         );
 
@@ -90,7 +90,9 @@ class AppRouter {
       case '/dashboard':
         return MaterialPageRoute(builder: (_) => const DashboardScreen());
       case '/userwallet':
-        return MaterialPageRoute(builder: (_) => MyWalletScreen());
+        return MaterialPageRoute(builder: (_) => UserTransactionHistory());
+      case '/workerwallet':
+        return MaterialPageRoute(builder: (_) => WorkerTransactionHistory());
       // case '/settings':
       //   return MaterialPageRoute(builder: (_) => AccountSettingsScreen(
       //     toggleTheme: toggleTheme ?? (mode) {},
@@ -101,19 +103,19 @@ class AppRouter {
           builder: (_) => AuthWrapper(toggleTheme: toggleTheme),
         );
 
-
       case '/chathome':
-        return MaterialPageRoute(
-          builder: (_) =>  ChatHomeScreen(),
-        ); 
+        return MaterialPageRoute(builder: (_) => ChatHomeScreen());
       case '/updatejobsscreen':
-        return MaterialPageRoute(builder: (_) => const UpdateJobsScreen()); 
-
+        return MaterialPageRoute(builder: (_) => const UpdateJobsScreen());
 
       case '/userpendingjobs':
-        return MaterialPageRoute(builder: (_) => const PendingJobsScreen(isUser: true,));
+        return MaterialPageRoute(
+          builder: (_) => const PendingJobsScreen(isUser: true),
+        );
       case '/posterpendingjobs':
-        return MaterialPageRoute(builder: (_) => const PendingJobsScreen(isUser: false,));
+        return MaterialPageRoute(
+          builder: (_) => const PendingJobsScreen(isUser: false),
+        );
       case '/rejectedjobs':
         return MaterialPageRoute(builder: (_) => const RejectedJobsScreen());
 
@@ -125,7 +127,9 @@ class AppRouter {
       case '/changepassword':
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       case '/termsandconditions':
-        return MaterialPageRoute(builder: (_) => const TermsAndConditionsScreen());
+        return MaterialPageRoute(
+          builder: (_) => const TermsAndConditionsScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) =>
